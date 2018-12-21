@@ -18,5 +18,6 @@ protocol OmniBarDelegate: class {
     func omnibarSubmitted()
     func inputCleared()
     func omniBarButtonPressed(_ button: OmniBarButton)
+    func omniBarSelected()
 }
 
