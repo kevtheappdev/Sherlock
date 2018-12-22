@@ -11,7 +11,7 @@ import UIKit
 class OmniBar: UIGradientView {
 
     @IBOutlet weak var searchField: UITextField!
-    var delegate: OmniBarDelegate?
+    weak var delegate: OmniBarDelegate?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -30,6 +30,10 @@ class OmniBar: UIGradientView {
     
     @IBAction func historyButtonPressed(_ sender: Any) {
         self.delegate?.omniBarButtonPressed(.history)
+    }
+    
+    func resignActive(){
+        self.searchField.resignFirstResponder()
     }
 }
 

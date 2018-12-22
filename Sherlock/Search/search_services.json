@@ -1,0 +1,22 @@
+{
+	"google": {
+		"name": "google",
+		"searchText": "Search with Google",
+		"searchURL": "http://www.google.com/search?q={query}",
+		"icon": "google_icon.png"
+	},
+
+	"wikipedia": {
+		"name": "wikipedia",
+		"searchText": "Search Wikipedia",
+		"searchURL": "https://en.wikipedia.org/w/index.php?search={query}",
+		"icon": "wikipedia_icon.png"
+	},
+
+	"facebook": {
+		"name": "facebook",
+		"searchText": "Search with Facebook",
+		"searchURL": "https://www.facebook.com/search/top/?q={query}",
+		"icon": "facebook_icon.png"
+	}
+}
