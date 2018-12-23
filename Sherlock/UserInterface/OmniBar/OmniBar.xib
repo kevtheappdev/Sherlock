@@ -16,13 +16,6 @@
             <rect key="frame" x="0.0" y="0.0" width="604" height="115"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="o19-W3-xO7">
-                    <rect key="frame" x="20" y="0.0" width="461" height="115"/>
-                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="40"/>
-                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search"/>
-                </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h2l-dT-7Bf">
                     <rect key="frame" x="544" y="37.5" width="40" height="40"/>
                     <constraints>
@@ -47,6 +40,13 @@
                         <action selector="historyButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="o0b-MG-mAO"/>
                     </connections>
                 </button>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="o19-W3-xO7">
+                    <rect key="frame" x="20" y="0.0" width="461" height="115"/>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search"/>
+                </textField>
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
             <constraints>

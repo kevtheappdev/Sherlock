@@ -31,15 +31,13 @@ class SherlockServiceManager: NSObject {
         guard let userServices = defaults.array(forKey: "services") as? [String] else {return}
         
         guard let path = Bundle.main.path(forResource: "search_services", ofType: "json") else {return}
+        
         var jsonString: String!
-        do {
-            jsonString = try String(contentsOfFile: path, encoding: .utf8)
-        } catch {
-            return // TODO: figure out a better handling here
-        }
+        jsonString = try! String(contentsOfFile: path, encoding: .utf8)
+
         
         guard let data = jsonString.data(using: .utf8) else {return}
-        let serviceData = try! JSON(data: data).dictionary! // TODO: revisit this
+        let serviceData = try! JSON(data: data).dictionary!
         
         
         for service in userServices {

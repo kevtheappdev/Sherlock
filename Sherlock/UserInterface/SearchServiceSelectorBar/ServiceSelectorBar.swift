@@ -78,7 +78,7 @@ class ServiceSelectorBar: UIView {
     }
     
     func selectButtonAt(Index serviceIndex: Int){
-        let selectedOffset = self.buttonOffsets[serviceIndex] // TODO: error check this?
+        let selectedOffset = self.buttonOffsets[serviceIndex]
         UIView.animate(withDuration: 0.1, animations: {() in
             let selectedPoint = CGPoint(x: selectedOffset, y: 0)
             self.selectionView.frame = CGRect(origin: selectedPoint, size: self.selectionView.bounds.size)

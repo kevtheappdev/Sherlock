@@ -147,8 +147,8 @@ extension SearchViewController: OmniBarDelegate {
 
 extension SearchViewController: ScrollResultsDelegate {
     func selectedLink(url: URL) {
-        let sfVC = SFSafariViewController(url: url)
-        self.present(sfVC, animated: true, completion: nil)
+        let sfVC = WebResultViewController(url: url)
+        self.presentDetail(sfVC)
     }
     
     func switchedTo(service: serviceType) {

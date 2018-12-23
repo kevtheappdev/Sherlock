@@ -11,6 +11,8 @@ import UIKit
 class ServiceResultsTableViewController: UITableViewController {
     var serviceManager = SherlockServiceManager.main
     var services: [SherlockService]!
+    var ogTableFrame: CGRect?
+    var keyboardShown = false
     var cellCache = Dictionary<serviceType, SearchServiceTableViewCell>()
     weak var delegate: ServiceResultDelegate?
 
@@ -18,7 +20,35 @@ class ServiceResultsTableViewController: UITableViewController {
         super.viewDidLoad()
         self.services = self.serviceManager.getServices()
         self.tableView.separatorStyle = .none
+        
+        // listen for keyboard appearance
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardAppeared(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDissapeared(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
+    
+    // MARK: - Keyboard notifications
+    @objc
+    func keyboardAppeared(notification: NSNotification) {
+        if self.keyboardShown {return}
+        self.keyboardShown =  true
+        self.ogTableFrame = self.view.frame
+        let fullHeight = self.view.frame.size.height
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight =  keyboardFrame.cgRectValue.size.height
+            self.view.frame = CGRect(origin: self.view.frame.origin, size: CGSize(width: UIScreen.main.bounds.width, height: fullHeight - keyboardHeight))
+        }
+    }
+    
+    @objc
+    func keyboardDissapeared(notification: NSNotification) {
+        if !self.keyboardShown {return}
+        self.keyboardShown = false
+        if let ogFrame = self.ogTableFrame {
+            self.view.frame = ogFrame
+        }
+    }
+    
 
     // MARK: - Table view data source
 
@@ -32,7 +62,6 @@ class ServiceResultsTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO: add logic to cache the cell types ourselves
         let service = self.services[indexPath.row]
         let serviceType = service.type
         var cell = cellCache[serviceType]

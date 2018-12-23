@@ -14,8 +14,7 @@ class ScrollResultsViewController: UIViewController {
     let serviceSelector = ServiceSelectorBar()
     var services: [SherlockService]
     var lastQuery:  String?
-    var webControllers: [WebSearchViewController] = Array<WebSearchViewController>() // TODO: Eliminate references to VCs in two places
-    var webControllersOffsets: [serviceType:  WebSearchViewController] = Dictionary<serviceType, WebSearchViewController>()
+    var webControllers: [serviceType:  WebSearchViewController] = Dictionary<serviceType, WebSearchViewController>()
     weak var currentResult: WebSearchViewController!
     weak var delegate: ScrollResultsDelegate?
     var loadOk = true
@@ -45,7 +44,7 @@ class ScrollResultsViewController: UIViewController {
         // add web views
         for service in services {
             let webVC = WebSearchViewController(service: service)
-            self.webControllers.append(webVC)
+            self.webControllers[service.type] = webVC
             self.addChild(webVC)
             webVC.didMove(toParent:self)
             self.scrollView.addSubview(webVC.view)
@@ -89,11 +88,9 @@ class ScrollResultsViewController: UIViewController {
         
         // layout webviews
         var curX: CGFloat = 0
-        for (service, webVC) in zip(services, webControllers) {
+        for service in self.services {
+            let webVC = self.webControllers[service.type]!
             webVC.view.frame = CGRect(x: curX, y: 0, width: width, height: height)
-            
-            let serviceType = service.type
-            webControllersOffsets[serviceType] = webVC
             curX += width
         }
 
@@ -112,7 +109,7 @@ class ScrollResultsViewController: UIViewController {
         }
         lastQuery = query
         
-        for webVC in webControllers { // TODO: limit this when we add more services
+        for (_, webVC) in webControllers { // TODO: limit this when we add more services
             webVC.execute(query: query)
         }
         
@@ -129,14 +126,14 @@ class ScrollResultsViewController: UIViewController {
         if let selectedService = service {
             // scroll to selected service
             let type = selectedService.type
-            guard let curVC = webControllersOffsets[type] else {
+            guard let curVC = webControllers[type] else {
                 return
             }
             self.currentResult = curVC
             self.scrollView.contentOffset = curVC.view.frame.origin
             self.serviceSelector.select(service: type)
         } else {
-            self.currentResult = webControllers.first!
+            self.currentResult = webControllers[services.first!.type]
         }
         
         self.currentResult.webView.navigationDelegate = self
@@ -147,7 +144,7 @@ extension ScrollResultsViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset
         
-        for (serviceType, webVC) in webControllersOffsets {
+        for (serviceType, webVC) in webControllers {
             if offset == webVC.view.frame.origin && currentResult.sherlockService.type != webVC.sherlockService.type {
                 self.delegate?.switchedTo(service: serviceType)
                 self.currentResult = webVC

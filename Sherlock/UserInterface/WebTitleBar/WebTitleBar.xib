@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="WebTitleBar" customModule="Sherlock" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="450" height="90"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="URL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HWR-4J-YUQ">
+                    <rect key="frame" x="20" y="52" width="421" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TRC-hx-uye">
+                    <rect key="frame" x="0.0" y="88" width="450" height="2"/>
+                </progressView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Site Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.55000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="cGd-Va-uu8">
+                    <rect key="frame" x="20" y="14" width="421" height="30"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="cGd-Va-uu8" secondAttribute="trailing" constant="9" id="0tu-Na-qUl"/>
+                <constraint firstItem="TRC-hx-uye" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="Csv-27-gHv"/>
+                <constraint firstItem="HWR-4J-YUQ" firstAttribute="top" secondItem="cGd-Va-uu8" secondAttribute="bottom" constant="8" id="IGT-LL-7ld"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="HWR-4J-YUQ" secondAttribute="trailing" constant="9" id="TTE-46-98s"/>
+                <constraint firstItem="HWR-4J-YUQ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="Y1q-0r-G4b"/>
+                <constraint firstItem="cGd-Va-uu8" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="14" id="Y1y-kq-BY8"/>
+                <constraint firstItem="cGd-Va-uu8" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="dZn-Jp-oJz"/>
+                <constraint firstItem="TRC-hx-uye" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="fHi-Cb-byO"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="TRC-hx-uye" secondAttribute="trailing" id="hNc-4m-kXN"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="progressBar" destination="TRC-hx-uye" id="Jqv-y8-X9v"/>
+                <outlet property="titleLabel" destination="cGd-Va-uu8" id="4LC-JL-g8j"/>
+                <outlet property="urlLabel" destination="HWR-4J-YUQ" id="eVU-pY-ulR"/>
+            </connections>
+            <point key="canvasLocation" x="113.59999999999999" y="279.76011994002999"/>
+        </view>
+    </objects>
+</document>

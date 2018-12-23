@@ -28,7 +28,7 @@ struct SherlockService {
     var weight: Int = 0
     
     init(name: String, searchText: String, searchURL: String, icon: UIImage) {
-        self.type = serviceType(rawValue: name)!  // TODO: error check this
+        self.type = serviceType(rawValue: name)!
         self.searchText = searchText
         self.searchURL = searchURL
         self.icon = icon
