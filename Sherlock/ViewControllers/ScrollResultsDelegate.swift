@@ -10,5 +10,5 @@ import Foundation
 
 protocol ScrollResultsDelegate: class {
     func selectedLink(url: URL)
-    func switchedTo(service: sherlockServices)
+    func switchedTo(service: serviceType)
 }

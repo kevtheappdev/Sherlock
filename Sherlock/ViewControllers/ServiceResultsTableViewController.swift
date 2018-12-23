@@ -11,7 +11,7 @@ import UIKit
 class ServiceResultsTableViewController: UITableViewController {
     var serviceManager = SherlockServiceManager.main
     var services: [SherlockService]!
-    var cellCache = Dictionary<sherlockServices, SearchServiceTableViewCell>()
+    var cellCache = Dictionary<serviceType, SearchServiceTableViewCell>()
     weak var delegate: ServiceResultDelegate?
 
     override func viewDidLoad() {
@@ -34,7 +34,7 @@ class ServiceResultsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // TODO: add logic to cache the cell types ourselves
         let service = self.services[indexPath.row]
-        let serviceType = sherlockServices(rawValue: service.name)!
+        let serviceType = service.type
         var cell = cellCache[serviceType]
         if cell == nil {
             guard let loadCell = Bundle.main.loadNibNamed("SearchServiceCell", owner: self, options: nil)?.first as?  SearchServiceTableViewCell else {

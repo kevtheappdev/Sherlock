@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-enum sherlockServices: String {
+enum serviceType: String {
     case google = "google"
     case facebook = "facebook"
     case wikipedia = "wikipedia"
@@ -18,7 +18,7 @@ enum sherlockServices: String {
 }
 
 struct SherlockService {
-    var name: String
+    var type: serviceType
     var searchText: String
     var searchURL: String
     var icon: UIImage
@@ -28,7 +28,7 @@ struct SherlockService {
     var weight: Int = 0
     
     init(name: String, searchText: String, searchURL: String, icon: UIImage) {
-        self.name = name
+        self.type = serviceType(rawValue: name)!  // TODO: error check this
         self.searchText = searchText
         self.searchURL = searchURL
         self.icon = icon

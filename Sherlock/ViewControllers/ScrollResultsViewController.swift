@@ -15,7 +15,7 @@ class ScrollResultsViewController: UIViewController {
     var services: [SherlockService]
     var lastQuery:  String?
     var webControllers: [WebSearchViewController] = Array<WebSearchViewController>() // TODO: Eliminate references to VCs in two places
-    var webControllersOffsets: [sherlockServices:  WebSearchViewController] = Dictionary<sherlockServices, WebSearchViewController>()
+    var webControllersOffsets: [serviceType:  WebSearchViewController] = Dictionary<serviceType, WebSearchViewController>()
     weak var currentResult: WebSearchViewController!
     weak var delegate: ScrollResultsDelegate?
     var loadOk = true
@@ -92,7 +92,7 @@ class ScrollResultsViewController: UIViewController {
         for (service, webVC) in zip(services, webControllers) {
             webVC.view.frame = CGRect(x: curX, y: 0, width: width, height: height)
             
-            let serviceType = sherlockServices(rawValue: service.name)! // TODO: have type be built into SherlockService struct
+            let serviceType = service.type
             webControllersOffsets[serviceType] = webVC
             curX += width
         }
@@ -128,7 +128,7 @@ class ScrollResultsViewController: UIViewController {
     func scrollToService(service: SherlockService?){
         if let selectedService = service {
             // scroll to selected service
-            let type = sherlockServices(rawValue: selectedService.name)!
+            let type = selectedService.type
             guard let curVC = webControllersOffsets[type] else {
                 return
             }
@@ -148,7 +148,7 @@ extension ScrollResultsViewController: UIScrollViewDelegate {
         let offset = scrollView.contentOffset
         
         for (serviceType, webVC) in webControllersOffsets {
-            if offset == webVC.view.frame.origin && currentResult.sherlockService.name != webVC.sherlockService.name {
+            if offset == webVC.view.frame.origin && currentResult.sherlockService.type != webVC.sherlockService.type {
                 self.delegate?.switchedTo(service: serviceType)
                 self.currentResult = webVC
                 webVC.webView.navigationDelegate = self

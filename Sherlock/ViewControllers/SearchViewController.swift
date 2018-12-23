@@ -151,7 +151,7 @@ extension SearchViewController: ScrollResultsDelegate {
         self.present(sfVC, animated: true, completion: nil)
     }
     
-    func switchedTo(service: sherlockServices) {
+    func switchedTo(service: serviceType) {
         print("switched to: \(service.rawValue)")
     }
     

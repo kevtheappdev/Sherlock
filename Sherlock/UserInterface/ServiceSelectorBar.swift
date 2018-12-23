@@ -21,6 +21,7 @@ class ServiceSelectorBar: UIView {
     init() {
         self.services = SherlockServiceManager.main.getServices()
         super.init(frame: CGRect.zero)
+        self.backgroundColor = UIColor.white
         self.addSubview(scrollView)
         self.displayServices()
     }
@@ -84,10 +85,10 @@ class ServiceSelectorBar: UIView {
         })
     }
     
-    func select(service selectedService: sherlockServices){
+    func select(service selectedService: serviceType){
         var index = 0
         for service in self.services {
-            if service.name == selectedService.rawValue  {
+            if service.type == selectedService  {
                 break
             }
             index += 1

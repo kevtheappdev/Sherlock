@@ -14,7 +14,7 @@ class SearchServiceTableViewCell: UITableViewCell {
     @IBOutlet weak var serviceLabel: UILabel!
     @IBOutlet weak var serviceIcon: UIImageView!
     
-    var type: sherlockServices!
+    var type: serviceType!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -32,7 +32,7 @@ class SearchServiceTableViewCell: UITableViewCell {
         self.serviceLabel.text = service.searchText
         self.serviceIcon.image = service.icon
         
-        self.type = sherlockServices(rawValue: service.name)
+        self.type = service.type
     }
     
 }
