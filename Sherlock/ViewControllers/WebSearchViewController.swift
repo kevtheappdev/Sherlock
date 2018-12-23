@@ -11,22 +11,39 @@ import WebKit
 import SafariServices
 
 class WebSearchViewController: UIViewController {
-    let webView = WKWebView()
+    var webView: WKWebView = WKWebView()
+    var sherlockService: SherlockService
 
+    init(service: SherlockService, javascriptEnabled: Bool = false){
+        // init WKWebView
+        let webPrefs = WKPreferences()
+        webPrefs.javaScriptEnabled = javascriptEnabled
+        let webConfig =  WKWebViewConfiguration()
+        webConfig.preferences = webPrefs
+        self.webView = WKWebView(frame: CGRect.zero, configuration: webConfig)
+        self.sherlockService = service
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.webView.navigationDelegate = self
+        self.view.backgroundColor = UIColor.white
+        self.webView.scrollView.contentInsetAdjustmentBehavior = .never
     }
     
     override func loadView() {
          self.view = webView
     }
     
-    func execute(query: String, withURL url: String) {
+    func execute(query: String) {
+        let urlStr = self.sherlockService.searchURL
         let urliFiedQuery = self.urlify(text: query)
-        let completedURL = url.replacingOccurrences(of: "{query}", with: urliFiedQuery)
-        print("completedURL: \(completedURL)")
+        let completedURL = urlStr.replacingOccurrences(of: "{query}", with: urliFiedQuery)
         let url = URL(string: completedURL)!
         let request = URLRequest(url: url)
         self.webView.load(request)
@@ -38,17 +55,5 @@ class WebSearchViewController: UIViewController {
         return arr.joined(separator: "%20")
     }
 
-}
-
-// experiment: find out how to intercept link clicks
-extension WebSearchViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        // prevent clicks on search results - to be overridden with customcontent viewer
-        if navigationAction.navigationType == .linkActivated {
-            decisionHandler(.cancel)
-        } else {
-            decisionHandler(.allow)
-        }
-    }
 }
 

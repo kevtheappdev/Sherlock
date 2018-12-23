@@ -45,7 +45,7 @@ class SherlockServiceManager: NSObject {
         for service in userServices {
             let serviceDetails = serviceData[service]!.dictionary
             if serviceDetails != nil {
-                let name = serviceDetails!["name"]!.string!
+                let name = service
                 let searchName = serviceDetails!["searchText"]!.string!
                 let searchURL = serviceDetails!["searchURL"]!.string!
                 let iconPath = serviceDetails!["icon"]!.string!

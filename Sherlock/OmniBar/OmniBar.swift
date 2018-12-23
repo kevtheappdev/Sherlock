@@ -51,6 +51,11 @@ extension OmniBar: UITextFieldDelegate {
         }
         return true
     }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        self.delegate?.inputCleared()
+        return true
+    }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.delegate?.omnibarSubmitted()

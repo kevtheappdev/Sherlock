@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import  SafariServices
 
 class SearchViewController: UIViewController {
     var omniBar: OmniBar!
     var serviceVC: ServiceResultsTableViewController!
-    var webSearchVC: WebSearchViewController!
+    var resultsVC: ScrollResultsViewController!
     var query: String?
 
     override func viewDidLoad() {
@@ -27,7 +28,6 @@ class SearchViewController: UIViewController {
             self.omniBar = searchBar
             self.view.addSubview(self.omniBar)
             // layout
-            self.view.translatesAutoresizingMaskIntoConstraints = false
             self.view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             self.omniBar.translatesAutoresizingMaskIntoConstraints = false
             
@@ -61,9 +61,11 @@ class SearchViewController: UIViewController {
         self.serviceVC = service
         
         // web search view
-        let webSearch = WebSearchViewController()
+        let services = SherlockServiceManager.main.getServices()
+        let webSearch = ScrollResultsViewController(services: services)
+        webSearch.delegate = self
         register(viewController: webSearch)
-        self.webSearchVC = webSearch
+        self.resultsVC = webSearch
         
         // set ServiceResults as default
         switchTo(viewController: service)
@@ -105,12 +107,11 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: ServiceResultDelegate {
     func didSelect(service: SherlockService) {
-        guard let queryVal = self.query else {
-            return
-        }
+        guard let queryVal = self.query else {return}
+        if queryVal.isEmpty {return}
         self.omniBar.resignActive()
-        self.webSearchVC.execute(query: queryVal, withURL: service.searchURL)
-        switchTo(viewController: self.webSearchVC)
+        self.resultsVC.execute(query: queryVal, service: service, force: true)
+        switchTo(viewController: self.resultsVC)
     }
 }
 
@@ -118,10 +119,11 @@ extension SearchViewController: OmniBarDelegate {
     func inputChanged(input: String) {
         self.query = input
         // TODO: autocomplete process kicks off here
+        self.resultsVC.execute(query: input)
     }
     
     func inputCleared() {
-        
+        self.query = ""
     }
     
     func omniBarSelected() {
@@ -129,11 +131,11 @@ extension SearchViewController: OmniBarDelegate {
     }
     
     func omnibarSubmitted() {
-        guard let firstService = SherlockServiceManager.main.getServices().first else {return}
-        if let queryVal = self.query{
-            self.webSearchVC.execute(query: queryVal, withURL: firstService.searchURL)
+        if let queryVal = self.query {
+            if queryVal.isEmpty {return}
+            self.resultsVC.execute(query: queryVal, force: true)
             self.omniBar.resignActive()
-            switchTo(viewController: webSearchVC)
+            switchTo(viewController: resultsVC)
         }
     }
     
@@ -141,5 +143,16 @@ extension SearchViewController: OmniBarDelegate {
         
     }
     
+}
+
+extension SearchViewController: ScrollResultsDelegate {
+    func selectedLink(url: URL) {
+        let sfVC = SFSafariViewController(url: url)
+        self.present(sfVC, animated: true, completion: nil)
+    }
+    
+    func switchedTo(service: sherlockServices) {
+        print("switched to: \(service.rawValue)")
+    }
     
 }

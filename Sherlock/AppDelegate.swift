@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // set default service list if first launch (for now)
         let userDefaults = UserDefaults.standard
         if userDefaults.array(forKey: "services") == nil {
-            userDefaults.set([sherlockServices.google.rawValue, sherlockServices.wikipedia.rawValue, sherlockServices.facebook.rawValue
+            userDefaults.set([sherlockServices.google.rawValue, sherlockServices.duckduckgo.rawValue, sherlockServices.wikipedia.rawValue, sherlockServices.facebook.rawValue
                 ], forKey: "services")
         }
     }

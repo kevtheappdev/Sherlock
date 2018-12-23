@@ -13,6 +13,7 @@ enum sherlockServices: String {
     case google = "google"
     case facebook = "facebook"
     case wikipedia = "wikipedia"
+    case duckduckgo = "duckduckgo"
     case none =  "none"
 }
 
