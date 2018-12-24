@@ -18,8 +18,8 @@ class ServiceSelectorBar: UIView {
     private var buttonOffsets: [CGFloat] = Array<CGFloat>()
     weak var delegate: ServiceSelectorBarDelegate?
     
-    init() {
-        self.services = SherlockServiceManager.main.getServices()
+    init(services: [SherlockService]) {
+        self.services = services
         super.init(frame: CGRect.zero)
         self.backgroundColor = UIColor.white
         self.addSubview(scrollView)

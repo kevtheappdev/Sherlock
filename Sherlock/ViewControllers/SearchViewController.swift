@@ -54,14 +54,15 @@ class SearchViewController: UIViewController {
     
     // MARK: View Controller logic
     func loadViewControllers(){
+        let services = SherlockServiceManager.main.getServices()
+        
         // service results view
-        let service = ServiceResultsTableViewController()
+        let service = ServiceResultsTableViewController(services: services)
         register(viewController: service)
         service.delegate = self
         self.serviceVC = service
         
         // web search view
-        let services = SherlockServiceManager.main.getServices()
         let webSearch = ScrollResultsViewController(services: services)
         webSearch.delegate = self
         register(viewController: webSearch)

@@ -9,16 +9,23 @@
 import UIKit
 
 class ServiceResultsTableViewController: UITableViewController {
-    var serviceManager = SherlockServiceManager.main
-    var services: [SherlockService]!
+    var services: [SherlockService]
     var ogTableFrame: CGRect?
     var keyboardShown = false
     var cellCache = Dictionary<serviceType, SearchServiceTableViewCell>()
     weak var delegate: ServiceResultDelegate?
 
+    init(services: [SherlockService]){
+        self.services = services
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.services = self.serviceManager.getServices()
         self.tableView.separatorStyle = .none
         
         // listen for keyboard appearance

@@ -11,7 +11,7 @@ import WebKit
 
 class ScrollResultsViewController: UIViewController {
     let scrollView = UIScrollView()
-    let serviceSelector = ServiceSelectorBar()
+    var serviceSelector: ServiceSelectorBar
     var services: [SherlockService]
     var lastQuery:  String?
     var webControllers: [serviceType:  WebSearchViewController] = Dictionary<serviceType, WebSearchViewController>()
@@ -21,6 +21,7 @@ class ScrollResultsViewController: UIViewController {
 
     
     init(services: [SherlockService]) {
+        self.serviceSelector = ServiceSelectorBar(services: services)
         self.services = services
         super.init(nibName: nil, bundle: nil)
     }
