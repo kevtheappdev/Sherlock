@@ -109,6 +109,10 @@ class ScrollResultsViewController: UIViewController {
         }
         lastQuery = query
         
+        if force {
+            SherlockHistoryManager.main.log(search: query)
+        }
+        
         for (_, webVC) in webControllers { // TODO: limit this when we add more services
             webVC.execute(query: query)
         }

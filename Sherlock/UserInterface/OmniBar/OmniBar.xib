@@ -16,11 +16,18 @@
             <rect key="frame" x="0.0" y="0.0" width="604" height="115"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="o19-W3-xO7">
+                    <rect key="frame" x="20" y="0.0" width="461" height="115"/>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search"/>
+                </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h2l-dT-7Bf">
-                    <rect key="frame" x="544" y="37.5" width="40" height="40"/>
+                    <rect key="frame" x="544" y="42" width="30" height="30"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="40" id="5x5-ff-xTZ"/>
-                        <constraint firstAttribute="width" constant="40" id="AoK-rJ-oQX"/>
+                        <constraint firstAttribute="height" constant="30" id="5x5-ff-xTZ"/>
+                        <constraint firstAttribute="width" constant="30" id="AoK-rJ-oQX"/>
                         <constraint firstAttribute="width" secondItem="h2l-dT-7Bf" secondAttribute="height" multiplier="1:1" id="j0Z-Me-8Tl"/>
                     </constraints>
                     <state key="normal" image="cog.png"/>
@@ -29,32 +36,25 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uSY-M2-gmF">
-                    <rect key="frame" x="489" y="37.5" width="40" height="40"/>
+                    <rect key="frame" x="489" y="42" width="30" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="uSY-M2-gmF" secondAttribute="height" multiplier="1:1" id="9nm-mU-bwf"/>
-                        <constraint firstAttribute="width" constant="40" id="AxG-f9-T6s"/>
-                        <constraint firstAttribute="height" constant="40" id="ewX-kp-4c8"/>
+                        <constraint firstAttribute="width" constant="30" id="AxG-f9-T6s"/>
+                        <constraint firstAttribute="height" constant="30" id="ewX-kp-4c8"/>
                     </constraints>
                     <state key="normal" image="history.png"/>
                     <connections>
                         <action selector="historyButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="o0b-MG-mAO"/>
                     </connections>
                 </button>
-                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="o19-W3-xO7">
-                    <rect key="frame" x="20" y="0.0" width="461" height="115"/>
-                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search"/>
-                </textField>
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
             <constraints>
-                <constraint firstItem="h2l-dT-7Bf" firstAttribute="leading" secondItem="uSY-M2-gmF" secondAttribute="trailing" constant="15" id="BHq-cM-pDh"/>
+                <constraint firstItem="h2l-dT-7Bf" firstAttribute="leading" secondItem="uSY-M2-gmF" secondAttribute="trailing" constant="25" id="BHq-cM-pDh"/>
                 <constraint firstItem="o19-W3-xO7" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Eee-GK-Ueg"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="h2l-dT-7Bf" secondAttribute="trailing" constant="20" id="PBN-h4-q8u"/>
-                <constraint firstItem="h2l-dT-7Bf" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="btJ-kh-RxS"/>
-                <constraint firstItem="uSY-M2-gmF" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="hAn-uG-GON"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="h2l-dT-7Bf" secondAttribute="trailing" constant="30" id="PBN-h4-q8u"/>
+                <constraint firstItem="h2l-dT-7Bf" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="-0.5" id="btJ-kh-RxS"/>
+                <constraint firstItem="uSY-M2-gmF" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="-0.5" id="hAn-uG-GON"/>
                 <constraint firstItem="o19-W3-xO7" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="igQ-Gd-XlV"/>
                 <constraint firstItem="o19-W3-xO7" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="kM6-r6-682"/>
                 <constraint firstItem="uSY-M2-gmF" firstAttribute="leading" secondItem="o19-W3-xO7" secondAttribute="trailing" constant="8" id="s7S-Ik-XlM"/>

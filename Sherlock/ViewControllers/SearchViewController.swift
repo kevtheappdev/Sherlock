@@ -42,7 +42,7 @@ class SearchViewController: UIViewController {
                                                                      metrics: nil,
                                                                      views: views)
             
-            let heightConstraint = NSLayoutConstraint(item: searchBar, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 125)
+            let heightConstraint = NSLayoutConstraint(item: searchBar, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 100)
             
             self.view.addConstraints(verticalConstraints)
             self.view.addConstraints(horizontalConstraints)

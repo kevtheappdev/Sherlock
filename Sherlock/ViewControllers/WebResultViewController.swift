@@ -85,7 +85,7 @@ class WebResultViewController: UIViewController {
                                                                  metrics: nil,
                                                                  views: views)
         
-        let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:[titleBar(130)][webView][navBar(115)]",
+        let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:[titleBar(130)][webView][navBar(90)]",
                                                                  options: [], metrics: nil,
                                                                  views: views)
         
@@ -141,6 +141,11 @@ extension WebResultViewController: WebNavBarDelegate {
 
 extension WebResultViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        SherlockHistoryManager.main.log(webPage: webView.url!, title: webView.title!) // TODO: error check this
         self.titleBar.progressBar.progress = 0.0
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        decisionHandler(.allow)
     }
 }
