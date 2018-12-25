@@ -73,5 +73,15 @@ class SherlockHistoryManager: NSObject {
         return result
     }
     
-
+    // update
+    func update(entry: NSManagedObject) {
+        entry.setValue(Date(), forKey: "datetime")
+        self.save()
+    }
+    
+    // delete
+    func delete(entry: NSManagedObject){
+        self.managedContext.delete(entry)
+    }
+    
 }

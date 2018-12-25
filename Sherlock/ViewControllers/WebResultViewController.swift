@@ -11,6 +11,8 @@ import WebKit
 
 class WebResultViewController: UIViewController {
     var url: URL
+    var recordHistory: Bool
+    var historyRecorded = false
     var webView: WKWebView!
     var titleBar: WebTitleBar!
     var navBar: WebNavBar!
@@ -19,8 +21,9 @@ class WebResultViewController: UIViewController {
     var topConstraint: NSLayoutConstraint?
     var bottomConstraint: NSLayoutConstraint?
     
-    init(url: URL) {
+    init(url: URL, recordHistory: Bool = true) {
         self.url = url
+        self.recordHistory = recordHistory
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -103,6 +106,12 @@ class WebResultViewController: UIViewController {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "estimatedProgress" {
+            let progress = Float(self.webView.estimatedProgress)
+            if progress > 0.5 && self.recordHistory && !self.historyRecorded {
+                self.historyRecorded = true
+                SherlockHistoryManager.main.log(webPage: webView.url!, title: webView.title!) // TODO: error check this
+            }
+            
             self.titleBar.progressBar.progress = Float(self.webView.estimatedProgress)
             if webView.title  != nil  && !webView.title!.isEmpty {
                 self.titleBar.set(title: webView.title!, url: webView.url!.absoluteString)
@@ -141,11 +150,18 @@ extension WebResultViewController: WebNavBarDelegate {
 
 extension WebResultViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        SherlockHistoryManager.main.log(webPage: webView.url!, title: webView.title!) // TODO: error check this
         self.titleBar.progressBar.progress = 0.0
+        if self.recordHistory && !self.historyRecorded {
+            self.historyRecorded = true
+            SherlockHistoryManager.main.log(webPage: webView.url!, title: webView.title!)
+        }
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if navigationAction.navigationType == .linkActivated {
+            self.historyRecorded = false
+            self.recordHistory = true
+        }
         decisionHandler(.allow)
     }
 }

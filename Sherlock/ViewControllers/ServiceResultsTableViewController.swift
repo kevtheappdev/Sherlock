@@ -12,8 +12,10 @@ class ServiceResultsTableViewController: UITableViewController {
     var services: [SherlockService]
     var ogTableFrame: CGRect?
     var keyboardShown = false
+    var keyboardAdjusted = false
     var cellCache = Dictionary<serviceType, SearchServiceTableViewCell>()
     weak var delegate: ServiceResultDelegate?
+    var keyboardHeight: CGFloat?
 
     init(services: [SherlockService]){
         self.services = services
@@ -34,16 +36,29 @@ class ServiceResultsTableViewController: UITableViewController {
     }
     
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
+    
+    override func viewDidLayoutSubviews() {
+        if let kbdHeight = self.keyboardHeight {
+            if !self.keyboardShown || self.keyboardAdjusted {return}
+            self.ogTableFrame = self.view.frame
+            let fullHeight = self.view.frame.height
+            self.keyboardAdjusted = true
+            self.view.frame = CGRect(origin: self.view.frame.origin, size: CGSize(width: UIScreen.main.bounds.width, height: fullHeight - kbdHeight))
+        }
+    }
+    
     // MARK: - Keyboard notifications
     @objc
     func keyboardAppeared(notification: NSNotification) {
         if self.keyboardShown {return}
         self.keyboardShown =  true
-        self.ogTableFrame = self.view.frame
-        let fullHeight = self.view.frame.size.height
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardHeight =  keyboardFrame.cgRectValue.size.height
-            self.view.frame = CGRect(origin: self.view.frame.origin, size: CGSize(width: UIScreen.main.bounds.width, height: fullHeight - keyboardHeight))
+            self.keyboardHeight =  keyboardFrame.cgRectValue.size.height
         }
     }
     
@@ -51,6 +66,7 @@ class ServiceResultsTableViewController: UITableViewController {
     func keyboardDissapeared(notification: NSNotification) {
         if !self.keyboardShown {return}
         self.keyboardShown = false
+        self.keyboardAdjusted = false
         if let ogFrame = self.ogTableFrame {
             self.view.frame = ogFrame
         }

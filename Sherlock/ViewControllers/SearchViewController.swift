@@ -141,7 +141,13 @@ extension SearchViewController: OmniBarDelegate {
     }
     
     func omniBarButtonPressed(_ button: OmniBarButton) {
-        
+        if button == .history {
+            let historySB = UIStoryboard(name: "History", bundle: nil)
+            let historyVC = historySB.instantiateViewController(withIdentifier: "historyVC") as! HistoryViewController
+            historyVC.delegate = self
+            historyVC.modalPresentationStyle = .overFullScreen
+            self.present(historyVC, animated: true)
+        }
     }
     
 }
@@ -154,6 +160,16 @@ extension SearchViewController: ScrollResultsDelegate {
     
     func switchedTo(service: serviceType) {
         print("switched to: \(service.rawValue)")
+    }
+    
+}
+
+extension SearchViewController: HistoryVCDDelegate {
+    func execute(search: String) {
+        self.resultsVC.execute(query: search)
+        switchTo(viewController: resultsVC)
+        self.omniBar.searchField.text = search
+        self.omniBar.resignActive()
     }
     
 }
