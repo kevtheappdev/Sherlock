@@ -20,6 +20,7 @@ class HistoryViewController: UIViewController {
     let push = PushTransition()
     let unwindPush = UnwindPushTransition()
     let interactor = PushInteractor()
+    var modalInteractor: NewModalInteractor?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +28,10 @@ class HistoryViewController: UIViewController {
         self.tableView.delegate = self
         self.historyNavBar.set(colors: _sherlockGradientColors)
         self.view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        
+        // interactive transition
+        let edgeRecognizer = UIPanGestureRecognizer(target: self, action: #selector(HistoryViewController.didPan(_:)))
+        self.view.addGestureRecognizer(edgeRecognizer)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -88,6 +93,41 @@ class HistoryViewController: UIViewController {
         dateFmt.timeZone = TimeZone.ReferenceType.default
         dateFmt.dateFormat = "MMM dd"
         return dateFmt.string(from:date)
+    }
+    
+    @objc func didPan(_ sender: UIPanGestureRecognizer){
+        let percenTrheshold: CGFloat = 0.3
+        let translation = sender.translation(in: self.view)
+        let verticalMovement = translation.y / self.view.bounds.height
+        let downwardMovement = fmax(Float(verticalMovement), 0.0)
+        let downwardMovementPercent = fminf(downwardMovement, 1.0)
+        let progress = CGFloat(downwardMovementPercent)
+        
+        guard let interactor = self.modalInteractor else {return}
+        
+        switch sender.state {
+        case .began:
+            interactor.hasStarted = true
+            self.dismiss(animated: true, completion: nil)
+        case .changed:
+            interactor.shouldFinish = progress > percenTrheshold
+            interactor.update(progress)
+        case .ended:
+            interactor.hasStarted = false
+            if interactor.shouldFinish {
+                interactor.finish()
+            } else {
+                interactor.cancel()
+            }
+        default:
+            break
+            
+        }
+        
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
 }

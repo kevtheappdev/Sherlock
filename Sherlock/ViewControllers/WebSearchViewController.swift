@@ -12,6 +12,7 @@ import SafariServices
 
 class WebSearchViewController: UIViewController {
     var webView: WKWebView = WKWebView()
+    var coverView: UIView
     var sherlockService: SherlockService
 
     init(service: SherlockService, javascriptEnabled: Bool = false){
@@ -21,8 +22,12 @@ class WebSearchViewController: UIViewController {
         let webConfig =  WKWebViewConfiguration()
         webConfig.preferences = webPrefs
         self.webView = WKWebView(frame: CGRect.zero, configuration: webConfig)
+        self.coverView = UIView()
+        
         self.sherlockService = service
         super.init(nibName: nil, bundle: nil)
+        
+        self.webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -32,12 +37,16 @@ class WebSearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.view.backgroundColor = UIColor.white
         self.webView.scrollView.contentInsetAdjustmentBehavior = .never
     }
     
     override func loadView() {
          self.view = webView
+    }
+    
+    override func  viewDidLayoutSubviews() {
+        self.coverView.backgroundColor = UIColor.white
+        self.coverView.frame = self.webView.frame
     }
     
     func execute(query: String) {
@@ -46,6 +55,7 @@ class WebSearchViewController: UIViewController {
         let completedURL = urlStr.replacingOccurrences(of: "{query}", with: urliFiedQuery)
         let url = URL(string: completedURL)!
         let request = URLRequest(url: url)
+        self.view.addSubview(self.coverView)
         self.webView.load(request)
     }
     
@@ -55,5 +65,13 @@ class WebSearchViewController: UIViewController {
         return arr.joined(separator: "%20")
     }
 
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "loading" {
+            if !self.webView.isLoading {
+                print("finished loading: \(sherlockService.searchURL)")
+                self.coverView.removeFromSuperview()
+            }
+        }
+    }
+    
 }
-

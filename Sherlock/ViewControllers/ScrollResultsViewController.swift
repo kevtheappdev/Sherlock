@@ -35,6 +35,7 @@ class ScrollResultsViewController: UIViewController {
         //  setup scrollview
         self.scrollView.delegate = self
         self.scrollView.isPagingEnabled = true
+        self.scrollView.showsHorizontalScrollIndicator = false
         self.scrollView.bounces = false
         self.view.addSubview(self.scrollView)
         

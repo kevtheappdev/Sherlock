@@ -16,6 +16,7 @@ class SearchViewController: UIViewController {
     let newModal = NewModal()
     let unwindNewModal = UnwindNewModal()
     let interactor = PushInteractor()
+    let modalInteractor = NewModalInteractor()
     
     var omniBar: OmniBar!
     var serviceVC: ServiceResultsTableViewController!
@@ -110,6 +111,10 @@ class SearchViewController: UIViewController {
     func switchTo(viewController vc: UIViewController){
         self.view.bringSubviewToFront(vc.view)
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
 }
 
@@ -153,7 +158,7 @@ extension SearchViewController: OmniBarDelegate {
             let historyVC = historySB.instantiateViewController(withIdentifier: "historyVC") as! HistoryViewController
             historyVC.delegate = self
             historyVC.transitioningDelegate = self
-            historyVC.modalPresentationStyle = .fullScreen
+            historyVC.modalInteractor = self.modalInteractor
             self.present(historyVC, animated: true)
         }
     }
@@ -200,6 +205,10 @@ extension SearchViewController: UIViewControllerTransitioningDelegate {
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return interactor.hasStarted ? interactor : nil
+        if let _ = animator as? UnwindPushTransition {
+            return interactor.hasStarted ? interactor : nil
+        } else {
+            return modalInteractor.hasStarted ? modalInteractor : nil
+        }
     }
 }

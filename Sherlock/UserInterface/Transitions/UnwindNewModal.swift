@@ -31,7 +31,7 @@ class UnwindNewModal: NSObject, UIViewControllerAnimatedTransitioning
             froMView.frame = finalFrame
             toView.transform = identity
             }, completion: {(done) in
-            transitionContext.completeTransition(done)
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         })
     }
     

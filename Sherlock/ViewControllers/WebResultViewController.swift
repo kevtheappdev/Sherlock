@@ -43,6 +43,7 @@ class WebResultViewController: UIViewController {
         
         // title bar setup
         self.titleBar = Bundle.main.loadNibNamed("WebTitleBar", owner: self, options: nil)?.first as? WebTitleBar
+        self.titleBar.delegate = self
         self.view.addSubview(self.titleBar)
         
         // nav bar setup
@@ -152,7 +153,6 @@ class WebResultViewController: UIViewController {
                  interactor.finish()
             } else {
                 interactor.cancel()
-                UIApplication.shared.keyWindow!.addSubview(self.view)
             }
         default:
             break
@@ -186,6 +186,13 @@ extension WebResultViewController: WebNavBarDelegate {
         let shareSheet = UIActivityViewController(activityItems: [self.url], applicationActivities: nil)
         self.present(shareSheet, animated: true)
     }
+}
+
+extension WebResultViewController: WebTitleBarDelegate {
+    func titleBackButtonPressed() {
+        self.dismiss(animated: true, completion: nil)
+    }
+
 }
 
 extension WebResultViewController: WKNavigationDelegate {
