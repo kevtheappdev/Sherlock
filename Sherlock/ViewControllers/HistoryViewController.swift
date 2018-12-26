@@ -16,12 +16,17 @@ class HistoryViewController: UIViewController {
     var dateStrings: [String] = []
     weak var delegate: HistoryVCDDelegate?
     
+    // transitions
+    let push = PushTransition()
+    let unwindPush = UnwindPushTransition()
+    let interactor = PushInteractor()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.historyNavBar.set(colors: _sherlockGradientColors)
-//        self.loadHistory()
+        self.view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -135,12 +140,14 @@ extension HistoryViewController: UITableViewDelegate {
             let url = URL(string: webEntry.url!)! // TODO: Error check this in the History manager - make sure we don't save without a valid url
             let webVC = WebResultViewController(url: url, recordHistory: false)
             SherlockHistoryManager.main.update(entry: webEntry)
-            self.presentDetail(webVC)
+            webVC.transitioningDelegate = self
+            webVC.interactor = self.interactor
+            self.present(webVC, animated: true)
         } else {
             let searchEntry = selectedEntry as! SearchHistoryEntry
-            self.dismiss(animated: true, completion: nil)
             self.delegate?.execute(search: searchEntry.query!)
             SherlockHistoryManager.main.update(entry: searchEntry)
+            self.dismiss(animated: true, completion: nil)
         }
     }
 }
@@ -163,12 +170,23 @@ extension HistoryViewController: HistoryCellDelegate {
                 self.tableView.deleteRows(at: [IndexPath(row: rowIndex, section: sectionIndex)], with: UITableView.RowAnimation.automatic)
             }
             
-
-            
             // delete from core data
             SherlockHistoryManager.main.delete(entry: deletedObject)
         }
     }
     
+}
 
+extension HistoryViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return  self.push
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return self.unwindPush
+    }
+    
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return self.interactor.hasStarted ? self.interactor : nil
+    }
 }

@@ -16,13 +16,6 @@
             <rect key="frame" x="0.0" y="0.0" width="604" height="115"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="o19-W3-xO7">
-                    <rect key="frame" x="20" y="0.0" width="461" height="115"/>
-                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search"/>
-                </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h2l-dT-7Bf">
                     <rect key="frame" x="544" y="42" width="30" height="30"/>
                     <constraints>
@@ -47,24 +40,31 @@
                         <action selector="historyButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="o0b-MG-mAO"/>
                     </connections>
                 </button>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="j6C-eS-b2s">
+                    <rect key="frame" x="36" y="0.0" width="445" height="115"/>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search"/>
+                </textField>
             </subviews>
-            <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+            <color key="backgroundColor" red="0.0" green="0.66614978869999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
+                <constraint firstItem="j6C-eS-b2s" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="36" id="1D2-eV-neO"/>
                 <constraint firstItem="h2l-dT-7Bf" firstAttribute="leading" secondItem="uSY-M2-gmF" secondAttribute="trailing" constant="25" id="BHq-cM-pDh"/>
-                <constraint firstItem="o19-W3-xO7" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Eee-GK-Ueg"/>
+                <constraint firstItem="uSY-M2-gmF" firstAttribute="leading" secondItem="j6C-eS-b2s" secondAttribute="trailing" constant="8" id="IMi-Ue-u9b"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="h2l-dT-7Bf" secondAttribute="trailing" constant="30" id="PBN-h4-q8u"/>
+                <constraint firstItem="j6C-eS-b2s" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="Qdb-BY-6Zf"/>
                 <constraint firstItem="h2l-dT-7Bf" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="-0.5" id="btJ-kh-RxS"/>
+                <constraint firstItem="j6C-eS-b2s" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="buW-59-Ruz"/>
                 <constraint firstItem="uSY-M2-gmF" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="-0.5" id="hAn-uG-GON"/>
-                <constraint firstItem="o19-W3-xO7" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="igQ-Gd-XlV"/>
-                <constraint firstItem="o19-W3-xO7" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="kM6-r6-682"/>
-                <constraint firstItem="uSY-M2-gmF" firstAttribute="leading" secondItem="o19-W3-xO7" secondAttribute="trailing" constant="8" id="s7S-Ik-XlM"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
-                <outlet property="searchField" destination="o19-W3-xO7" id="Kof-v5-VNq"/>
+                <outlet property="searchField" destination="j6C-eS-b2s" id="h46-fn-9bU"/>
             </connections>
             <point key="canvasLocation" x="419.19999999999999" y="76.911544227886068"/>
         </view>

@@ -10,6 +10,13 @@ import UIKit
 import  SafariServices
 
 class SearchViewController: UIViewController {
+    // transitions
+    let present = PushTransition()
+    let dissmiss = UnwindPushTransition()
+    let newModal = NewModal()
+    let unwindNewModal = UnwindNewModal()
+    let interactor = PushInteractor()
+    
     var omniBar: OmniBar!
     var serviceVC: ServiceResultsTableViewController!
     var resultsVC: ScrollResultsViewController!
@@ -145,7 +152,8 @@ extension SearchViewController: OmniBarDelegate {
             let historySB = UIStoryboard(name: "History", bundle: nil)
             let historyVC = historySB.instantiateViewController(withIdentifier: "historyVC") as! HistoryViewController
             historyVC.delegate = self
-            historyVC.modalPresentationStyle = .overFullScreen
+            historyVC.transitioningDelegate = self
+            historyVC.modalPresentationStyle = .fullScreen
             self.present(historyVC, animated: true)
         }
     }
@@ -155,7 +163,9 @@ extension SearchViewController: OmniBarDelegate {
 extension SearchViewController: ScrollResultsDelegate {
     func selectedLink(url: URL) {
         let sfVC = WebResultViewController(url: url)
-        self.presentDetail(sfVC)
+        sfVC.transitioningDelegate = self
+        sfVC.interactor = self.interactor
+        self.present(sfVC, animated: true)
     }
     
     func switchedTo(service: serviceType) {
@@ -172,4 +182,24 @@ extension SearchViewController: HistoryVCDDelegate {
         self.omniBar.resignActive()
     }
     
+}
+
+extension SearchViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        if let _ = presented as? HistoryViewController {
+            return self.newModal
+        }
+        return self.present
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        if let _ = dismissed as? HistoryViewController {
+            return self.unwindNewModal
+        }
+        return self.dissmiss
+    }
+    
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return interactor.hasStarted ? interactor : nil
+    }
 }

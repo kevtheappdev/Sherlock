@@ -16,6 +16,7 @@ class WebResultViewController: UIViewController {
     var webView: WKWebView!
     var titleBar: WebTitleBar!
     var navBar: WebNavBar!
+    var interactor: PushInteractor?
     
     // constraints
     var topConstraint: NSLayoutConstraint?
@@ -48,6 +49,11 @@ class WebResultViewController: UIViewController {
         self.navBar = Bundle.main.loadNibNamed("WebNavBar", owner: self, options: nil)?.first as? WebNavBar
         self.navBar.delegate = self
         self.view.addSubview(self.navBar)
+        
+        // interaction gesture
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(WebResultViewController.didPan(_:)))
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(gestureRecognizer)
         
         self.load()
     }
@@ -104,6 +110,7 @@ class WebResultViewController: UIViewController {
         self.webView.load(request)
     }
     
+    // webview progress
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "estimatedProgress" {
             let progress = Float(self.webView.estimatedProgress)
@@ -118,6 +125,39 @@ class WebResultViewController: UIViewController {
             }
         }
     }
+    
+    // transition gesture
+    @objc func didPan(_ sender: UIPanGestureRecognizer){
+        let percentThreshold: CGFloat = 0.3
+        // convert x-position rightward pull progress
+        let translation = sender.translation(in: self.view)
+        let horizontalMovement = translation.x / self.view.bounds.width
+        let rightwardMovement = fmaxf(Float(horizontalMovement), 0.0)
+        let rightwardMovementPercent = fminf(rightwardMovement,  1.0)
+        let progress = CGFloat(rightwardMovementPercent)
+        
+        guard let interactor = self.interactor else {return}
+        
+        switch sender.state {
+        case .began:
+            interactor.hasStarted = true
+            self.dismiss(animated: true, completion: nil)
+        case .changed:
+            interactor.shouldFinish = progress > percentThreshold
+            interactor.update(progress)
+        case .ended:
+            interactor.hasStarted = false
+            interactor.completionSpeed = 0.99
+            if interactor.shouldFinish {
+                 interactor.finish()
+            } else {
+                interactor.cancel()
+                UIApplication.shared.keyWindow!.addSubview(self.view)
+            }
+        default:
+            break
+        }
+    }
 
 }
 
@@ -127,7 +167,7 @@ extension WebResultViewController: WebNavBarDelegate {
             self.navBar.forwardButton.isEnabled = true
             self.webView.goBack()
         }  else {
-            self.dismissDetail() // for now
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
