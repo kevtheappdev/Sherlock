@@ -12,7 +12,7 @@ import SafariServices
 
 class WebSearchViewController: UIViewController {
     var webView: WKWebView = WKWebView()
-    var coverView: UIView
+    var coverView: CoverView!
     var sherlockService: SherlockService
 
     init(service: SherlockService, javascriptEnabled: Bool = false){
@@ -22,8 +22,6 @@ class WebSearchViewController: UIViewController {
         let webConfig =  WKWebViewConfiguration()
         webConfig.preferences = webPrefs
         self.webView = WKWebView(frame: CGRect.zero, configuration: webConfig)
-        self.coverView = UIView()
-        
         self.sherlockService = service
         super.init(nibName: nil, bundle: nil)
         
@@ -38,6 +36,10 @@ class WebSearchViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.webView.scrollView.contentInsetAdjustmentBehavior = .never
+        
+        // setup cover view
+        self.coverView = CoverView()
+        self.coverView.backgroundColor = UIColor.white
     }
     
     override func loadView() {
@@ -45,8 +47,7 @@ class WebSearchViewController: UIViewController {
     }
     
     override func  viewDidLayoutSubviews() {
-        self.coverView.backgroundColor = UIColor.white
-        self.coverView.frame = self.webView.frame
+        self.coverView.frame = CGRect(origin: CGPoint.zero, size: self.view.frame.size)
     }
     
     func execute(query: String) {
@@ -56,6 +57,7 @@ class WebSearchViewController: UIViewController {
         let url = URL(string: completedURL)!
         let request = URLRequest(url: url)
         self.view.addSubview(self.coverView)
+        self.coverView.loadingIndicator.startLoadAnimation()
         self.webView.load(request)
     }
     
