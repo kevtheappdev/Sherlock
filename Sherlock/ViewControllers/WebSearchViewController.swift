@@ -51,13 +51,13 @@ class WebSearchViewController: UIViewController {
     }
     
     func execute(query: String) {
+        self.coverView.loadingIndicator.startLoadAnimation()
         let urlStr = self.sherlockService.searchURL
         let urliFiedQuery = self.urlify(text: query)
         let completedURL = urlStr.replacingOccurrences(of: "{query}", with: urliFiedQuery)
         let url = URL(string: completedURL)!
         let request = URLRequest(url: url)
         self.view.addSubview(self.coverView)
-        self.coverView.loadingIndicator.startLoadAnimation()
         self.webView.load(request)
     }
     

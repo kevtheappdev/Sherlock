@@ -13,7 +13,6 @@ class CoverView: UIView {
 
     init(){
         super.init(frame: CGRect.zero)
-        self.loadingIndicator.startLoadAnimation()
         self.loadingIndicator.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: 100, height: 100))
         self.addSubview(self.loadingIndicator)
     }

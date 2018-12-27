@@ -22,12 +22,24 @@ class SearchViewController: UIViewController {
     var serviceVC: ServiceResultsTableViewController!
     var resultsVC: ScrollResultsViewController!
     var query: String?
+    var queryToExecute = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // view setup
         setupOmniBar()
         loadViewControllers()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.queryToExecute {
+            self.resultsVC.execute(query: self.query!)
+            switchTo(viewController: resultsVC)
+            self.omniBar.searchField.text = self.query
+            self.omniBar.resignActive()
+            self.queryToExecute = false
+        }
     }
     
     func setupOmniBar(){
@@ -181,10 +193,8 @@ extension SearchViewController: ScrollResultsDelegate {
 
 extension SearchViewController: HistoryVCDDelegate {
     func execute(search: String) {
-        self.resultsVC.execute(query: search)
-        switchTo(viewController: resultsVC)
-        self.omniBar.searchField.text = search
-        self.omniBar.resignActive()
+        self.query = search
+        self.queryToExecute = true
     }
     
 }

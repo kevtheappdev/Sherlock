@@ -98,7 +98,6 @@ class ScrollResultsViewController: UIViewController {
 
     }
     
-    
     func execute(query: String, service: SherlockService? = nil, force: Bool = false){
         if !force && !self.loadOk {return}
         
