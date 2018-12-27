@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+
 enum serviceType: String {
     case google = "google"
     case facebook = "facebook"
@@ -22,6 +23,7 @@ struct SherlockService {
     var searchText: String
     var searchURL: String
     var icon: UIImage
+    var config = SherlockServiceConfig()
     // TODO: add support for autocomplete handler
     
     // Default values
@@ -33,6 +35,12 @@ struct SherlockService {
         self.searchURL = searchURL
         self.icon = icon
     }
+}
+
+
+struct SherlockServiceConfig {
+    var resultsJavascriptEnabled = false
+    var searchURLS: [String] = []
 }
 
 

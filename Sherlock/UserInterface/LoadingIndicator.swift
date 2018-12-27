@@ -10,7 +10,6 @@ import UIKit
 
 class LoadingIndicator: UIView {
     let loadLayer =  CAShapeLayer()
-    var animationStarted = false
     
     override func layoutSubviews() {
         let size = self.frame.size.width > self.frame.size.height ? self.frame.size.height : self.frame.size.width
@@ -25,14 +24,11 @@ class LoadingIndicator: UIView {
     }
     
     func startLoadAnimation(){
-        if !animationStarted  {
-            let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
-            rotateAnimation.fromValue = 0.0
-            rotateAnimation.toValue =  CGFloat(Float.pi * 2.0)
-            rotateAnimation.duration = 1.0
-            rotateAnimation.repeatCount = .greatestFiniteMagnitude
-            self.animationStarted = true
-            self.layer.add(rotateAnimation, forKey: nil)
-        }
+        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotateAnimation.fromValue = 0.0
+        rotateAnimation.toValue =  CGFloat(Float.pi * 2.0)
+        rotateAnimation.duration = 1.0
+        rotateAnimation.repeatCount = .greatestFiniteMagnitude
+        self.layer.add(rotateAnimation, forKey: nil)
     }
 }

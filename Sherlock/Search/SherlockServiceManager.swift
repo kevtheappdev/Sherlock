@@ -49,7 +49,11 @@ class SherlockServiceManager: NSObject {
                 let iconPath = serviceDetails!["icon"]!.string!
                 let icon = UIImage(named: iconPath)!
                 
-                let serviceObj = SherlockService(name: name, searchText: searchName, searchURL: searchURL, icon: icon)
+                var serviceObj = SherlockService(name: name, searchText: searchName, searchURL: searchURL, icon: icon)
+                if let config = serviceDetails!["config"]?.dictionary {
+                    serviceObj.config = self.parse(config: config)
+                }
+                
                 self.services.append(serviceObj)
             }
         }
@@ -64,5 +68,21 @@ extension SherlockServiceManager {
     func getServices() -> [SherlockService]
     {
         return self.services
+    }
+}
+
+// MARK: Configuration parsing
+extension SherlockServiceManager {
+    func parse(config configDict: Dictionary<String, JSON>) -> SherlockServiceConfig {
+        var serviceConfig = SherlockServiceConfig()
+        
+        // resultsPage options
+        if let resultsConfig = configDict["resultsPage"]?.dictionary {
+            if let jsEnabled = resultsConfig["javascriptEnabled"]?.bool {
+                serviceConfig.resultsJavascriptEnabled = jsEnabled
+            }
+        }
+        
+        return serviceConfig
     }
 }

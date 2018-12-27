@@ -45,7 +45,8 @@ class ScrollResultsViewController: UIViewController {
         
         // add web views
         for service in services {
-            let webVC = WebSearchViewController(service: service)
+            let config = service.config
+            let webVC = WebSearchViewController(service: service, javascriptEnabled: config.resultsJavascriptEnabled)
             self.webControllers[service.type] = webVC
             self.addChild(webVC)
             webVC.didMove(toParent:self)
@@ -119,7 +120,7 @@ class ScrollResultsViewController: UIViewController {
         }
         
         scrollToService(service: service)
-        
+    
         // rate limiting
         self.loadOk = false
         Timer.scheduledTimer(withTimeInterval: 0.75, repeats: false, block:{_  in  // TODO: have servicespecific rate limiting

@@ -14,7 +14,12 @@
 	"facebook": {
 		"searchText": "Search with Facebook",
 		"searchURL": "https://www.facebook.com/search/top/?q={query}",
-		"icon": "facebook_icon.png"
+		"icon": "facebook_icon.png",
+		"config": {
+			"resultsPage": {
+				"javascriptEnabled": true
+			}
+		}
 	},
     
     "duckduckgo": {
