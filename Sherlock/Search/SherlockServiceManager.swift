@@ -14,6 +14,7 @@ class SherlockServiceManager: NSObject {
     
     // ivars
     var services = Array<SherlockService>() // TODO: replace with custom data structure
+    var delegate: SherlockServiceManagerDelegate? // TODO: Look into having multiple subscribers
     
     private override init() {
         super.init()
@@ -54,25 +55,58 @@ class SherlockServiceManager: NSObject {
                     serviceObj.config = self.parse(config: config)
                 }
                 
+                if let acURL = serviceDetails!["acURL"]?.string {
+                    if let acParser = autocomplete[name] {
+                        serviceObj.automcompleteHandler = AutoCompleteRequester(url: acURL, autocomplete: acParser)
+                    }
+                }
+                
+                
                 self.services.append(serviceObj)
             }
         }
         
     }
     
+    
 }
 
 // MARK: API Methods
 extension SherlockServiceManager {
     // temp function for current state of datastructures
-    func getServices() -> [SherlockService]
+    func getServices() -> [SherlockService] // TODO: callers pass in reference to conforming delegate method
     {
         return self.services
+    }
+    
+    func beginAutocomplete(forQuery query: String){
+        for service in self.services {
+            service.automcompleteHandler?.makeRequest(withQuery: query) {(error) in
+                if error == nil {
+                    self.delegate?.autocompleteResultsChanged(self.services)
+                }
+            }
+        }
+    }
+    
+    func clearAutocomplete(){
+        for service in self.services {
+            service.automcompleteHandler?.suggestions.removeAll(keepingCapacity: true)
+        }
+        
+        self.delegate?.autocompleteResultsChanged(self.services)
+    }
+    
+    func cancelAutocomplete(){
+        for service in self.services {
+            service.automcompleteHandler?.cancel()
+        }
     }
 }
 
 // MARK: Configuration parsing
 extension SherlockServiceManager {
+    // configure SherlockServiceConfig objectr from the JSON
     func parse(config configDict: Dictionary<String, JSON>) -> SherlockServiceConfig {
         var serviceConfig = SherlockServiceConfig()
         

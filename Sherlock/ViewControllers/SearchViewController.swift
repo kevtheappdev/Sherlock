@@ -131,6 +131,11 @@ class SearchViewController: UIViewController {
 }
 
 extension SearchViewController: ServiceResultDelegate {
+    func updated(query: String) {
+        self.query = query
+        self.omniBar.searchField.text = query
+    }
+    
     func didSelect(service: SherlockService) {
         guard let queryVal = self.query else {return}
         if queryVal.isEmpty {return}
@@ -143,12 +148,16 @@ extension SearchViewController: ServiceResultDelegate {
 extension SearchViewController: OmniBarDelegate {
     func inputChanged(input: String) {
         self.query = input
-        // TODO: autocomplete process kicks off here
+        SherlockServiceManager.main.beginAutocomplete(forQuery: input)
         self.resultsVC.execute(query: input)
     }
     
     func inputCleared() {
         self.query = ""
+        // clear autocomplete suggestions
+        let serviceManager = SherlockServiceManager.main
+        serviceManager.clearAutocomplete()
+        serviceManager.cancelAutocomplete()
     }
     
     func omniBarSelected() {

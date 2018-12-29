@@ -53,18 +53,12 @@ class WebSearchViewController: UIViewController {
     func execute(query: String) {
         self.coverView.loadingIndicator.startLoadAnimation()
         let urlStr = self.sherlockService.searchURL
-        let urliFiedQuery = self.urlify(text: query)
+        let urliFiedQuery = urlify(text: query)
         let completedURL = urlStr.replacingOccurrences(of: "{query}", with: urliFiedQuery)
         let url = URL(string: completedURL)!
         let request = URLRequest(url: url)
         self.view.addSubview(self.coverView)
         self.webView.load(request)
-    }
-    
-    func urlify(text textStr: String) -> String {
-        let str = textStr.components(separatedBy: " ")
-        let arr = str.filter({$0 != ""})
-        return arr.joined(separator: "%20")
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {

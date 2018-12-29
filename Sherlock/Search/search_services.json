@@ -2,6 +2,7 @@
 	"google": {
 		"searchText": "Search with Google",
 		"searchURL": "http://www.google.com/search?q={query}",
+		"acURL": "http://suggestqueries.google.com/complete/search?client=firefox&q={query}",
 		"icon": "google_icon.png"
 	},
 
@@ -25,6 +26,7 @@
     "duckduckgo": {
         "searchText": "Search with DuckDuckGo",
         "searchURL": "https://duckduckgo.com/?q={query}",
+        "acURL": "http://duckduckgo.com/ac/?q={query}",
         "icon": "duckduckgo.png"
     }
 }

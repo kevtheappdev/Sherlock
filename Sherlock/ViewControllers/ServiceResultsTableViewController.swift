@@ -16,6 +16,7 @@ class ServiceResultsTableViewController: UITableViewController {
     var cellCache = Dictionary<serviceType, SearchServiceTableViewCell>()
     weak var delegate: ServiceResultDelegate?
     var keyboardHeight: CGFloat?
+    var reloadingResults = false
 
     init(services: [SherlockService]){
         self.services = services
@@ -29,6 +30,12 @@ class ServiceResultsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.separatorStyle = .none
+        
+        // subscribe to SherlockServiceManager delegate
+        SherlockServiceManager.main.delegate = self
+        
+        // register autocomplete cells
+        self.tableView.register(UINib(nibName: "AutoCompleteTableViewCell", bundle: nil), forCellReuseIdentifier: "autocomplete")
         
         // listen for keyboard appearance
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardAppeared(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -76,38 +83,41 @@ class ServiceResultsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return self.services.count
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return self.services[section].searchText
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.services.count
+        if let acHandler = self.services[section].automcompleteHandler {
+            return acHandler.suggestions.count
+        }
+        
+        return 0
+
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let service = self.services[indexPath.row]
-        let serviceType = service.type
-        var cell = cellCache[serviceType]
-        if cell == nil {
-            guard let loadCell = Bundle.main.loadNibNamed("SearchServiceCell", owner: self, options: nil)?.first as?  SearchServiceTableViewCell else {
-                fatalError("Failed to load searchServiceCell nib.")
-            }
-            cellCache[serviceType] = loadCell
-            cell = loadCell
-        }
-        
-        // Configure the cell...
-        cell!.configureCell(withService: service)
-        return cell!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "autocomplete", for: indexPath) as! AutoCompleteTableViewCell
+        let suggestion = self.services[indexPath.section].automcompleteHandler!.suggestions[indexPath.row]
+        cell.suggestionLabel.text = suggestion
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 85
+        return 60
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let service = self.services[indexPath.row]
+        let service = self.services[indexPath.section]
+        guard let querySuggestion = service.automcompleteHandler?.suggestions[indexPath.row] else {
+            return
+        }
+        self.delegate?.updated(query: querySuggestion)
         self.delegate?.didSelect(service: service)
     }
 
@@ -156,5 +166,23 @@ class ServiceResultsTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
 
+}
+
+extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
+    func autocompleteResultsChanged(_ services: [SherlockService]) {
+        self.services = services
+        if self.reloadingResults { // TOOD: maybe replace with timer callback
+            return // skip this reload if data source is updating.
+        }
+        
+        CATransaction.begin()
+        self.reloadingResults = true
+        CATransaction.setCompletionBlock({() in
+            self.reloadingResults = false
+        })
+        self.tableView.reloadData()
+        CATransaction.commit()
+    }
 }

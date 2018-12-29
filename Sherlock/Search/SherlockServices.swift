@@ -24,7 +24,7 @@ struct SherlockService {
     var searchURL: String
     var icon: UIImage
     var config = SherlockServiceConfig()
-    // TODO: add support for autocomplete handler
+    var automcompleteHandler: AutoCompleteRequester?
     
     // Default values
     var weight: Int = 0
