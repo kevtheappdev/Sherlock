@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="70" id="mf1-tB-VFJ">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mf1-tB-VFJ" id="z9x-jV-iER">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="69.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.png" translatesAutoresizingMaskIntoConstraints="NO" id="wLR-b0-iLN">
+                        <rect key="frame" x="158" y="16" width="59" height="38"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="59" id="J30-e8-t5A"/>
+                            <constraint firstAttribute="height" constant="38" id="pbs-JE-BgT"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="wLR-b0-iLN" firstAttribute="centerY" secondItem="z9x-jV-iER" secondAttribute="centerY" id="5JM-dl-T4m"/>
+                    <constraint firstItem="wLR-b0-iLN" firstAttribute="centerX" secondItem="z9x-jV-iER" secondAttribute="centerX" id="VDK-pr-a9j"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="138.40000000000001" y="165.51724137931035"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="chevron.png" width="298" height="93"/>
+    </resources>
+</document>

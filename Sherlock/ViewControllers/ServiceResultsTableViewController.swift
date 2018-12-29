@@ -17,14 +17,22 @@ class ServiceResultsTableViewController: UITableViewController {
     weak var delegate: ServiceResultDelegate?
     var keyboardHeight: CGFloat?
     var reloadingResults = false
+    var reducedModeDict: [serviceType: Bool] = [:]
 
     init(services: [SherlockService]){
         self.services = services
         super.init(nibName: nil, bundle: nil)
+        self.initReducedMode()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func initReducedMode(){
+        for service in self.services { // reduced mode for all searches
+            self.reducedModeDict[service.type] = true
+        }
     }
     
     override func viewDidLoad() {
@@ -86,13 +94,31 @@ class ServiceResultsTableViewController: UITableViewController {
         return self.services.count
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self.services[section].searchText
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = Bundle.main.loadNibNamed("SearchServiceHeader", owner: self, options: nil)?.first as? SearchServiceHeader else {
+            return UIView()
+        }
+        
+        let service = self.services[section]
+        headerView.delegate = self
+        headerView.tag = section
+        headerView.set(service: service)
+        return headerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 85
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let acHandler = self.services[section].automcompleteHandler {
-            return acHandler.suggestions.count
+            let suggestionCount = acHandler.suggestions.count
+            let type = self.services[section].type
+            if suggestionCount > _numACResults && self.reducedModeDict[type]! { // TODO: figure out how to get around potential error here
+                return _numACResults + 1
+            } else {
+                return acHandler.suggestions.count
+            }
         }
         
         return 0
@@ -101,6 +127,15 @@ class ServiceResultsTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let type = self.services[indexPath.section].type
+        if self.reducedModeDict[type]! && indexPath.row >= _numACResults {
+            guard let cell = Bundle.main.loadNibNamed("ChevronCell", owner: self, options: nil)?.first as? UITableViewCell else {
+                return UITableViewCell()
+            }
+            
+            return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "autocomplete", for: indexPath) as! AutoCompleteTableViewCell
         let suggestion = self.services[indexPath.section].automcompleteHandler!.suggestions[indexPath.row]
         cell.suggestionLabel.text = suggestion
@@ -113,6 +148,15 @@ class ServiceResultsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let type = self.services[indexPath.section].type
+        if self.reducedModeDict[type]! && indexPath.row >= _numACResults {
+            self.reducedModeDict[type] = false
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            tableView.insertRows(at: self.createIndexPaths(forSection: indexPath.section), with: UITableView.RowAnimation.automatic)
+            tableView.endUpdates()
+            return
+        }
         let service = self.services[indexPath.section]
         guard let querySuggestion = service.automcompleteHandler?.suggestions[indexPath.row] else {
             return
@@ -121,61 +165,36 @@ class ServiceResultsTableViewController: UITableViewController {
         self.delegate?.didSelect(service: service)
     }
 
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    
+    private func createIndexPaths(forSection section: Int) -> [IndexPath]{
+        let service = self.services[section]
+        guard let acSuggest = service.automcompleteHandler?.suggestions else {
+            return []
+        }
+        
+        var indexPaths = Array<IndexPath>()
+        for i in _numACResults..<acSuggest.count {
+            let ip = IndexPath(row: i, section: section)
+            indexPaths.append(ip)
+        }
+        
+        return  indexPaths
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
 
 }
 
 extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
+    func autocompleteCleared() {
+        self.initReducedMode()
+    }
+    
     func autocompleteResultsChanged(_ services: [SherlockService]) {
-        self.services = services
         if self.reloadingResults { // TOOD: maybe replace with timer callback
             return // skip this reload if data source is updating.
         }
+        
+        self.services = services
         
         CATransaction.begin()
         self.reloadingResults = true
@@ -186,3 +205,12 @@ extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
         CATransaction.commit()
     }
 }
+
+extension ServiceResultsTableViewController: SearchServiceHeaderDelegate {
+    func tapped(index: Int) {
+        self.delegate?.didSelect(service: self.services[index])
+    }
+    
+}
+
+

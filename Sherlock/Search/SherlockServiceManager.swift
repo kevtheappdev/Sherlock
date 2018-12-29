@@ -94,6 +94,7 @@ extension SherlockServiceManager {
             service.automcompleteHandler?.suggestions.removeAll(keepingCapacity: true)
         }
         
+        self.delegate?.autocompleteCleared()
         self.delegate?.autocompleteResultsChanged(self.services)
     }
     

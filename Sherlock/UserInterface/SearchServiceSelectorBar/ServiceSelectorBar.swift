@@ -30,9 +30,10 @@ class ServiceSelectorBar: UIView {
         // setup scrollView
         // setup contentsize
         scrollView.frame = self.bounds
-        let width = CGFloat(self.services.count) * ServiceSelectorBar.iconSize
+        scrollView.showsHorizontalScrollIndicator = false
+        let width = CGFloat(self.services.count) * (ServiceSelectorBar.iconSize + (2 * ServiceSelectorBar.padding))
         let height = self.scrollView.bounds.height
-        self.scrollView.contentSize = CGSize(width: width, height: height)
+        self.scrollView.contentSize = CGSize(width: width , height: height)
         
         // layout scrollview elements
         self.selectionView.frame = CGRect(x: 0, y: 0, width: ServiceSelectorBar.iconSize + (2 * ServiceSelectorBar.padding), height: height)
@@ -79,6 +80,10 @@ class ServiceSelectorBar: UIView {
     
     func selectButtonAt(Index serviceIndex: Int){
         let selectedOffset = self.buttonOffsets[serviceIndex]
+        if selectedOffset > self.bounds.width {
+            let diff = selectedOffset - self.bounds.width
+            self.scrollView.contentOffset = CGPoint(x: diff, y: 0) // TODO: refine this
+        }
         UIView.animate(withDuration: 0.1, animations: {() in
             let selectedPoint = CGPoint(x: selectedOffset, y: 0)
             self.selectionView.frame = CGRect(origin: selectedPoint, size: self.selectionView.bounds.size)

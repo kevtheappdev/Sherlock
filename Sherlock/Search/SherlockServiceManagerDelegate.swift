@@ -11,4 +11,5 @@ import Foundation
 protocol SherlockServiceManagerDelegate: class {
     // func to notify of changes to subscribers
     func autocompleteResultsChanged(_ services: [SherlockService])
+    func autocompleteCleared()
 }

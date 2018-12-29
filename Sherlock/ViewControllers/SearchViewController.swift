@@ -148,8 +148,12 @@ extension SearchViewController: ServiceResultDelegate {
 extension SearchViewController: OmniBarDelegate {
     func inputChanged(input: String) {
         self.query = input
-        SherlockServiceManager.main.beginAutocomplete(forQuery: input)
-        self.resultsVC.execute(query: input)
+        if input.isEmpty {
+            self.inputCleared()
+        } else {
+            SherlockServiceManager.main.beginAutocomplete(forQuery: input)
+            self.resultsVC.execute(query: input)
+        }
     }
     
     func inputCleared() {

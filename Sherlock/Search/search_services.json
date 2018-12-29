@@ -13,7 +13,7 @@
 	},
 
 	"facebook": {
-		"searchText": "Search with Facebook",
+		"searchText": "Search Facebook",
 		"searchURL": "https://www.facebook.com/search/top/?q={query}",
 		"icon": "facebook_icon.png",
 		"config": {
@@ -28,5 +28,27 @@
         "searchURL": "https://duckduckgo.com/?q={query}",
         "acURL": "http://duckduckgo.com/ac/?q={query}",
         "icon": "duckduckgo.png"
+    },
+
+    "twitter": {
+    	"searchText": "Search Twitter",
+    	"searchURL": "https://twitter.com/search?q={query}",
+    	"icon": "twitter.png",
+    	"config": {
+    		"resultsPage": {
+    			"javascriptEnabled": true
+    		}
+    	}
+    },
+
+    "linkedin":  {
+    	"searchText": "Search LinkedIn",
+    	"searchURL": "https://www.linkedin.com/search/results/all/?keywords={query}",
+    	"icon": "linkedin.png",
+    	"config": {
+    		"resultsPage": {
+    			"javascriptEnabled": true
+    		}
+    	}
     }
 }

@@ -15,6 +15,8 @@ enum serviceType: String {
     case facebook = "facebook"
     case wikipedia = "wikipedia"
     case duckduckgo = "duckduckgo"
+    case twitter = "twitter"
+    case linkedin = "linkedin"
     case none =  "none"
 }
 
