@@ -13,7 +13,6 @@ class ServiceResultsTableViewController: UITableViewController {
     var ogTableFrame: CGRect?
     var keyboardShown = false
     var keyboardAdjusted = false
-    var cellCache = Dictionary<serviceType, SearchServiceTableViewCell>()
     weak var delegate: ServiceResultDelegate?
     var keyboardHeight: CGFloat?
     var reloadingResults = false
@@ -138,7 +137,12 @@ class ServiceResultsTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "autocomplete", for: indexPath) as! AutoCompleteTableViewCell
         let suggestion = self.services[indexPath.section].automcompleteHandler!.suggestions[indexPath.row]
-        cell.suggestionLabel.text = suggestion
+        if suggestion.url != nil {
+            cell.iconImageView.image  = UIImage(imageLiteralResourceName: "file-text.png")
+        } else {
+            cell.iconImageView.image = UIImage(imageLiteralResourceName: "search.png")
+        }
+        cell.suggestionLabel.text = suggestion.suggestion
         return cell
     }
     
@@ -161,7 +165,7 @@ class ServiceResultsTableViewController: UITableViewController {
         guard let querySuggestion = service.automcompleteHandler?.suggestions[indexPath.row] else {
             return
         }
-        self.delegate?.updated(query: querySuggestion)
+        self.delegate?.updated(query: querySuggestion.suggestion)
         self.delegate?.didSelect(service: service)
     }
 
@@ -202,6 +206,7 @@ extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
             self.reloadingResults = false
         })
         self.tableView.reloadData()
+        self.tableView.layoutIfNeeded()
         CATransaction.commit()
     }
 }

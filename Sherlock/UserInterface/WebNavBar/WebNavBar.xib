@@ -53,7 +53,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fxr-8U-99e">
-                    <rect key="frame" x="340" y="31" width="30" height="30"/>
+                    <rect key="frame" x="370" y="31" width="30" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="30" id="EnQ-cl-cph"/>
                         <constraint firstAttribute="height" constant="30" id="Kgp-oh-0Hf"/>
@@ -73,7 +73,7 @@
                 <constraint firstItem="Fxr-8U-99e" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="Jc0-dA-Ixm"/>
                 <constraint firstItem="jvU-Zd-ehi" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="Ji8-oX-IrU"/>
                 <constraint firstItem="ypn-j1-7Pa" firstAttribute="leading" secondItem="jvU-Zd-ehi" secondAttribute="trailing" constant="44" id="Trg-KH-MVz"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Fxr-8U-99e" secondAttribute="trailing" constant="50" id="fqV-Mq-4rB"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Fxr-8U-99e" secondAttribute="trailing" constant="20" id="fqV-Mq-4rB"/>
                 <constraint firstItem="iTb-UJ-ITs" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="rqN-m8-9TE"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>

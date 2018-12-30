@@ -24,6 +24,9 @@ class ServiceSelectorBar: UIView {
         self.backgroundColor = UIColor.white
         self.addSubview(scrollView)
         self.displayServices()
+        
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.gray.cgColor
     }
     
     override func layoutSubviews() {

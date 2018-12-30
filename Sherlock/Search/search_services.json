@@ -9,7 +9,8 @@
 	"wikipedia": {
 		"searchText": "Search Wikipedia",
 		"searchURL": "https://en.wikipedia.org/w/index.php?search={query}",
-		"icon": "wikipedia_icon.png"
+		"icon": "wikipedia_icon.png",
+		"acURL": "https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&limit=1&namespace=0&format=json"
 	},
 
 	"facebook": {

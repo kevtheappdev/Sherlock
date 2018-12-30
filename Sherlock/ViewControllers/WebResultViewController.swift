@@ -63,7 +63,7 @@ class WebResultViewController: UIViewController {
         let navBar = self.navBar!
         let titleBar = self.titleBar!
         let webView = self.webView!
-    
+        
         navBar.translatesAutoresizingMaskIntoConstraints = false
         titleBar.translatesAutoresizingMaskIntoConstraints = false
         webView.translatesAutoresizingMaskIntoConstraints = false

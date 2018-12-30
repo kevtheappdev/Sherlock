@@ -10,6 +10,7 @@ import UIKit
 
 class AutoCompleteTableViewCell: UITableViewCell {
     @IBOutlet weak var suggestionLabel: UILabel!
+    @IBOutlet weak var iconImageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

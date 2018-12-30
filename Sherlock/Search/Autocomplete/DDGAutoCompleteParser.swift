@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 class DDGAutoCompleteParser: AutoCompleteParser {
-    func process(results data: Data) -> [String] {
+    func process(results data: Data) -> [Autocomplete] {
         guard let acResults = try? JSON(data: data).array else {
             return []
         }
@@ -19,12 +19,13 @@ class DDGAutoCompleteParser: AutoCompleteParser {
             return []
         }
         
-        var suggestions = Array<String>()
+        var suggestions = Array<Autocomplete>()
         for result in results {
             if let phrase = result.dictionary {
                 if let suggestionObj = phrase["phrase"] {
                     if let suggestion = suggestionObj.string {
-                        suggestions.append(suggestion)
+                        let ac  = Autocomplete(suggestion: suggestion, url: nil)
+                        suggestions.append(ac)
                     }
                 }
             }

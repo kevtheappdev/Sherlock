@@ -11,6 +11,8 @@ import SwiftyJSON
 
 class SherlockServiceManager: NSObject {
     static let main = SherlockServiceManager()
+    private var timer: Timer!
+    private var needsUpdate = false
     
     // ivars
     var services = Array<SherlockService>() // TODO: replace with custom data structure
@@ -18,6 +20,7 @@ class SherlockServiceManager: NSObject {
     
     private override init() {
         super.init()
+        self.timer = Timer.scheduledTimer(timeInterval: 0.075, target: self, selector: #selector(SherlockServiceManager.update(_:)), userInfo: nil, repeats: true)
     }
     
     
@@ -68,6 +71,15 @@ class SherlockServiceManager: NSObject {
         
     }
     
+    @objc func update(_ sender: Any){
+        if self.needsUpdate {
+            self.delegate?.autocompleteResultsChanged(self.services)
+            self.needsUpdate = false
+        }
+        
+        
+    }
+    
     
 }
 
@@ -83,7 +95,7 @@ extension SherlockServiceManager {
         for service in self.services {
             service.automcompleteHandler?.makeRequest(withQuery: query) {(error) in
                 if error == nil {
-                    self.delegate?.autocompleteResultsChanged(self.services)
+                    self.needsUpdate = true
                 }
             }
         }
@@ -95,7 +107,7 @@ extension SherlockServiceManager {
         }
         
         self.delegate?.autocompleteCleared()
-        self.delegate?.autocompleteResultsChanged(self.services)
+        self.needsUpdate = true
     }
     
     func cancelAutocomplete(){

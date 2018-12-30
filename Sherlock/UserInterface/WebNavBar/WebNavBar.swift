@@ -19,6 +19,11 @@ class WebNavBar: UIView {
         super.init(coder: aDecoder)
     }
     
+    override func awakeFromNib() {
+        self.layer.borderColor = UIColor.gray.cgColor
+        self.layer.borderWidth = 1
+    }
+    
     // pass button presses through delegate
     @IBAction func backButtonPressed(_ sender: Any) {
         self.delegate?.backButtonPressed()

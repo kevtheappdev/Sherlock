@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class GoogleAutoCompleteParser: AutoCompleteParser {
     
-    func process(results data: Data) -> [String] {
+    func process(results data: Data) -> [Autocomplete] {
         // TODO: Insert logging for these failure points
         guard let acResults = try? JSON(data: data).array else {
             return []
@@ -20,13 +20,13 @@ class GoogleAutoCompleteParser: AutoCompleteParser {
             return []
         }
         
-        var results = Array<String>()
+        var results = Array<Autocomplete>()
         for suggestion in suggestions {
             guard let suggestionStr = suggestion.string else {
                 continue
             }
-            
-            results.append(suggestionStr)
+            let ac = Autocomplete(suggestion: suggestionStr, url: nil)
+            results.append(ac)
         }
         
         return results

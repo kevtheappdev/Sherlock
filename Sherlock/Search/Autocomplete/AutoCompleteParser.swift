@@ -10,5 +10,5 @@ import UIKit
 
 
 protocol AutoCompleteParser: class {
-    func process(results data: Data) -> [String]
+    func process(results data: Data) -> [Autocomplete]
 }

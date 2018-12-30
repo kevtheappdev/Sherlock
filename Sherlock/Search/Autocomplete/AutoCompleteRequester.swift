@@ -14,7 +14,7 @@ class AutoCompleteRequester: NSObject {
     var url: String
     var autoCompleteParser: AutoCompleteParser
     var task: URLSessionDataTask?
-    var suggestions: [String] = []
+    var suggestions: [Autocomplete] = []
     
     init(url: String, autocomplete: AutoCompleteParser) {
         self.url = url

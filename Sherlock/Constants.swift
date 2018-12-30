@@ -15,7 +15,8 @@ let _numACResults = 3
 // TODO: replace key with enum vals
 let autocomplete: [String: AutoCompleteParser] = [
     "google": GoogleAutoCompleteParser(),
-    "duckduckgo": DDGAutoCompleteParser()
+    "duckduckgo": DDGAutoCompleteParser(),
+    "wikipedia": WikipediaAutoCompleteParser()
 ]
 
 func urlify(text textStr: String) -> String {

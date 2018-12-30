@@ -93,6 +93,7 @@ class ScrollResultsViewController: UIViewController {
         var curX: CGFloat = 0
         for service in self.services {
             let webVC = self.webControllers[service.type]!
+            
             webVC.view.frame = CGRect(x: curX, y: 0, width: width, height: height)
             curX += width
         }
