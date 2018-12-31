@@ -23,7 +23,9 @@ class AutoCompleteRequester: NSObject {
     }
     
     func makeRequest(withQuery query: String, completion: @escaping Completion){
-        let param = urlify(text: query)
+        guard let param = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) else {
+            return
+        }
         let fullURLStr = self.url.replacingOccurrences(of: "{query}", with: param)
         guard let url = URL(string: fullURLStr) else {return}
         self.task = URLSession.shared.dataTask(with: url) { (data, response, error) in

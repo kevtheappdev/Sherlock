@@ -31,6 +31,10 @@ class DDGAutoCompleteParser: AutoCompleteParser {
             }
         }
         
+        if suggestions.count > 0 {
+            SherlockServiceManager.main.add(weight: 2, toService: .duckduckgo)
+        }
+        
         return suggestions
     }
     

@@ -152,6 +152,7 @@ extension SearchViewController: OmniBarDelegate {
             self.inputCleared()
         } else {
             SherlockServiceManager.main.beginAutocomplete(forQuery: input)
+            SherlockServiceManager.main.categorize(withQuery: input)
             self.resultsVC.execute(query: input)
         }
     }
@@ -162,6 +163,7 @@ extension SearchViewController: OmniBarDelegate {
         let serviceManager = SherlockServiceManager.main
         serviceManager.clearAutocomplete()
         serviceManager.cancelAutocomplete()
+        serviceManager.resetRankings()
     }
     
     func omniBarSelected() {

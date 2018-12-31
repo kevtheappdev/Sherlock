@@ -45,7 +45,7 @@
                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search"/>
+                    <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search" smartInsertDeleteType="yes"/>
                 </textField>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.66614978869999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

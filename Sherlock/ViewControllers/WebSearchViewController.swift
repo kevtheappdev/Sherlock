@@ -53,7 +53,7 @@ class WebSearchViewController: UIViewController {
     func execute(query: String) {
         self.coverView.loadingIndicator.startLoadAnimation()
         let urlStr = self.sherlockService.searchURL
-        let urliFiedQuery = urlify(text: query)
+        let urliFiedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!
         let completedURL = urlStr.replacingOccurrences(of: "{query}", with: urliFiedQuery)
         let url = URL(string: completedURL)!
         let request = URLRequest(url: url)

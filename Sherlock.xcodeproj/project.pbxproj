@@ -50,6 +50,7 @@
 		688C1AA121CC3F4600AADE9F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 688C1A9F21CC3F4600AADE9F /* LaunchScreen.storyboard */; };
 		688C1AAC21CC3F4600AADE9F /* SherlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688C1AAB21CC3F4600AADE9F /* SherlockTests.swift */; };
 		688C1AB721CC3F4600AADE9F /* SherlockUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688C1AB621CC3F4600AADE9F /* SherlockUITests.swift */; };
+		68A7940121D97FDB009084AB /* CategoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A7940021D97FDB009084AB /* CategoryManager.swift */; };
 		68AA33EA21D82D1E003E07BB /* WikipediaAutoCompleteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68AA33E921D82D1E003E07BB /* WikipediaAutoCompleteParser.swift */; };
 		68AA33EC21D8361B003E07BB /* file-text.png in Resources */ = {isa = PBXBuildFile; fileRef = 68AA33EB21D8361B003E07BB /* file-text.png */; };
 		68C1875721CDD87300EED415 /* ServiceResultDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C1875621CDD87300EED415 /* ServiceResultDelegate.swift */; };
@@ -152,6 +153,7 @@
 		688C1AB221CC3F4600AADE9F /* SherlockUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SherlockUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		688C1AB621CC3F4600AADE9F /* SherlockUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockUITests.swift; sourceTree = "<group>"; };
 		688C1AB821CC3F4600AADE9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		68A7940021D97FDB009084AB /* CategoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManager.swift; sourceTree = "<group>"; };
 		68AA33E921D82D1E003E07BB /* WikipediaAutoCompleteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaAutoCompleteParser.swift; sourceTree = "<group>"; };
 		68AA33EB21D8361B003E07BB /* file-text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "file-text.png"; sourceTree = "<group>"; };
 		68C1875621CDD87300EED415 /* ServiceResultDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceResultDelegate.swift; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 		6811F46E21CD5AD6001DBE63 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				68A7940021D97FDB009084AB /* CategoryManager.swift */,
 				6811F46F21CD5AEB001DBE63 /* SherlockServiceManager.swift */,
 				6811F47121CD6985001DBE63 /* SherlockServices.swift */,
 				6811F47921CD80BD001DBE63 /* search_services.json */,
@@ -661,6 +664,7 @@
 				688C1A9C21CC3F4500AADE9F /* Sherlock.xcdatamodeld in Sources */,
 				683DE29521CFFEC6005E58F4 /* WebTitleBar.swift in Sources */,
 				682483A821D405A0003D189A /* WebTitleBarDelegate.swift in Sources */,
+				68A7940121D97FDB009084AB /* CategoryManager.swift in Sources */,
 				68AA33EA21D82D1E003E07BB /* WikipediaAutoCompleteParser.swift in Sources */,
 				68FA236321D1994E006290FD /* WebTableViewCell.swift in Sources */,
 				68F7575721D7EE350047B24D /* SearchServiceHeader.swift in Sources */,

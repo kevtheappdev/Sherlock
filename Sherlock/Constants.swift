@@ -19,6 +19,12 @@ let autocomplete: [String: AutoCompleteParser] = [
     "wikipedia": WikipediaAutoCompleteParser()
 ]
 
+enum serviceCategory {
+    case people
+    case places
+    case things
+}
+
 func urlify(text textStr: String) -> String {
     let str = textStr.components(separatedBy: " ")
     let arr = str.filter({$0 != ""})

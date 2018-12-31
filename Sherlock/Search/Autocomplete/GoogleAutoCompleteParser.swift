@@ -29,6 +29,10 @@ class GoogleAutoCompleteParser: AutoCompleteParser {
             results.append(ac)
         }
         
+        if  results.count > 0 {
+            SherlockServiceManager.main.add(weight: 2, toService: .google)
+        }
+        
         return results
     }
 }

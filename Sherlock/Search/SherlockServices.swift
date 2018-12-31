@@ -20,13 +20,14 @@ enum serviceType: String {
     case none =  "none"
 }
 
-struct SherlockService {
+class SherlockService {
     var type: serviceType
     var searchText: String
     var searchURL: String
     var icon: UIImage
     var config = SherlockServiceConfig()
     var automcompleteHandler: AutoCompleteRequester?
+    var categories: [NSLinguisticTag:Int] = [:]
     
     // Default values
     var weight: Int = 0

@@ -9,6 +9,7 @@
 	"wikipedia": {
 		"searchText": "Search Wikipedia",
 		"searchURL": "https://en.wikipedia.org/w/index.php?search={query}",
+		"categories": {"OrganizationName": 2, "PersonalName": 1, "PlaceName": 2},
 		"icon": "wikipedia_icon.png",
 		"acURL": "https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&limit=1&namespace=0&format=json"
 	},
@@ -17,6 +18,7 @@
 		"searchText": "Search Facebook",
 		"searchURL": "https://www.facebook.com/search/top/?q={query}",
 		"icon": "facebook_icon.png",
+		"categories": {"PersonalName": 2},
 		"config": {
 			"resultsPage": {
 				"javascriptEnabled": true
@@ -34,6 +36,7 @@
     "twitter": {
     	"searchText": "Search Twitter",
     	"searchURL": "https://twitter.com/search?q={query}",
+    	"categories": {"PersonalName": 2},
     	"icon": "twitter.png",
     	"config": {
     		"resultsPage": {
@@ -45,6 +48,7 @@
     "linkedin":  {
     	"searchText": "Search LinkedIn",
     	"searchURL": "https://www.linkedin.com/search/results/all/?keywords={query}",
+    	"categories": {"PersonalName": 2},	
     	"icon": "linkedin.png",
     	"config": {
     		"resultsPage": {

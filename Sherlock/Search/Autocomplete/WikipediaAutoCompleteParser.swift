@@ -48,7 +48,7 @@ class WikipediaAutoCompleteParser: AutoCompleteParser {
             return []
         }
         
-        
+        SherlockServiceManager.main.add(weight: 3, toService: .wikipedia)
         return [Autocomplete(suggestion: title, url: url)]
     }
 
