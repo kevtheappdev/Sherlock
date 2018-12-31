@@ -22,9 +22,6 @@
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TRC-hx-uye">
-                    <rect key="frame" x="0.0" y="88" width="450" height="2"/>
-                </progressView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Site Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.55000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="cGd-Va-uu8">
                     <rect key="frame" x="49" y="14" width="393" height="30"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
@@ -42,26 +39,33 @@
                         <action selector="backButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="yW4-DN-3X1"/>
                     </connections>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QeW-2I-lDn" customClass="SherlockProgressBar" customModule="Sherlock" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="81" width="450" height="9"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="9" id="Et2-Tw-937"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="cGd-Va-uu8" secondAttribute="trailing" constant="8" id="0tu-Na-qUl"/>
-                <constraint firstItem="TRC-hx-uye" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="Csv-27-gHv"/>
                 <constraint firstItem="HWR-4J-YUQ" firstAttribute="top" secondItem="cGd-Va-uu8" secondAttribute="bottom" constant="8" id="IGT-LL-7ld"/>
                 <constraint firstItem="HWR-4J-YUQ" firstAttribute="leading" secondItem="b6X-7d-OTI" secondAttribute="trailing" constant="14" id="SWj-dS-3v2"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="HWR-4J-YUQ" secondAttribute="trailing" constant="11" id="TTE-46-98s"/>
                 <constraint firstItem="b6X-7d-OTI" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="7" id="XOh-an-TLR"/>
                 <constraint firstItem="cGd-Va-uu8" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="14" id="Y1y-kq-BY8"/>
-                <constraint firstItem="TRC-hx-uye" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="fHi-Cb-byO"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="TRC-hx-uye" secondAttribute="trailing" id="hNc-4m-kXN"/>
+                <constraint firstItem="QeW-2I-lDn" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="fdL-Fn-QXW"/>
+                <constraint firstItem="QeW-2I-lDn" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="mah-cB-btv"/>
                 <constraint firstItem="b6X-7d-OTI" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" id="ne4-on-98P"/>
+                <constraint firstItem="QeW-2I-lDn" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="o80-Xa-NcZ"/>
                 <constraint firstItem="cGd-Va-uu8" firstAttribute="leading" secondItem="b6X-7d-OTI" secondAttribute="trailing" constant="14" id="zfD-fu-IV5"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
-                <outlet property="progressBar" destination="TRC-hx-uye" id="Jqv-y8-X9v"/>
+                <outlet property="progressBar" destination="QeW-2I-lDn" id="uEy-7U-m25"/>
                 <outlet property="titleLabel" destination="cGd-Va-uu8" id="4LC-JL-g8j"/>
                 <outlet property="urlLabel" destination="HWR-4J-YUQ" id="eVU-pY-ulR"/>
             </connections>

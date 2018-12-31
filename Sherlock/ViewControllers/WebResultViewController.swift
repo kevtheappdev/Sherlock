@@ -196,7 +196,6 @@ extension WebResultViewController: WebTitleBarDelegate {
 
 extension WebResultViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        self.titleBar.progressBar.progress = 0.0
         if self.recordHistory && !self.historyRecorded {
             self.historyRecorded = true
             SherlockHistoryManager.main.log(webPage: webView.url!, title: webView.title!)

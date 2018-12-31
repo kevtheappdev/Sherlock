@@ -11,7 +11,7 @@ import UIKit
 class WebTitleBar: UIView {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var urlLabel: UILabel!
-    @IBOutlet weak var progressBar: UIProgressView!
+    @IBOutlet weak var progressBar: SherlockProgressBar!
     weak var delegate: WebTitleBarDelegate?
     
     func set(title: String, url urlStr: String){

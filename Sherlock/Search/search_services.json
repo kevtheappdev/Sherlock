@@ -11,7 +11,12 @@
 		"searchURL": "https://en.wikipedia.org/w/index.php?search={query}",
 		"categories": {"OrganizationName": 4, "PersonalName": 2, "PlaceName": 4},
 		"icon": "wikipedia_icon.png",
-		"acURL": "https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&limit=1&namespace=0&format=json"
+		"acURL": "https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&limit=1&namespace=0&format=json",
+		"config": {
+			"resultsPage": {
+				"javascriptEnabled": true
+			}
+		}
 	},
 
 	"facebook": {

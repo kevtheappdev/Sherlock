@@ -36,6 +36,7 @@
 		683DE29E21D061AD005E58F4 /* SherlockHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683DE29D21D061AD005E58F4 /* SherlockHistoryManager.swift */; };
 		6843F2C521DAAEEF00E94DE7 /* HistoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6843F2C421DAAEEF00E94DE7 /* HistoryHeaderView.swift */; };
 		6843F2C721DAAEFB00E94DE7 /* HistoryHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6843F2C621DAAEFB00E94DE7 /* HistoryHeaderView.xib */; };
+		6843F2C921DAC31100E94DE7 /* SherlockProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6843F2C821DAC31100E94DE7 /* SherlockProgressBar.swift */; };
 		686290A021CD842400085FFE /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6862909F21CD842400085FFE /* SwiftyJSON.framework */; };
 		686290A221CD987F00085FFE /* SherlockServiceManagerDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686290A121CD987F00085FFE /* SherlockServiceManagerDelegates.swift */; };
 		68662D8921D5A27E00A67B4C /* AutoCompleteRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68662D8821D5A27E00A67B4C /* AutoCompleteRequester.swift */; };
@@ -135,6 +136,7 @@
 		683DE29D21D061AD005E58F4 /* SherlockHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockHistoryManager.swift; sourceTree = "<group>"; };
 		6843F2C421DAAEEF00E94DE7 /* HistoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHeaderView.swift; sourceTree = "<group>"; };
 		6843F2C621DAAEFB00E94DE7 /* HistoryHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HistoryHeaderView.xib; sourceTree = "<group>"; };
+		6843F2C821DAC31100E94DE7 /* SherlockProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockProgressBar.swift; sourceTree = "<group>"; };
 		6862909F21CD842400085FFE /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Sherlock/Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		686290A121CD987F00085FFE /* SherlockServiceManagerDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockServiceManagerDelegates.swift; sourceTree = "<group>"; };
 		68662D8821D5A27E00A67B4C /* AutoCompleteRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompleteRequester.swift; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 				683DE29421CFFEC6005E58F4 /* WebTitleBar.swift */,
 				683DE29621CFFFDC005E58F4 /* WebTitleBar.xib */,
 				682483A721D405A0003D189A /* WebTitleBarDelegate.swift */,
+				6843F2C821DAC31100E94DE7 /* SherlockProgressBar.swift */,
 			);
 			path = WebTitleBar;
 			sourceTree = "<group>";
@@ -689,6 +692,7 @@
 				68CC169121CFF8C0005AEF42 /* WebResultViewController.swift in Sources */,
 				68C412E021D362A800DAC3EA /* NewModal.swift in Sources */,
 				68C4617C21D32E1E00A1E1CC /* UnwindPushTransition.swift in Sources */,
+				6843F2C921DAC31100E94DE7 /* SherlockProgressBar.swift in Sources */,
 				68FA236921D1A058006290FD /* HistoryVCDelegate.swift in Sources */,
 				6802426D21CC44E100AA8899 /* UIGradientView.swift in Sources */,
 				682483AA21D4079B003D189A /* LoadingIndicator.swift in Sources */,

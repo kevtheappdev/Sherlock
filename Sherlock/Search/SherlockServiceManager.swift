@@ -114,10 +114,10 @@ class SherlockServiceManager: NSObject {
     @objc func update(_ sender: Any){
         if self.needsUpdate {
             self.reorder() // ensure sorted data
-            self.delegate?.resultsChanged(self.services)
+            self.delegate?.resultsChanged(self.copyServices())
             self.needsUpdate = false
             if self.isFinal {
-                self.commitDelegate?.resultsCommited(self.services)
+                self.commitDelegate?.resultsCommited(self.copyServices())
                 self.isFinal = false
             }
             
@@ -129,6 +129,22 @@ class SherlockServiceManager: NSObject {
         
     }
     
+    func copyServices() -> [SherlockService]
+    {
+        var copy: [SherlockService] = []
+        for service in self.services {
+            let copyService = SherlockService(name: service.type.rawValue, searchText: service.searchText, searchURL: service.searchURL, icon: service.icon)
+            copyService.config = service.config
+            copyService.automcompleteHandler = service.automcompleteHandler
+            copyService.categoriesApplied = service.categoriesApplied
+            copyService.categories = service.categories
+            copyService.ogIndex = service.ogIndex
+            copy.append(copyService)
+        }
+        
+        return copy
+    }
+    
     
 }
 
@@ -137,7 +153,7 @@ extension SherlockServiceManager {
     
     func begin(Query query: String){
         self.fetchAutocomplete(forQuery: query)
-        self.categorize(withQuery: query)
+        self.analyze(Query: query)
     }
     
     func commit(Query query: String){
@@ -220,6 +236,12 @@ extension SherlockServiceManager {
 
 // MARK: Linguistic analysis
 extension SherlockServiceManager {
+    
+    private func analyze(Query query: String){
+        self.categorize(withQuery: query)
+        self.addressAnalysis(ofString: query)
+    }
+    
     private func categorize(withQuery query: String){
         self.clearLinguisticWeights()//  fresh start on rankings
         
@@ -242,6 +264,34 @@ extension SherlockServiceManager {
                 self.clearLinguisticWeights()
             }
         }
+    }
+    
+    private func addressAnalysis(ofString query: String) {
+        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.address.rawValue) else {
+            return
+        }
+        
+        var foundAddress = false
+        let matches = detector.matches(in: query, options: [], range: NSRange(location: 0, length: query.count))
+        for match in matches {
+            if match.resultType == .address {
+                foundAddress = true
+                break
+            }
+        }
+        
+        
+        for service in self.services {
+            let sWeight = service.categories[.placeName]
+            if sWeight != nil {
+                if foundAddress {
+                    self.add(weight: sWeight! * 2, toService: service.type)
+                } else {
+                    self.subtract(weight: sWeight! * 2, forService: service.type)
+                }
+            }
+        }
+
     }
     
     private func servicesFor(tag: NSLinguisticTag) -> [serviceType: Int]{
