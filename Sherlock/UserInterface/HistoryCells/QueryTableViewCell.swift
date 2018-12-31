@@ -10,9 +10,6 @@ import UIKit
 
 class QueryTableViewCell: UITableViewCell {
     @IBOutlet weak var queryLabel: UILabel!
-    weak var delegate: HistoryCellDelegate?
-    var index: IndexPath?
-    var data: SearchHistoryEntry?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,15 +21,5 @@ class QueryTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
-    func set(data: SearchHistoryEntry, index: IndexPath, delegate: HistoryCellDelegate? = nil){
-        self.data = data
-        self.queryLabel.text = data.query
-        self.index = index
-        self.delegate = delegate
-    }
 
-    @IBAction func deleteButtonPressed(_ sender: Any) {
-        self.delegate?.deleteButtonPressed(object: self.data)
-    }
 }

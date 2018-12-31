@@ -78,31 +78,18 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search Query" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gga-hK-sld">
-                                                    <rect key="frame" x="72" y="26" width="245" height="31"/>
+                                                    <rect key="frame" x="72" y="26" width="296" height="31"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="26"/>
                                                     <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hqf-fA-bEl">
-                                                    <rect key="frame" x="325" y="24" width="35" height="35"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="35" id="22C-Qq-Tai"/>
-                                                        <constraint firstAttribute="height" constant="35" id="yNH-ep-O1q"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Button" image="cancel-circle.png"/>
-                                                    <connections>
-                                                        <action selector="deleteButtonPressed:" destination="c2c-Y5-dBU" eventType="touchUpInside" id="bHa-Qr-s9K"/>
-                                                    </connections>
-                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="gga-hK-sld" firstAttribute="leading" secondItem="at6-kg-rCh" secondAttribute="trailing" constant="17" id="0Ga-DX-Ao6"/>
                                                 <constraint firstItem="gga-hK-sld" firstAttribute="centerY" secondItem="sGU-Rh-HWz" secondAttribute="centerY" id="5SN-Vw-T3S"/>
                                                 <constraint firstItem="at6-kg-rCh" firstAttribute="leading" secondItem="sGU-Rh-HWz" secondAttribute="leading" constant="15" id="Ech-a3-4eR"/>
                                                 <constraint firstItem="at6-kg-rCh" firstAttribute="centerY" secondItem="sGU-Rh-HWz" secondAttribute="centerY" id="L7P-Jy-rL3"/>
-                                                <constraint firstAttribute="trailing" secondItem="Hqf-fA-bEl" secondAttribute="trailing" constant="15" id="Y00-7q-2P6"/>
-                                                <constraint firstItem="Hqf-fA-bEl" firstAttribute="centerY" secondItem="sGU-Rh-HWz" secondAttribute="centerY" id="kOl-Ok-1Qf"/>
-                                                <constraint firstItem="Hqf-fA-bEl" firstAttribute="leading" secondItem="gga-hK-sld" secondAttribute="trailing" constant="8" id="zN3-qs-9sN"/>
+                                                <constraint firstAttribute="trailing" secondItem="gga-hK-sld" secondAttribute="trailing" constant="7" id="nwh-Go-4rs"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -124,39 +111,26 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Web Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="buC-Lt-fvv">
-                                                    <rect key="frame" x="74" y="12" width="243" height="32"/>
+                                                    <rect key="frame" x="74" y="12" width="294" height="32"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="26"/>
                                                     <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="URL" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aPB-qG-0IF">
-                                                    <rect key="frame" x="74" y="43" width="243" height="19"/>
+                                                    <rect key="frame" x="74" y="43" width="294" height="19"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AMa-rP-xEI">
-                                                    <rect key="frame" x="325" y="26" width="35" height="35"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="35" id="5I2-Aw-6Va"/>
-                                                        <constraint firstAttribute="width" constant="35" id="mOM-nV-UbE"/>
-                                                    </constraints>
-                                                    <state key="normal" title="Button" image="cancel-circle.png"/>
-                                                    <connections>
-                                                        <action selector="deleteButtonPressed:" destination="hBd-03-zg4" eventType="touchUpInside" id="K65-K7-ZGu"/>
-                                                    </connections>
-                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="aPB-qG-0IF" firstAttribute="top" secondItem="buC-Lt-fvv" secondAttribute="bottom" constant="-1" id="0Cy-nK-lcc"/>
-                                                <constraint firstAttribute="trailing" secondItem="AMa-rP-xEI" secondAttribute="trailing" constant="15" id="DNL-xg-sTW"/>
-                                                <constraint firstItem="AMa-rP-xEI" firstAttribute="centerY" secondItem="Uxb-3Q-ORN" secondAttribute="centerY" constant="2" id="OUh-dE-Iur"/>
+                                                <constraint firstAttribute="trailing" secondItem="aPB-qG-0IF" secondAttribute="trailing" constant="7" id="NGk-R8-4Uy"/>
                                                 <constraint firstItem="ijQ-kb-ytx" firstAttribute="centerY" secondItem="Uxb-3Q-ORN" secondAttribute="centerY" id="WXw-7G-TJo"/>
-                                                <constraint firstItem="AMa-rP-xEI" firstAttribute="leading" secondItem="aPB-qG-0IF" secondAttribute="trailing" constant="8" id="fgC-Rb-tyU"/>
+                                                <constraint firstAttribute="trailing" secondItem="buC-Lt-fvv" secondAttribute="trailing" constant="7" id="ZJu-4G-S4v"/>
                                                 <constraint firstItem="ijQ-kb-ytx" firstAttribute="leading" secondItem="Uxb-3Q-ORN" secondAttribute="leading" constant="15" id="hUO-or-EUb"/>
                                                 <constraint firstItem="buC-Lt-fvv" firstAttribute="top" secondItem="Uxb-3Q-ORN" secondAttribute="top" constant="12" id="kc9-gi-py7"/>
                                                 <constraint firstItem="buC-Lt-fvv" firstAttribute="leading" secondItem="ijQ-kb-ytx" secondAttribute="trailing" constant="19" id="mCL-Jt-q4y"/>
-                                                <constraint firstItem="AMa-rP-xEI" firstAttribute="leading" secondItem="buC-Lt-fvv" secondAttribute="trailing" constant="8" id="msv-W2-lnv"/>
                                                 <constraint firstItem="aPB-qG-0IF" firstAttribute="leading" secondItem="ijQ-kb-ytx" secondAttribute="trailing" constant="19" id="pL2-hL-Isa"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -191,7 +165,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="cancel-circle.png" width="128" height="128"/>
         <image name="history.png" width="136" height="128"/>
         <image name="search.png" width="128" height="128"/>
         <image name="sphere.png" width="128" height="128"/>

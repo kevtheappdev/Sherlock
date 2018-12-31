@@ -17,6 +17,7 @@ class ServiceResultsTableViewController: UITableViewController {
     var keyboardHeight: CGFloat?
     var reloadingResults = false
     var reducedModeDict: [serviceType: Bool] = [:]
+    let numAcResults = ApplicationConstants._numACResults
 
     init(services: [SherlockService]){
         self.services = services
@@ -113,8 +114,8 @@ class ServiceResultsTableViewController: UITableViewController {
         if let acHandler = self.services[section].automcompleteHandler {
             let suggestionCount = acHandler.suggestions.count
             let type = self.services[section].type
-            if suggestionCount > _numACResults && self.reducedModeDict[type]! {
-                return _numACResults + 1
+            if suggestionCount > self.numAcResults && self.reducedModeDict[type]! {
+                return self.numAcResults + 1
             } else {
                 return acHandler.suggestions.count
             }
@@ -127,7 +128,7 @@ class ServiceResultsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let type = self.services[indexPath.section].type
-        if self.reducedModeDict[type]! && indexPath.row >= _numACResults {
+        if self.reducedModeDict[type]! && indexPath.row >= self.numAcResults {
             guard let cell = Bundle.main.loadNibNamed("ChevronCell", owner: self, options: nil)?.first as? UITableViewCell else {
                 return UITableViewCell()
             }
@@ -153,7 +154,7 @@ class ServiceResultsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let type = self.services[indexPath.section].type
-        if self.reducedModeDict[type]! && indexPath.row >= _numACResults {
+        if self.reducedModeDict[type]! && indexPath.row >= self.numAcResults {
             self.reducedModeDict[type] = false
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
@@ -177,7 +178,7 @@ class ServiceResultsTableViewController: UITableViewController {
         }
         
         var indexPaths = Array<IndexPath>()
-        for i in _numACResults..<acSuggest.count {
+        for i in self.numAcResults..<acSuggest.count {
             let ip = IndexPath(row: i, section: section)
             indexPaths.append(ip)
         }

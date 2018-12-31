@@ -9,6 +9,6 @@
 import Foundation
 import CoreData
 
-protocol HistoryCellDelegate: class {
-    func deleteButtonPressed(object: NSManagedObject?)
+protocol HistorySectionDelegate: class {
+    func deleteButtonPressed(dateStr: String)
 }

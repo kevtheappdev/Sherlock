@@ -12,10 +12,6 @@ import CoreData
 class WebTableViewCell: UITableViewCell {
     @IBOutlet weak var siteTitleLabel: UILabel!
     @IBOutlet weak var siteUrlLabel: UILabel!
-    weak var delegate: HistoryCellDelegate?
-    var index: IndexPath?
-    var data: NSManagedObject?
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -26,16 +22,6 @@ class WebTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
-    func set(data: WebHistoryEntry, index: IndexPath, delegate: HistoryCellDelegate? = nil){
-        self.data = data
-        self.siteTitleLabel.text = data.title
-        self.siteUrlLabel.text = data.url
-        self.index = index
-        self.delegate = delegate
-    }
 
-    @IBAction func deleteButtonPressed(_ sender: Any) {
-        self.delegate?.deleteButtonPressed(object: self.data)
-    }
+
 }

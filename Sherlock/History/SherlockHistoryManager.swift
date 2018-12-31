@@ -82,6 +82,7 @@ class SherlockHistoryManager: NSObject {
     // delete
     func delete(entry: NSManagedObject){
         self.managedContext.delete(entry)
+        self.save()
     }
     
 }

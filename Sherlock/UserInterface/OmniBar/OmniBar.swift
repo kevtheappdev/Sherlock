@@ -15,7 +15,7 @@ class OmniBar: UIGradientView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        set(colors: _sherlockGradientColors)
+        set(colors: ApplicationConstants._sherlockGradientColors)
     }
     
     override func awakeFromNib() {

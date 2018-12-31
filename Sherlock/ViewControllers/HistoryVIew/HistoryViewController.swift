@@ -26,12 +26,12 @@ class HistoryViewController: UIViewController {
         super.viewDidLoad()
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        self.historyNavBar.set(colors: _sherlockGradientColors)
+        self.historyNavBar.set(colors: ApplicationConstants._sherlockGradientColors)
         self.view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         // interactive transition
         let edgeRecognizer = UIPanGestureRecognizer(target: self, action: #selector(HistoryViewController.didPan(_:)))
-        self.view.addGestureRecognizer(edgeRecognizer)
+        self.historyNavBar.addGestureRecognizer(edgeRecognizer)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -88,11 +88,28 @@ class HistoryViewController: UIViewController {
         return aDate.compare(bDate) == .orderedDescending
     }
     
-    func extractStrFrom(date: Date) -> String{
+    func extractStrFrom(date: Date) -> String {
         let dateFmt = DateFormatter()
         dateFmt.timeZone = TimeZone.ReferenceType.default
         dateFmt.dateFormat = "MMM dd"
-        return dateFmt.string(from:date)
+        
+        let today = Date()
+        let todayStr = dateFmt.string(from: today)
+        let dateStr = dateFmt.string(from: date)
+        if dateStr == todayStr {
+            return "Today"
+        }
+        
+        // yesterday
+        let calendar = Calendar.current
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
+        let yesterdayStr = dateFmt.string(from: yesterday)
+        
+        if dateStr == yesterdayStr {
+            return "Yesterday"
+        }
+        
+        return dateStr
     }
     
     @objc func didPan(_ sender: UIPanGestureRecognizer){
@@ -145,12 +162,13 @@ extension HistoryViewController: UITableViewDataSource {
         let entry = self.historyEntries[dateStr]![indexPath.row]
         if let searchEntry = entry as? SearchHistoryEntry {
             let cell = tableView.dequeueReusableCell(withIdentifier: "searchEntry") as!  QueryTableViewCell
-            cell.set(data: searchEntry, index: indexPath, delegate: self)
+            cell.queryLabel.text = searchEntry.query
             return cell
         } else {
             let webEntry = entry as! WebHistoryEntry
             let cell = tableView.dequeueReusableCell(withIdentifier: "webEntry")  as! WebTableViewCell
-            cell.set(data: webEntry, index: indexPath, delegate: self)
+            cell.siteUrlLabel.text = webEntry.url
+            cell.siteTitleLabel.text = webEntry.title
             return cell
         }
 
@@ -160,10 +178,55 @@ extension HistoryViewController: UITableViewDataSource {
         return self.dateStrings.count
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self.dateStrings[section]
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = Bundle.main.loadNibNamed("HistoryHeaderView", owner: self, options: nil)?.first as? HistoryHeaderView else {
+            return UIView()
+        }
+        
+        headerView.dateStr = self.dateStrings[section]
+        headerView.delegate = self
+        return headerView
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 85
+    }
+    
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return UITableViewCell.EditingStyle.delete
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deletion = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+            let dateStr = self.dateStrings[indexPath.section]
+            var arr = self.historyEntries[dateStr]!
+            var deleteObject: NSManagedObject
+            if arr.count == 1 {
+                // remove section
+                deleteObject = arr[0]
+                self.dateStrings.remove(at: indexPath.section)
+                self.historyEntries.removeValue(forKey: dateStr)
+                self.tableView.beginUpdates()
+                self.tableView.deleteSections([indexPath.section], with: UITableView.RowAnimation.automatic)
+            } else {
+                if indexPath.row >=  arr.count {return}
+                deleteObject = arr.remove(at: indexPath.row)
+                self.historyEntries[dateStr] = arr
+                self.tableView.beginUpdates()
+                self.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+                self.tableView.endUpdates()
+            }
+            
+            SherlockHistoryManager.main.delete(entry: deleteObject)
+            
+         }
+        return [deletion]
+    }
 }
 
 extension HistoryViewController: UITableViewDelegate {
@@ -193,26 +256,18 @@ extension HistoryViewController: UITableViewDelegate {
     }
 }
 
-extension HistoryViewController: HistoryCellDelegate {
-    func deleteButtonPressed(object: NSManagedObject?) {
-        if let deletedObject = object { // TODO: Look into making this faster
-            // remove from data source
-            let dateStr = self.extractStrFrom(date: deletedObject.value(forKey: "datetime") as! Date)
-            guard let sectionIndex = self.dateStrings.index(of: dateStr) else {return}
-            guard let rowIndex = self.historyEntries[dateStr]!.index(of: deletedObject) else {return}
-            var arr = self.historyEntries[dateStr]!
-            if arr.count == 1 {
-                self.dateStrings.remove(at: sectionIndex)
-                self.historyEntries[dateStr] = []
-                self.tableView.deleteSections([sectionIndex], with: UITableView.RowAnimation.automatic)
-            } else {
-                arr.remove(at: rowIndex)
-                self.historyEntries[dateStr] = arr
-                self.tableView.deleteRows(at: [IndexPath(row: rowIndex, section: sectionIndex)], with: UITableView.RowAnimation.automatic)
-            }
-            
-            // delete from core data
-            SherlockHistoryManager.main.delete(entry: deletedObject)
+
+extension HistoryViewController: HistorySectionDelegate {
+    func deleteButtonPressed(dateStr: String) {
+        let deleteIndex = self.dateStrings.index(of: dateStr)!
+        self.dateStrings.remove(at: deleteIndex)
+        let deletedEntries = self.historyEntries.removeValue(forKey: dateStr)!
+        self.tableView.beginUpdates()
+        self.tableView.deleteSections([deleteIndex], with: UITableView.RowAnimation.automatic)
+        self.tableView.endUpdates()
+        
+        for entry in deletedEntries {
+            SherlockHistoryManager.main.delete(entry: entry)
         }
     }
     

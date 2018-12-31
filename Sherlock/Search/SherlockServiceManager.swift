@@ -13,6 +13,7 @@ class SherlockServiceManager: NSObject {
     static let main = SherlockServiceManager()
     private var timer: Timer!
     private var needsUpdate = false
+    private var cleared = false
     private var isFinal = false
     private var loaded = false
     private var ogOrder = Dictionary<serviceType, Int>() // Maps service types with their original index
@@ -95,7 +96,7 @@ class SherlockServiceManager: NSObject {
                 }
                 
                 if let acURL = serviceDetails!["acURL"]?.string {
-                    if let acParser = autocomplete[name] {
+                    if let acParser = ApplicationConstants.autocomplete[name] {
                         serviceObj.automcompleteHandler = AutoCompleteRequester(url: acURL, autocomplete: acParser)
                     }
                 }
@@ -112,11 +113,17 @@ class SherlockServiceManager: NSObject {
     // update delegate subscribers
     @objc func update(_ sender: Any){
         if self.needsUpdate {
+            self.reorder() // ensure sorted data
             self.delegate?.resultsChanged(self.services)
             self.needsUpdate = false
             if self.isFinal {
                 self.commitDelegate?.resultsCommited(self.services)
                 self.isFinal = false
+            }
+            
+            if self.cleared {
+                self.delegate?.resultsCleared()
+                self.cleared = false
             }
         }
         
@@ -144,6 +151,7 @@ extension SherlockServiceManager {
         self.cancelAutocomplete()
         self.clearAutocomplete()
         self.resetRankings()
+        self.cleared = true
     }
 }
 
@@ -200,7 +208,6 @@ extension SherlockServiceManager {
             service.automcompleteHandler?.clear()
         }
         
-        self.delegate?.resultsCleared()
         self.needsUpdate = true
     }
     
@@ -270,7 +277,7 @@ extension SherlockServiceManager {
         
         let ss = self.servicesMapping[serviceType]
         ss?.weight = 0
-        self.reorder()
+        self.needsUpdate = true
     }
     
     func subtract(weight: Int, forService serviceType: serviceType){
@@ -284,13 +291,12 @@ extension SherlockServiceManager {
             ss?.weight -= weight
         }
         
+        self.needsUpdate = true
     }
     
     func add(weight: Int, toService serviceType: serviceType){
         let ss = self.servicesMapping[serviceType]
         ss?.weight += weight
-        
-        self.reorder()
     }
 
     
@@ -309,8 +315,6 @@ extension SherlockServiceManager {
         for service in self.services {
             service.weight = 0
         }
-        
-        self.reorder()
         
         self.needsUpdate = true
     }
