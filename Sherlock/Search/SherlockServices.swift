@@ -17,6 +17,7 @@ enum serviceType: String {
     case duckduckgo = "duckduckgo"
     case twitter = "twitter"
     case linkedin = "linkedin"
+    case applemaps = "applemaps"
     case none =  "none"
 }
 
@@ -28,6 +29,8 @@ class SherlockService {
     var config = SherlockServiceConfig()
     var automcompleteHandler: AutoCompleteRequester?
     var categories: [NSLinguisticTag:Int] = [:]
+    var categoriesApplied: [Int] = []
+    var ogIndex = 0
     
     // Default values
     var weight: Int = 0
@@ -44,6 +47,7 @@ class SherlockService {
 struct SherlockServiceConfig {
     var resultsJavascriptEnabled = false
     var searchURLS: [String] = []
+    var openURLScheme = false
 }
 
 

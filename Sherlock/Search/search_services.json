@@ -7,9 +7,9 @@
 	},
 
 	"wikipedia": {
-		"searchText": "Search Wikipedia",
+		"searchText": "Wikipedia",
 		"searchURL": "https://en.wikipedia.org/w/index.php?search={query}",
-		"categories": {"OrganizationName": 2, "PersonalName": 1, "PlaceName": 2},
+		"categories": {"OrganizationName": 4, "PersonalName": 2, "PlaceName": 4},
 		"icon": "wikipedia_icon.png",
 		"acURL": "https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&limit=1&namespace=0&format=json"
 	},
@@ -18,7 +18,7 @@
 		"searchText": "Search Facebook",
 		"searchURL": "https://www.facebook.com/search/top/?q={query}",
 		"icon": "facebook_icon.png",
-		"categories": {"PersonalName": 2},
+		"categories": {"PersonalName": 5},
 		"config": {
 			"resultsPage": {
 				"javascriptEnabled": true
@@ -36,7 +36,7 @@
     "twitter": {
     	"searchText": "Search Twitter",
     	"searchURL": "https://twitter.com/search?q={query}",
-    	"categories": {"PersonalName": 2},
+    	"categories": {"PersonalName": 5},
     	"icon": "twitter.png",
     	"config": {
     		"resultsPage": {
@@ -53,6 +53,18 @@
     	"config": {
     		"resultsPage": {
     			"javascriptEnabled": true
+    		}
+    	}
+    },
+
+    "applemaps": {
+    	"searchText": "Search Apple Maps",
+    	"searchURL": "http://maps.apple.com/?q={query}",
+    	"categories": {"PlaceName": 3},
+    	"icon": "applemaps.png",
+    	"config": {
+    		"resultsPage": {
+    			"openURL": true,
     		}
     	}
     }

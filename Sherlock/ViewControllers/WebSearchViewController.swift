@@ -64,7 +64,7 @@ class WebSearchViewController: UIViewController {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "loading" {
             if !self.webView.isLoading {
-                print("finished loading: \(sherlockService.searchURL)")
+//                print("finished loading: \(sherlockService.searchURL)")
                 self.coverView.removeFromSuperview()
             }
         }

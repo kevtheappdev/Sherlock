@@ -74,7 +74,7 @@ class SearchViewController: UIViewController {
     
     // MARK: View Controller logic
     func loadViewControllers(){
-        let services = SherlockServiceManager.main.getServices()
+        let services = SherlockServiceManager.main.services
         
         // service results view
         let service = ServiceResultsTableViewController(services: services)
@@ -93,7 +93,6 @@ class SearchViewController: UIViewController {
     }
 
     func register(viewController vc: UIViewController){
-        // for now add as child viewcontroller - reevaluate how that should go soon
         addChild(vc)
         vc.didMove(toParent: self)
         self.view.addSubview(vc.view)
@@ -140,7 +139,7 @@ extension SearchViewController: ServiceResultDelegate {
         guard let queryVal = self.query else {return}
         if queryVal.isEmpty {return}
         self.omniBar.resignActive()
-        self.resultsVC.execute(query: queryVal, service: service, force: true)
+        self.resultsVC.execute(query: queryVal, service: service)
         switchTo(viewController: self.resultsVC)
     }
 }
@@ -151,19 +150,14 @@ extension SearchViewController: OmniBarDelegate {
         if input.isEmpty {
             self.inputCleared()
         } else {
-            SherlockServiceManager.main.beginAutocomplete(forQuery: input)
-            SherlockServiceManager.main.categorize(withQuery: input)
-            self.resultsVC.execute(query: input)
+            SherlockServiceManager.main.begin(Query: input)
         }
     }
     
     func inputCleared() {
         self.query = ""
         // clear autocomplete suggestions
-        let serviceManager = SherlockServiceManager.main
-        serviceManager.clearAutocomplete()
-        serviceManager.cancelAutocomplete()
-        serviceManager.resetRankings()
+        SherlockServiceManager.main.cancelQuery()
     }
     
     func omniBarSelected() {
@@ -173,7 +167,8 @@ extension SearchViewController: OmniBarDelegate {
     func omnibarSubmitted() {
         if let queryVal = self.query {
             if queryVal.isEmpty {return}
-            self.resultsVC.execute(query: queryVal, force: true)
+            SherlockServiceManager.main.commit(Query: queryVal)
+            self.resultsVC.execute(query: queryVal)
             self.omniBar.resignActive()
             switchTo(viewController: resultsVC)
         }
@@ -201,7 +196,22 @@ extension SearchViewController: ScrollResultsDelegate {
     }
     
     func switchedTo(service: serviceType) {
-        print("switched to: \(service.rawValue)")
+//        print("switched to: \(service.rawValue)")
+        let services = SherlockServiceManager.main.servicesMapping
+        let ss = services[service]!
+        
+        if ss.config.openURLScheme {
+            guard let queryStr = self.query else {
+                return
+            }
+            var urlStr = ss.searchURL.replacingOccurrences(of: "{query}", with: queryStr)
+            urlStr = urlStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!
+            let url = URL(string: urlStr)!
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+        
+        
+        
     }
     
 }

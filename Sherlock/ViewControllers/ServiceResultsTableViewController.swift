@@ -113,7 +113,7 @@ class ServiceResultsTableViewController: UITableViewController {
         if let acHandler = self.services[section].automcompleteHandler {
             let suggestionCount = acHandler.suggestions.count
             let type = self.services[section].type
-            if suggestionCount > _numACResults && self.reducedModeDict[type]! { // TODO: figure out how to get around potential error here
+            if suggestionCount > _numACResults && self.reducedModeDict[type]! {
                 return _numACResults + 1
             } else {
                 return acHandler.suggestions.count
@@ -189,16 +189,23 @@ class ServiceResultsTableViewController: UITableViewController {
 }
 
 extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
-    func autocompleteCleared() {
+    func resultsCleared() {
         self.initReducedMode()
     }
     
-    func autocompleteResultsChanged(_ services: [SherlockService]) {
-        if self.reloadingResults { // TOOD: maybe replace with timer callback
+    func resultsChanged(_ services: [SherlockService]) {
+        if self.reloadingResults {
             return // skip this reload if data source is updating.
         }
         
         self.services = services
+        // debug statements
+        print("\nupdated services:")
+        for service in services {
+            print("\(service.type.rawValue):  \(service.weight)")
+        }
+        
+        
         
         CATransaction.begin()
         self.reloadingResults = true

@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // set default service list if first launch (for now)
         let userDefaults = UserDefaults.standard
 //        if userDefaults.array(forKey: "services") == nil {
-            userDefaults.set([serviceType.google.rawValue, serviceType.duckduckgo.rawValue, serviceType.wikipedia.rawValue, serviceType.facebook.rawValue, serviceType.twitter.rawValue
+            userDefaults.set([serviceType.google.rawValue, serviceType.duckduckgo.rawValue, serviceType.wikipedia.rawValue, serviceType.facebook.rawValue, serviceType.twitter.rawValue, serviceType.applemaps.rawValue
                 ], forKey: "services")
 //        }
     }

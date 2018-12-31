@@ -17,7 +17,7 @@ class ScrollResultsViewController: UIViewController {
     var webControllers: [serviceType:  WebSearchViewController] = Dictionary<serviceType, WebSearchViewController>()
     weak var currentResult: WebSearchViewController!
     weak var delegate: ScrollResultsDelegate?
-    var loadOk = true
+
 
     
     init(services: [SherlockService]) {
@@ -100,8 +100,7 @@ class ScrollResultsViewController: UIViewController {
 
     }
     
-    func execute(query: String, service: SherlockService? = nil, force: Bool = false){
-        if !force && !self.loadOk {return}
+    func execute(query: String, service: SherlockService? = nil) {
         
         // only execute on a new query
         if let lastQuery = self.lastQuery {
@@ -112,21 +111,15 @@ class ScrollResultsViewController: UIViewController {
         }
         lastQuery = query
         
-        if force {
-            SherlockHistoryManager.main.log(search: query)
-        }
+        
+        SherlockHistoryManager.main.log(search: query)
+        
         
         for (_, webVC) in webControllers { // TODO: limit this when we add more services
             webVC.execute(query: query)
         }
         
         scrollToService(service: service)
-    
-        // rate limiting
-        self.loadOk = false
-        Timer.scheduledTimer(withTimeInterval: 0.75, repeats: false, block:{_  in  // TODO: have servicespecific rate limiting
-            self.loadOk = true
-        })
     }
     
     func scrollToService(service: SherlockService?){
@@ -136,11 +129,14 @@ class ScrollResultsViewController: UIViewController {
             guard let curVC = webControllers[type] else {
                 return
             }
+            self.delegate?.switchedTo(service: selectedService.type)
             self.currentResult = curVC
             self.scrollView.contentOffset = curVC.view.frame.origin
             self.serviceSelector.select(service: type)
         } else {
-            self.currentResult = webControllers[services.first!.type]
+            let firstType = services.first!.type
+            self.delegate?.switchedTo(service: firstType)
+            self.currentResult = webControllers[firstType]
         }
         
         self.currentResult.webView.navigationDelegate = self

@@ -177,7 +177,7 @@ extension HistoryViewController: UITableViewDelegate {
         let selectedDateStr = self.dateStrings[indexPath.section]
         let selectedEntry = self.historyEntries[selectedDateStr]![indexPath.row]
         if let webEntry =  selectedEntry as? WebHistoryEntry {
-            let url = URL(string: webEntry.url!)! // TODO: Error check this in the History manager - make sure we don't save without a valid url
+            let url = URL(string: webEntry.url!)!
             let webVC = WebResultViewController(url: url, recordHistory: false)
             SherlockHistoryManager.main.update(entry: webEntry)
             webVC.transitioningDelegate = self
@@ -186,7 +186,7 @@ extension HistoryViewController: UITableViewDelegate {
         } else {
             let searchEntry = selectedEntry as! SearchHistoryEntry
             SherlockHistoryManager.main.update(entry: searchEntry)
-            SherlockServiceManager.main.beginAutocomplete(forQuery: searchEntry.query!)
+            SherlockServiceManager.main.begin(Query: searchEntry.query!)
             self.dismiss(animated: true, completion: nil)
             self.delegate?.execute(search: searchEntry.query!)
         }

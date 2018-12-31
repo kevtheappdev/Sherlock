@@ -31,7 +31,6 @@ class AutoCompleteRequester: NSObject {
         self.task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let data = data {
                 let suggestions = self.autoCompleteParser.process(results: data)
-                print("suggestions for url: \(self.url): \(suggestions)")
                 self.suggestions = suggestions
             }
             
@@ -44,6 +43,11 @@ class AutoCompleteRequester: NSObject {
     
     func cancel(){
         self.task?.cancel()
+    }
+    
+    func clear(){
+        self.suggestions.removeAll()
+        self.autoCompleteParser.clear()
     }
     
 }

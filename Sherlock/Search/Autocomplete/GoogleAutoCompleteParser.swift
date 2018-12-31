@@ -10,6 +10,13 @@ import UIKit
 import SwiftyJSON
 
 class GoogleAutoCompleteParser: AutoCompleteParser {
+    var weightChanged = false
+    var weight = 2
+    
+    func clear() {
+        self.weightChanged = false
+    }
+    
     
     func process(results data: Data) -> [Autocomplete] {
         // TODO: Insert logging for these failure points
@@ -29,8 +36,12 @@ class GoogleAutoCompleteParser: AutoCompleteParser {
             results.append(ac)
         }
         
-        if  results.count > 0 {
-            SherlockServiceManager.main.add(weight: 2, toService: .google)
+        if  results.count > 0 && !self.weightChanged {
+            SherlockServiceManager.main.add(weight: self.weight, toService: .google)
+            self.weightChanged = true
+        } else {
+            SherlockServiceManager.main.subtract(weight: self.weight, forService: .google)
+            self.weightChanged = false
         }
         
         return results

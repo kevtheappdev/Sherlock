@@ -13,12 +13,38 @@ class SherlockServiceManager: NSObject {
     static let main = SherlockServiceManager()
     private var timer: Timer!
     private var needsUpdate = false
+    private var isFinal = false
+    private var loaded = false
     private var ogOrder = Dictionary<serviceType, Int>() // Maps service types with their original index
-    private var servicesMapping = Dictionary<serviceType, SherlockService>()
+    private lazy var _servicesMapping: Dictionary<serviceType, SherlockService> = {
+        if !self.loaded {
+            fatalError("Must call load() before accessing")
+        }
+        
+        var mapping = Dictionary<serviceType, SherlockService>()
+        for service in self.services {
+            mapping[service.type] = service
+        }
+        return mapping
+    }()
     
     // ivars
-    var services = Array<SherlockService>() // TODO: replace with custom data structure
-    var delegate: SherlockServiceManagerDelegate? // TODO: Look into having multiple subscribers
+    private var _services = Array<SherlockService>()
+    weak var delegate: SherlockServiceManagerDelegate?
+    weak var commitDelegate: SherlockServiceManagerCommitDelegate?
+    
+    // data structure access
+    var services: [SherlockService] {
+        get {
+            return self._services
+        }
+    }
+    
+    var servicesMapping: [serviceType: SherlockService] {
+        get {
+            return self._servicesMapping
+        }
+    }
 
     
     private override init() {
@@ -29,7 +55,9 @@ class SherlockServiceManager: NSObject {
     
     func load(){
         // Other setup
+        self.loaded = true
         loadServices()
+        resetRankings() // fresh rank
     }
     
     private func loadServices(){
@@ -62,19 +90,8 @@ class SherlockServiceManager: NSObject {
                 }
                 
                 // parse out categories if they exist
-                // TODO: move this into a utility function
                 if let categories = serviceDetails!["categories"]?.dictionary {
-                    var serviceCategories: [NSLinguisticTag:Int] = [:]
-                    for (category, weight) in categories {
-                        guard let weight = weight.int else {
-                            continue
-                        }
-                        
-                        
-                        let tag = NSLinguisticTag(rawValue: category)
-                        serviceCategories[tag] = weight
-                    }
-                    serviceObj.categories = serviceCategories
+                   serviceObj.categories = self.parse(categories: categories)
                 }
                 
                 if let acURL = serviceDetails!["acURL"]?.string {
@@ -83,21 +100,25 @@ class SherlockServiceManager: NSObject {
                     }
                 }
                 
-                self.ogOrder[serviceObj.type] = index // preserve original indexing
+                serviceObj.ogIndex = index // preserve original indexing
                 index += 1
                 
-                self.services.append(serviceObj)
+                self._services.append(serviceObj)
             }
         }
         
     }
     
+    // update delegate subscribers
     @objc func update(_ sender: Any){
         if self.needsUpdate {
-            self.delegate?.autocompleteResultsChanged(self.services)
+            self.delegate?.resultsChanged(self.services)
             self.needsUpdate = false
+            if self.isFinal {
+                self.commitDelegate?.resultsCommited(self.services)
+                self.isFinal = false
+            }
         }
-        
         
     }
     
@@ -106,13 +127,65 @@ class SherlockServiceManager: NSObject {
 
 // MARK: API Methods
 extension SherlockServiceManager {
-    // temp function for current state of datastructures
-    func getServices() -> [SherlockService] // TODO: callers pass in reference to conforming delegate method
-    {
-        return self.services
+    
+    func begin(Query query: String){
+        self.fetchAutocomplete(forQuery: query)
+        self.categorize(withQuery: query)
     }
     
-    func beginAutocomplete(forQuery query: String){
+    func commit(Query query: String){
+        self.fetchAutocomplete(forQuery: query)
+        self.categorize(withQuery: query)
+        self.isFinal = true
+        self.needsUpdate  = true
+    }
+    
+    func cancelQuery(){
+        self.cancelAutocomplete()
+        self.clearAutocomplete()
+        self.resetRankings()
+    }
+}
+
+// MARK: Parsing functions for services
+extension SherlockServiceManager {
+    // configure SherlockServiceConfig objectr from the JSON
+    private func parse(config configDict: Dictionary<String, JSON>) -> SherlockServiceConfig {
+        var serviceConfig = SherlockServiceConfig()
+        
+        // resultsPage options
+        if let resultsConfig = configDict["resultsPage"]?.dictionary {
+            if let jsEnabled = resultsConfig["javascriptEnabled"]?.bool {
+                serviceConfig.resultsJavascriptEnabled = jsEnabled
+            }
+            
+            if let openURL = resultsConfig["openURL"]?.bool {
+                serviceConfig.openURLScheme = openURL
+            }
+        }
+        
+        return serviceConfig
+    }
+    
+    private func parse(categories categoryDict: Dictionary<String, JSON>) -> [NSLinguisticTag: Int] { // TODO: Change out NSLinguisticTag enum for something more extensible
+        
+        var serviceCategories: [NSLinguisticTag:Int] = [:]
+        for (category, weight) in categoryDict {
+            guard let weight = weight.int else {
+                continue
+            }
+            
+            let tag = NSLinguisticTag(rawValue: category)
+            serviceCategories[tag] = weight
+        }
+        return serviceCategories
+    }
+
+}
+
+// MARK: Autocomplete
+extension SherlockServiceManager {
+    private func fetchAutocomplete(forQuery query: String){
         for service in self.services {
             service.automcompleteHandler?.makeRequest(withQuery: query) {(error) in
                 if error == nil {
@@ -122,44 +195,26 @@ extension SherlockServiceManager {
         }
     }
     
-    func clearAutocomplete(){
+    private func clearAutocomplete(){
         for service in self.services {
-            service.automcompleteHandler?.suggestions.removeAll(keepingCapacity: true)
+            service.automcompleteHandler?.clear()
         }
         
-        self.delegate?.autocompleteCleared()
+        self.delegate?.resultsCleared()
         self.needsUpdate = true
     }
     
-    func cancelAutocomplete(){
+    private func cancelAutocomplete(){
         for service in self.services {
             service.automcompleteHandler?.cancel()
         }
     }
 }
 
-// MARK: Configuration parsing
-extension SherlockServiceManager {
-    // configure SherlockServiceConfig objectr from the JSON
-    func parse(config configDict: Dictionary<String, JSON>) -> SherlockServiceConfig {
-        var serviceConfig = SherlockServiceConfig()
-        
-        // resultsPage options
-        if let resultsConfig = configDict["resultsPage"]?.dictionary {
-            if let jsEnabled = resultsConfig["javascriptEnabled"]?.bool {
-                serviceConfig.resultsJavascriptEnabled = jsEnabled
-            }
-        }
-        
-        return serviceConfig
-    }
-
-}
-
 // MARK: Linguistic analysis
 extension SherlockServiceManager {
-    func categorize(withQuery query: String){
-        self.clearRankings() //  fresh start on rankings
+    private func categorize(withQuery query: String){
+        self.clearLinguisticWeights()//  fresh start on rankings
         
         let query = query.capitalized
         let schemes = NSLinguisticTagger.availableTagSchemes(forLanguage: "en")
@@ -172,52 +227,78 @@ extension SherlockServiceManager {
         tagger.enumerateTags(in: range, unit: .word, scheme: .nameType, options: options) { tag, tokenRange, stop in
             if let tag = tag, tags.contains(tag) {
                 let serviceWeights = self.servicesFor(tag: tag)
+                print("tag: \(tag) for str: \(query)")
                 for (service, serviceWeight) in serviceWeights {
                     self.add(weight: serviceWeight, toService: service)
                 }
+            } else {
+                self.clearLinguisticWeights()
             }
         }
     }
     
-    func servicesFor(tag: NSLinguisticTag) -> [serviceType: Int]{
+    private func servicesFor(tag: NSLinguisticTag) -> [serviceType: Int]{
         var services: [serviceType: Int] = [:]
         for service in self.services {
             if service.categories[tag] != nil {
-                services[service.type] = service.categories[tag]
+                let weight = service.categories[tag]!
+                service.categoriesApplied.append(weight)
+                services[service.type] = weight
             }
         }
         
         return services
     }
+    
+    private func clearLinguisticWeights(){
+        for service in self.services {
+            for weight in service.categoriesApplied {
+                if weight > service.weight {
+                    break
+                }
+                service.weight -= weight
+            }
+            service.categoriesApplied.removeAll()
+        }
+    }
 }
 
 // MARK: Automatic ordering
 extension SherlockServiceManager {
-    func add(weight: Int, toServices selectServices: [serviceType]){  // maybe redundant?
-        let serviceSet = Set<serviceType>(selectServices)
-        for service in self.services {
-            if serviceSet.contains(service.type) {
-                service.weight += weight
-            }
-        }
+
+    func removeWeight(forService serviceType: serviceType){
+        
+        let ss = self.servicesMapping[serviceType]
+        ss?.weight = 0
         self.reorder()
     }
     
-    func add(weight: Int, toService serviceType: serviceType){
-        if self.servicesMapping.isEmpty {
-            for service in self.services {
-                self.servicesMapping[service.type] = service
-            }
+    func subtract(weight: Int, forService serviceType: serviceType){
+        
+        let ss = self.servicesMapping[serviceType]
+        guard let curWeight = ss?.weight else {
+            return
         }
         
+        if curWeight >= weight {
+            ss?.weight -= weight
+        }
+        
+    }
+    
+    func add(weight: Int, toService serviceType: serviceType){
         let ss = self.servicesMapping[serviceType]
         ss?.weight += weight
         
         self.reorder()
     }
+
     
     private func reorder(){
-        self.services.sort {a, b in
+        self._services.sort {a, b in
+            if a.weight == b.weight {
+                return a.ogIndex < b.ogIndex
+            }
             return a.weight > b.weight
         }
         
@@ -225,22 +306,13 @@ extension SherlockServiceManager {
     }
     
     func resetRankings(){
-        
-        for service in self.services {
-            service.weight = self.ogOrder[service.type]!
-        }
-        
-        self.services.sort {a, b in
-            return b.weight > a.weight
-        }
-        
-        self.needsUpdate = true
-    }
-    
-    func clearRankings(){
         for service in self.services {
             service.weight = 0
         }
+        
+        self.reorder()
+        
+        self.needsUpdate = true
     }
     
 }

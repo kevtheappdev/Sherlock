@@ -114,15 +114,14 @@ class WebResultViewController: UIViewController {
     // webview progress
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "estimatedProgress" {
-            let progress = Float(self.webView.estimatedProgress)
-            if progress > 0.5 && self.recordHistory && !self.historyRecorded {
-                self.historyRecorded = true
-                SherlockHistoryManager.main.log(webPage: webView.url!, title: webView.title!) // TODO: error check this
-            }
-            
             self.titleBar.progressBar.progress = Float(self.webView.estimatedProgress)
             if webView.title  != nil  && !webView.title!.isEmpty {
                 self.titleBar.set(title: webView.title!, url: webView.url!.absoluteString)
+                // record history
+                if self.recordHistory && !self.historyRecorded {
+                    SherlockHistoryManager.main.log(webPage: webView.url!, title: webView.title!)
+                    self.historyRecorded = true
+                }
             }
         }
     }

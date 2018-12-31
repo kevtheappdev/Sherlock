@@ -35,7 +35,7 @@
 		683DE29721CFFFDC005E58F4 /* WebTitleBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 683DE29621CFFFDC005E58F4 /* WebTitleBar.xib */; };
 		683DE29E21D061AD005E58F4 /* SherlockHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683DE29D21D061AD005E58F4 /* SherlockHistoryManager.swift */; };
 		686290A021CD842400085FFE /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6862909F21CD842400085FFE /* SwiftyJSON.framework */; };
-		686290A221CD987F00085FFE /* SherlockServiceManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686290A121CD987F00085FFE /* SherlockServiceManagerDelegate.swift */; };
+		686290A221CD987F00085FFE /* SherlockServiceManagerDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686290A121CD987F00085FFE /* SherlockServiceManagerDelegates.swift */; };
 		68662D8921D5A27E00A67B4C /* AutoCompleteRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68662D8821D5A27E00A67B4C /* AutoCompleteRequester.swift */; };
 		686C68BB21D6B4F000270E41 /* GoogleAutoCompleteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686C68BA21D6B4EF00270E41 /* GoogleAutoCompleteParser.swift */; };
 		686C68BD21D6B50600270E41 /* AutoCompleteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686C68BC21D6B50600270E41 /* AutoCompleteParser.swift */; };
@@ -62,6 +62,7 @@
 		68C4618221D344DE00A1E1CC /* PushInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C4618121D344DE00A1E1CC /* PushInteractor.swift */; };
 		68CC169121CFF8C0005AEF42 /* WebResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CC169021CFF8C0005AEF42 /* WebResultViewController.swift */; };
 		68CC169321CFF972005AEF42 /* WebNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CC169221CFF972005AEF42 /* WebNavBar.swift */; };
+		68E569AC21D9C4D1004346C7 /* applemaps.png in Resources */ = {isa = PBXBuildFile; fileRef = 68E569AB21D9C4D1004346C7 /* applemaps.png */; };
 		68F7575321D7E5940047B24D /* chevron.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7575221D7E5930047B24D /* chevron.png */; };
 		68F7575521D7E5BB0047B24D /* ChevronCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68F7575421D7E5BB0047B24D /* ChevronCell.xib */; };
 		68F7575721D7EE350047B24D /* SearchServiceHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F7575621D7EE350047B24D /* SearchServiceHeader.swift */; };
@@ -132,7 +133,7 @@
 		683DE29621CFFFDC005E58F4 /* WebTitleBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WebTitleBar.xib; sourceTree = "<group>"; };
 		683DE29D21D061AD005E58F4 /* SherlockHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockHistoryManager.swift; sourceTree = "<group>"; };
 		6862909F21CD842400085FFE /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Sherlock/Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
-		686290A121CD987F00085FFE /* SherlockServiceManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockServiceManagerDelegate.swift; sourceTree = "<group>"; };
+		686290A121CD987F00085FFE /* SherlockServiceManagerDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockServiceManagerDelegates.swift; sourceTree = "<group>"; };
 		68662D8821D5A27E00A67B4C /* AutoCompleteRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompleteRequester.swift; sourceTree = "<group>"; };
 		686C68BA21D6B4EF00270E41 /* GoogleAutoCompleteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAutoCompleteParser.swift; sourceTree = "<group>"; };
 		686C68BC21D6B50600270E41 /* AutoCompleteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoCompleteParser.swift; sourceTree = "<group>"; };
@@ -165,6 +166,7 @@
 		68C4618121D344DE00A1E1CC /* PushInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushInteractor.swift; sourceTree = "<group>"; };
 		68CC169021CFF8C0005AEF42 /* WebResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebResultViewController.swift; sourceTree = "<group>"; };
 		68CC169221CFF972005AEF42 /* WebNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebNavBar.swift; sourceTree = "<group>"; };
+		68E569AB21D9C4D1004346C7 /* applemaps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = applemaps.png; sourceTree = "<group>"; };
 		68F7575221D7E5930047B24D /* chevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron.png; sourceTree = "<group>"; };
 		68F7575421D7E5BB0047B24D /* ChevronCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChevronCell.xib; sourceTree = "<group>"; };
 		68F7575621D7EE350047B24D /* SearchServiceHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchServiceHeader.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 		6802427221CC47A000AA8899 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				68E569AB21D9C4D1004346C7 /* applemaps.png */,
 				68AA33EB21D8361B003E07BB /* file-text.png */,
 				68F7575E21D7FA9F0047B24D /* linkedin.png */,
 				68F7575C21D7F55B0047B24D /* twitter.png */,
@@ -289,7 +292,7 @@
 				6811F46F21CD5AEB001DBE63 /* SherlockServiceManager.swift */,
 				6811F47121CD6985001DBE63 /* SherlockServices.swift */,
 				6811F47921CD80BD001DBE63 /* search_services.json */,
-				686290A121CD987F00085FFE /* SherlockServiceManagerDelegate.swift */,
+				686290A121CD987F00085FFE /* SherlockServiceManagerDelegates.swift */,
 				6860AFED21D73F8100F00602 /* Autocomplete */,
 			);
 			path = Search;
@@ -592,6 +595,7 @@
 				683DE28F21CFFB0E005E58F4 /* share.png in Resources */,
 				6802427521CC47B700AA8899 /* cog.png in Resources */,
 				683DE29721CFFFDC005E58F4 /* WebTitleBar.xib in Resources */,
+				68E569AC21D9C4D1004346C7 /* applemaps.png in Resources */,
 				68FA235F21D14C06006290FD /* cancel-circle.png in Resources */,
 				6802427121CC45D900AA8899 /* OmniBar.xib in Resources */,
 				68F7575521D7E5BB0047B24D /* ChevronCell.xib in Resources */,
@@ -686,7 +690,7 @@
 				682483AA21D4079B003D189A /* LoadingIndicator.swift in Sources */,
 				68CC169321CFF972005AEF42 /* WebNavBar.swift in Sources */,
 				686C68BB21D6B4F000270E41 /* GoogleAutoCompleteParser.swift in Sources */,
-				686290A221CD987F00085FFE /* SherlockServiceManagerDelegate.swift in Sources */,
+				686290A221CD987F00085FFE /* SherlockServiceManagerDelegates.swift in Sources */,
 				68C1875921CDDB0A00EED415 /* WebSearchViewController.swift in Sources */,
 				682483AE21D4603F003D189A /* CoverView.swift in Sources */,
 				68F9F14021CF0943001E7FD7 /* ServiceSelectorBar.swift in Sources */,

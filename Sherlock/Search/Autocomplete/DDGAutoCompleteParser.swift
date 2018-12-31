@@ -10,6 +10,9 @@ import UIKit
 import SwiftyJSON
 
 class DDGAutoCompleteParser: AutoCompleteParser {
+    var weightChanged = false
+    var weight = 2
+    
     func process(results data: Data) -> [Autocomplete] {
         guard let acResults = try? JSON(data: data).array else {
             return []
@@ -31,11 +34,19 @@ class DDGAutoCompleteParser: AutoCompleteParser {
             }
         }
         
-        if suggestions.count > 0 {
-            SherlockServiceManager.main.add(weight: 2, toService: .duckduckgo)
+        if suggestions.count > 0 && !weightChanged{
+            SherlockServiceManager.main.add(weight: self.weight, toService: .duckduckgo)
+            weightChanged = true
+        } else {
+            SherlockServiceManager.main.subtract(weight: self.weight, forService: .duckduckgo)
+            weightChanged = false
         }
         
         return suggestions
+    }
+    
+    func clear(){
+        self.weightChanged = false
     }
     
 }
