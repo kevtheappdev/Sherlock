@@ -13,7 +13,3 @@ protocol SherlockServiceManagerDelegate: class {
     func resultsChanged(_ services: [SherlockService])
     func resultsCleared()
 }
-
-protocol SherlockServiceManagerCommitDelegate: class {
-    func resultsCommited(_ services: [SherlockService])
-}

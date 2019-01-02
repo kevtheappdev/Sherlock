@@ -160,6 +160,7 @@ class WebResultViewController: UIViewController {
 
 }
 
+// MARK: WebNavBarDelegate
 extension WebResultViewController: WebNavBarDelegate {
     func backButtonPressed() {
         if self.webView.canGoBack {
@@ -187,6 +188,7 @@ extension WebResultViewController: WebNavBarDelegate {
     }
 }
 
+// MARK: WebTitleBarDelegate
 extension WebResultViewController: WebTitleBarDelegate {
     func titleBackButtonPressed() {
         self.dismiss(animated: true, completion: nil)
@@ -194,6 +196,7 @@ extension WebResultViewController: WebTitleBarDelegate {
 
 }
 
+// MARK: WKNavigationDelegate
 extension WebResultViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if self.recordHistory && !self.historyRecorded {

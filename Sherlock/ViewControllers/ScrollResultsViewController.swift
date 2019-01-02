@@ -12,7 +12,7 @@ import WebKit
 class ScrollResultsViewController: UIViewController {
     let scrollView = UIScrollView()
     var serviceSelector: ServiceSelectorBar
-    var services: [SherlockService]
+    var services: [SherlockService] = Array<SherlockService>()
     var lastQuery:  String?
     var currentIndex = 0
     var webControllers: [serviceType:  WebSearchViewController] = Dictionary<serviceType, WebSearchViewController>()
@@ -22,9 +22,10 @@ class ScrollResultsViewController: UIViewController {
 
     
     init(services: [SherlockService]) {
-        self.serviceSelector = ServiceSelectorBar(services: services)
         self.services = services
+        self.serviceSelector = ServiceSelectorBar()
         super.init(nibName: nil, bundle: nil)
+        self.setupWebViews()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -45,17 +46,35 @@ class ScrollResultsViewController: UIViewController {
         self.serviceSelector.delegate = self
         self.view.addSubview(self.serviceSelector)
         
+        self.setupWebViews()
+    }
+    
+    func setupWebViews(){
+        // clear previous webviews
+        for (_, webVC) in self.webControllers {
+            webVC.removeFromParent()
+            webVC.view.removeFromSuperview()
+        }
+        self.webControllers.removeAll()
+        
         // add web views
         var index = 0
         for service in services {
             let config = service.config
-            let webVC = WebSearchViewController(service: service, javascriptEnabled: config.resultsJavascriptEnabled) // TODO: decouple the passing of this data  from the constructor
+            let webVC = WebSearchViewController(service: service, javascriptEnabled: config.resultsJavascriptEnabled)
             self.webControllers[service.type] = webVC
             self.addChild(webVC)
             webVC.didMove(toParent:self)
             self.scrollView.addSubview(webVC.view)
             index += 1
         }
+    }
+    
+    func set(Services services: [SherlockService]){
+        self.services = services
+        self.serviceSelector.display(Services: services)
+        self.layoutWebviews()
+        self.view.layoutIfNeeded()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,10 +115,11 @@ class ScrollResultsViewController: UIViewController {
 
     }
     
+    
     private func layoutWebviews(){
         let width = self.view.bounds.width
         let height = self.view.bounds.height
-         self.scrollView.contentSize = CGSize(width: width * CGFloat(self.services.count), height: height)
+        self.scrollView.contentSize = CGSize(width: width * CGFloat(self.services.count), height: height)
         
         var index = 0
         for service in self.services {
@@ -111,7 +131,9 @@ class ScrollResultsViewController: UIViewController {
         self.scrollView.contentOffset = CGPoint(x: CGFloat(self.currentIndex) * width, y: 0)
     }
     
-    func execute(query: String, service: SherlockService? = nil) {
+    func execute(query: String, service: SherlockService? = nil, services: [SherlockService]) {
+        self.set(Services: services)
+        
         
         // only execute on a new query
         if let lastQuery = self.lastQuery {
@@ -158,6 +180,7 @@ class ScrollResultsViewController: UIViewController {
     
 }
 
+// MARK: UIScrollViewDelegate
 extension ScrollResultsViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset
@@ -175,6 +198,7 @@ extension ScrollResultsViewController: UIScrollViewDelegate {
     }
 }
 
+// MARK: WKNavigationDelegate
 extension ScrollResultsViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         // prevent clicks on search results - to be overridden with custom content viewer
@@ -187,8 +211,9 @@ extension ScrollResultsViewController: WKNavigationDelegate {
     }
 }
 
+// MARK: ServiceSelectorBarDelegate
 extension ScrollResultsViewController: ServiceSelectorBarDelegate {
-func selected(service: SherlockService) {
+    func selected(service: SherlockService) {
         self.scrollToService(service: service)
     }
 }

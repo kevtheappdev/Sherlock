@@ -15,7 +15,6 @@ class SherlockServiceManager: NSObject {
     private var needsUpdate = false
     private var canChangeOrder = true
     private var cleared = false
-    private var isFinal = false
     private var loaded = false
     private var ogOrder = Dictionary<serviceType, Int>() // Maps service types with their original index
     private lazy var _servicesMapping: Dictionary<serviceType, SherlockService> = {
@@ -33,7 +32,6 @@ class SherlockServiceManager: NSObject {
     // ivars
     private var _services = Array<SherlockService>()
     weak var delegate: SherlockServiceManagerDelegate?
-    weak var commitDelegate: SherlockServiceManagerCommitDelegate?
     
     // data structure access
     var services: [SherlockService] {
@@ -117,16 +115,12 @@ class SherlockServiceManager: NSObject {
             if self.canChangeOrder {
                 self.reorder() // ensure sorted data
                 self.canChangeOrder = false // limit how often we change results
-                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) {_ in
+                Timer.scheduledTimer(withTimeInterval: 0.25, repeats: false) {_ in
                     self.canChangeOrder = true
                 }
             }
             self.delegate?.resultsChanged(self.copyServices())
             self.needsUpdate = false
-            if self.isFinal {
-                self.commitDelegate?.resultsCommited(self.copyServices())
-                self.isFinal = false
-            }
             
             if self.cleared {
                 self.delegate?.resultsCleared()
@@ -161,11 +155,10 @@ extension SherlockServiceManager {
         self.analyze(Query: query)
     }
     
-    func commit(Query query: String){
-        self.fetchAutocomplete(forQuery: query)
-        self.categorize(withQuery: query)
-        self.isFinal = true
-        self.needsUpdate  = true
+    func commitQuery() -> [SherlockService]{
+        self.needsUpdate = false
+        self.cancelAutocomplete()
+        return self.copyServices()
     }
     
     func cancelQuery(){

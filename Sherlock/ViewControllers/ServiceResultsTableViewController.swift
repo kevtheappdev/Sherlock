@@ -189,6 +189,7 @@ class ServiceResultsTableViewController: UITableViewController {
 
 }
 
+// MARK: SherlockServiceManagerDelegate
 extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
     func resultsCleared() {
         self.initReducedMode()
@@ -219,6 +220,7 @@ extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
     }
 }
 
+// MARK: SearchServiceHeaderDelegate
 extension ServiceResultsTableViewController: SearchServiceHeaderDelegate {
     func tapped(index: Int) {
         self.delegate?.didSelect(service: self.services[index])

@@ -39,6 +39,10 @@ class UnwindPushTransition: NSObject, UIViewControllerAnimatedTransitioning {
             fromView.frame = finalFrame
             toView.transform = identity
         }, completion: {(done) in
+            if transitionContext.transitionWasCancelled {
+                toView.transform = CGAffineTransform.identity
+            }
+            
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         })
         

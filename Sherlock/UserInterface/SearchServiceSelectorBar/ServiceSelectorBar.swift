@@ -12,19 +12,23 @@ class ServiceSelectorBar: UIView {
     private static let iconSize: CGFloat = 40
     private static let padding: CGFloat = 25
     private let scrollView = UIScrollView()
-    private var services: [SherlockService]
+    private var services: [SherlockService] = Array<SherlockService>()
     private var buttons: [UIButton] = Array<UIButton>()
     private var selectionView: UIView!
     private var buttonOffsets: [CGFloat] = Array<CGFloat>()
     private var selectedOffset = CGPoint(x: 0, y: 0)
     weak var delegate: ServiceSelectorBarDelegate?
     
-    init(services: [SherlockService]) {
-        self.services = services
+    init() {
         super.init(frame: CGRect.zero)
         self.backgroundColor = UIColor.white
         self.addSubview(scrollView)
-        self.displayServices()
+        
+        // setup selection view
+        self.selectionView = UIView()
+        self.selectionView.backgroundColor = UIColor.gray
+        self.selectionView.layer.opacity = 0.4
+        self.scrollView.addSubview(selectionView)
         
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.gray.cgColor
@@ -41,7 +45,13 @@ class ServiceSelectorBar: UIView {
         
         // layout scrollview elements
         self.selectionView.frame = CGRect(x: selectedOffset.x, y: selectedOffset.y, width: ServiceSelectorBar.iconSize + (2 * ServiceSelectorBar.padding), height: height)
+        self.layoutButtons()
+
+    }
+    
+    private func layoutButtons(){
         var curX: CGFloat = ServiceSelectorBar.padding
+        let height = self.scrollView.bounds.height
         let y = (0.4 * (height - ServiceSelectorBar.iconSize))
         for button in self.buttons {
             button.frame = CGRect(x: curX, y: y, width: ServiceSelectorBar.iconSize, height: ServiceSelectorBar.iconSize)
@@ -51,13 +61,13 @@ class ServiceSelectorBar: UIView {
         
     }
     
-    private func displayServices(){
-        
-        // setup selection view
-        self.selectionView = UIView()
-        self.selectionView.backgroundColor = UIColor.gray
-        self.selectionView.layer.opacity = 0.4
-        self.scrollView.addSubview(selectionView)
+    func display(Services services: [SherlockService]){
+        self.services = services
+        // clear any views
+        for button in self.buttons {
+            button.removeFromSuperview()
+        }
+        self.buttons.removeAll()
         
         var index = 1
         for service in self.services {
@@ -70,6 +80,8 @@ class ServiceSelectorBar: UIView {
             self.buttons.append(iconButton)
             index += 1
         }
+        
+        self.layoutButtons()
     }
     
     @objc

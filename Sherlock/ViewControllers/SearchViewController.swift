@@ -33,8 +33,9 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if self.queryToExecute {
-            self.resultsVC.execute(query: self.query!)
+        if self.queryToExecute { // TODO: make this a check  on the query string itself
+            let services = SherlockServiceManager.main.copyServices()
+            self.resultsVC.execute(query: self.query!, services: services)
             switchTo(viewController: resultsVC)
             self.omniBar.searchField.text = self.query
             self.omniBar.resignActive()
@@ -129,6 +130,7 @@ class SearchViewController: UIViewController {
 
 }
 
+// MARK:  ServiceResultDelegate
 extension SearchViewController: ServiceResultDelegate {
     func updated(query: String) {
         self.query = query
@@ -139,11 +141,13 @@ extension SearchViewController: ServiceResultDelegate {
         guard let queryVal = self.query else {return}
         if queryVal.isEmpty {return}
         self.omniBar.resignActive()
-        self.resultsVC.execute(query: queryVal, service: service)
+        let services = SherlockServiceManager.main.commitQuery()
+        self.resultsVC.execute(query: queryVal, service: service, services: services)
         switchTo(viewController: self.resultsVC)
     }
 }
 
+// MARK: OmniBarDelegate
 extension SearchViewController: OmniBarDelegate {
     func inputChanged(input: String) {
         self.query = input
@@ -167,8 +171,8 @@ extension SearchViewController: OmniBarDelegate {
     func omnibarSubmitted() {
         if let queryVal = self.query {
             if queryVal.isEmpty {return}
-            SherlockServiceManager.main.commit(Query: queryVal)
-            self.resultsVC.execute(query: queryVal)
+            let services = SherlockServiceManager.main.commitQuery()
+            self.resultsVC.execute(query: queryVal, services: services)
             self.omniBar.resignActive()
             switchTo(viewController: resultsVC)
         }
@@ -187,6 +191,7 @@ extension SearchViewController: OmniBarDelegate {
     
 }
 
+// MARK: ScrollResultsDelegate
 extension SearchViewController: ScrollResultsDelegate {
     func selectedLink(url: URL) {
         let sfVC = WebResultViewController(url: url)
@@ -196,7 +201,6 @@ extension SearchViewController: ScrollResultsDelegate {
     }
     
     func switchedTo(service: serviceType) {
-//        print("switched to: \(service.rawValue)")
         let services = SherlockServiceManager.main.servicesMapping
         let ss = services[service]!
         
@@ -216,6 +220,7 @@ extension SearchViewController: ScrollResultsDelegate {
     
 }
 
+// MARK: HistoryVCDDelegate
 extension SearchViewController: HistoryVCDDelegate {
     func execute(search: String) {
         self.query = search
@@ -224,6 +229,7 @@ extension SearchViewController: HistoryVCDDelegate {
     
 }
 
+// MARK: UIViewControllerTransitioningDelegate
 extension SearchViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if let _ = presented as? HistoryViewController {
