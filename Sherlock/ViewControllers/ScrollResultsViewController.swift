@@ -14,6 +14,7 @@ class ScrollResultsViewController: UIViewController {
     var serviceSelector: ServiceSelectorBar
     var services: [SherlockService]
     var lastQuery:  String?
+    var currentIndex = 0
     var webControllers: [serviceType:  WebSearchViewController] = Dictionary<serviceType, WebSearchViewController>()
     weak var currentResult: WebSearchViewController!
     weak var delegate: ScrollResultsDelegate?
@@ -37,6 +38,7 @@ class ScrollResultsViewController: UIViewController {
         self.scrollView.isPagingEnabled = true
         self.scrollView.showsHorizontalScrollIndicator = false
         self.scrollView.bounces = false
+        scrollView.contentInsetAdjustmentBehavior = UIScrollView.ContentInsetAdjustmentBehavior.never
         self.view.addSubview(self.scrollView)
         
         // setup service selector
@@ -44,13 +46,15 @@ class ScrollResultsViewController: UIViewController {
         self.view.addSubview(self.serviceSelector)
         
         // add web views
+        var index = 0
         for service in services {
             let config = service.config
-            let webVC = WebSearchViewController(service: service, javascriptEnabled: config.resultsJavascriptEnabled)
+            let webVC = WebSearchViewController(service: service, javascriptEnabled: config.resultsJavascriptEnabled) // TODO: decouple the passing of this data  from the constructor
             self.webControllers[service.type] = webVC
             self.addChild(webVC)
             webVC.didMove(toParent:self)
             self.scrollView.addSubview(webVC.view)
+            index += 1
         }
     }
     
@@ -85,19 +89,26 @@ class ScrollResultsViewController: UIViewController {
         self.view.addConstraints(serviceSelectorHorizontalConstraints)
         self.view.addConstraints(verticalConstraints)
         
-        let width = self.view.bounds.width
-        let height = self.view.bounds.height
-        self.scrollView.contentSize = CGSize(width: width * CGFloat(self.services.count), height: height)
+       
         
         // layout webviews
-        var curX: CGFloat = 0
+        layoutWebviews()
+
+    }
+    
+    private func layoutWebviews(){
+        let width = self.view.bounds.width
+        let height = self.view.bounds.height
+         self.scrollView.contentSize = CGSize(width: width * CGFloat(self.services.count), height: height)
+        
+        var index = 0
         for service in self.services {
             let webVC = self.webControllers[service.type]!
-            
-            webVC.view.frame = CGRect(x: curX, y: 0, width: width, height: height)
-            curX += width
+            webVC.view.frame = CGRect(x: width * CGFloat(index), y: 0, width: width, height: height)
+            index += 1
         }
-
+        
+        self.scrollView.contentOffset = CGPoint(x: CGFloat(self.currentIndex) * width, y: 0)
     }
     
     func execute(query: String, service: SherlockService? = nil) {
@@ -132,27 +143,33 @@ class ScrollResultsViewController: UIViewController {
             self.delegate?.switchedTo(service: selectedService.type)
             self.currentResult = curVC
             self.scrollView.contentOffset = curVC.view.frame.origin
+            self.currentIndex = Int(self.scrollView.contentOffset.x / self.currentResult.view.frame.size.width)
             self.serviceSelector.select(service: type)
         } else {
             let firstType = services.first!.type
             self.delegate?.switchedTo(service: firstType)
             self.currentResult = webControllers[firstType]
+            self.currentIndex = 0
         }
         
         self.currentResult.webView.navigationDelegate = self
     }
+    
+    
 }
 
 extension ScrollResultsViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset
-        
-        for (serviceType, webVC) in webControllers {
+
+        for (serviceType, webVC) in webControllers { // TODO: refactor this - use dictionary to map offsets to viewcontroller instances
             if offset == webVC.view.frame.origin && currentResult.sherlockService.type != webVC.sherlockService.type {
                 self.delegate?.switchedTo(service: serviceType)
                 self.currentResult = webVC
                 webVC.webView.navigationDelegate = self
                 self.serviceSelector.select(service: serviceType)
+                self.currentIndex = Int(offset.x / webVC.view.frame.width)
+                break
             }
         }
     }
