@@ -16,6 +16,7 @@ class ServiceSelectorBar: UIView {
     private var buttons: [UIButton] = Array<UIButton>()
     private var selectionView: UIView!
     private var buttonOffsets: [CGFloat] = Array<CGFloat>()
+    private var selectedOffset = CGPoint(x: 0, y: 0)
     weak var delegate: ServiceSelectorBarDelegate?
     
     init(services: [SherlockService]) {
@@ -39,7 +40,7 @@ class ServiceSelectorBar: UIView {
         self.scrollView.contentSize = CGSize(width: width , height: height)
         
         // layout scrollview elements
-        self.selectionView.frame = CGRect(x: 0, y: 0, width: ServiceSelectorBar.iconSize + (2 * ServiceSelectorBar.padding), height: height)
+        self.selectionView.frame = CGRect(x: selectedOffset.x, y: selectedOffset.y, width: ServiceSelectorBar.iconSize + (2 * ServiceSelectorBar.padding), height: height)
         var curX: CGFloat = ServiceSelectorBar.padding
         let y = (0.4 * (height - ServiceSelectorBar.iconSize))
         for button in self.buttons {
@@ -82,6 +83,7 @@ class ServiceSelectorBar: UIView {
     }
     
     func selectButtonAt(Index serviceIndex: Int){
+        if serviceIndex >= self.buttonOffsets.count {return}
         let selectedOffset = self.buttonOffsets[serviceIndex]
         if selectedOffset > self.bounds.width {
             let diff = selectedOffset - self.bounds.width
@@ -89,6 +91,7 @@ class ServiceSelectorBar: UIView {
         }
         UIView.animate(withDuration: 0.1, animations: {() in
             let selectedPoint = CGPoint(x: selectedOffset, y: 0)
+            self.selectedOffset = selectedPoint
             self.selectionView.frame = CGRect(origin: selectedPoint, size: self.selectionView.bounds.size)
         })
     }
