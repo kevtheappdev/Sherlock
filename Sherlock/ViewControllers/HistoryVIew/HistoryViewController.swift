@@ -16,6 +16,7 @@ class HistoryViewController: UIViewController {
     var dateStrings: [String] = []
     weak var delegate: HistoryVCDDelegate?
     
+    @IBOutlet weak var clearAllButton: UIButton!
     // transitions
     let push = PushTransition()
     let unwindPush = UnwindPushTransition()
@@ -26,6 +27,7 @@ class HistoryViewController: UIViewController {
         super.viewDidLoad()
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        self.clearAllButton.isHidden = true
         self.historyNavBar.set(colors: ApplicationConstants._sherlockGradientColors)
         self.view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
@@ -37,11 +39,20 @@ class HistoryViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.loadHistory()
+        self.clearAllButton.isHidden = !(self.dateStrings.count > 0)
         self.tableView.reloadData()
     }
     
     @IBAction func doneButtonPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
+    }
+    @IBAction func clearAllButtonPressed(_ sender: Any) {
+        let alert =  UIAlertController(title: "Clear History", message: "Are you sure you would like to delete all history?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Clear", style: .destructive, handler: {(_) in
+            self.deleteAll()
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func loadHistory(){
@@ -80,6 +91,19 @@ class HistoryViewController: UIViewController {
             
         }
         
+    }
+    
+    func deleteAll(){
+        for (_, entries) in self.historyEntries {
+            for entry in entries {
+                SherlockHistoryManager.main.delete(entry: entry)
+            }
+        }
+        
+        self.historyEntries.removeAll()
+        self.dateStrings.removeAll()
+        
+        self.tableView.reloadData()
     }
     
     func sortEntries(a: NSManagedObject, b: NSManagedObject) -> Bool {
@@ -189,7 +213,7 @@ extension HistoryViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 85
+        return 55
     }
     
     

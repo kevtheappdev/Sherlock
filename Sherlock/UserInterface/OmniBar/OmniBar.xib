@@ -41,7 +41,7 @@
                     </connections>
                 </button>
                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="j6C-eS-b2s">
-                    <rect key="frame" x="36" y="0.0" width="445" height="115"/>
+                    <rect key="frame" x="24" y="0.0" width="457" height="115"/>
                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <fontDescription key="fontDescription" type="system" pointSize="30"/>
@@ -50,7 +50,7 @@
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.66614978869999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
-                <constraint firstItem="j6C-eS-b2s" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="36" id="1D2-eV-neO"/>
+                <constraint firstItem="j6C-eS-b2s" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="24" id="1D2-eV-neO"/>
                 <constraint firstItem="h2l-dT-7Bf" firstAttribute="leading" secondItem="uSY-M2-gmF" secondAttribute="trailing" constant="25" id="BHq-cM-pDh"/>
                 <constraint firstItem="uSY-M2-gmF" firstAttribute="leading" secondItem="j6C-eS-b2s" secondAttribute="trailing" constant="8" id="IMi-Ue-u9b"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="h2l-dT-7Bf" secondAttribute="trailing" constant="30" id="PBN-h4-q8u"/>
