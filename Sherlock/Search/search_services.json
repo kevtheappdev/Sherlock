@@ -14,7 +14,7 @@
 		"acURL": "https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&limit=1&namespace=0&format=json",
 		"config": {
 			"resultsPage": {
-				"javascriptEnabled": true
+				"javascriptEnabled": false
 			}
 		}
 	},

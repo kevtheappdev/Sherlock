@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AutoCompleteRequester: NSObject {
+class AutoCompleteRequester {
     typealias Completion = (Error?) -> Void
     
     var url: String
@@ -19,7 +19,6 @@ class AutoCompleteRequester: NSObject {
     init(url: String, autocomplete: AutoCompleteParser) {
         self.url = url
         self.autoCompleteParser = autocomplete
-        super.init()
     }
     
     func makeRequest(withQuery query: String, completion: @escaping Completion){
@@ -48,6 +47,13 @@ class AutoCompleteRequester: NSObject {
     func clear(){
         self.suggestions.removeAll()
         self.autoCompleteParser.clear()
+    }
+    
+    func copy() -> AutoCompleteRequester {
+        let acr = AutoCompleteRequester(url: self.url, autocomplete: self.autoCompleteParser)
+        acr.suggestions = self.suggestions
+        acr.task = self.task
+        return acr
     }
     
 }

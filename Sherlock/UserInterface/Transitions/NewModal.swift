@@ -31,8 +31,9 @@ class NewModal: NSObject, UIViewControllerAnimatedTransitioning
         
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {() in
            fromView?.transform = scaled
-            toView?.frame  = CGRect(x: 0, y: 0, width: (toView?.bounds.width)!, height: (toView?.bounds.height)!)
+            toView?.frame = transitionContext.finalFrame(for: toVC!)
             }, completion: {(done) in
+                fromView?.transform = CGAffineTransform.identity
                 transitionContext.completeTransition(done)
         })
     }

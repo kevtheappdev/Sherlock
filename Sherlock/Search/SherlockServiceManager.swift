@@ -13,6 +13,7 @@ class SherlockServiceManager: NSObject {
     static let main = SherlockServiceManager()
     private var timer: Timer!
     private var needsUpdate = false
+    private var canChangeOrder = true
     private var cleared = false
     private var isFinal = false
     private var loaded = false
@@ -113,7 +114,13 @@ class SherlockServiceManager: NSObject {
     // update delegate subscribers
     @objc func update(_ sender: Any){
         if self.needsUpdate {
-            self.reorder() // ensure sorted data
+            if self.canChangeOrder {
+                self.reorder() // ensure sorted data
+                self.canChangeOrder = false // limit how often we change results
+                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) {_ in
+                    self.canChangeOrder = true
+                }
+            }
             self.delegate?.resultsChanged(self.copyServices())
             self.needsUpdate = false
             if self.isFinal {
@@ -135,10 +142,8 @@ class SherlockServiceManager: NSObject {
         for service in self.services {
             let copyService = SherlockService(name: service.type.rawValue, searchText: service.searchText, searchURL: service.searchURL, icon: service.icon)
             copyService.config = service.config
-            copyService.automcompleteHandler = service.automcompleteHandler
-            copyService.categoriesApplied = service.categoriesApplied
-            copyService.categories = service.categories
-            copyService.ogIndex = service.ogIndex
+            copyService.automcompleteHandler = service.automcompleteHandler?.copy()
+            copyService.weight = service.weight
             copy.append(copyService)
         }
         
@@ -347,6 +352,7 @@ extension SherlockServiceManager {
     func add(weight: Int, toService serviceType: serviceType){
         let ss = self.servicesMapping[serviceType]
         ss?.weight += weight
+        self.needsUpdate = true
     }
 
     
@@ -357,8 +363,6 @@ extension SherlockServiceManager {
             }
             return a.weight > b.weight
         }
-        
-        self.needsUpdate = true
     }
     
     func resetRankings(){

@@ -14,6 +14,11 @@ class WebTitleBar: UIView {
     @IBOutlet weak var progressBar: SherlockProgressBar!
     weak var delegate: WebTitleBarDelegate?
     
+    override func awakeFromNib() {
+        self.layer.borderColor = UIColor.gray.cgColor
+        self.layer.borderWidth = 1.0
+    }
+    
     func set(title: String, url urlStr: String){
         self.titleLabel.text = title
         self.urlLabel.text = urlStr
