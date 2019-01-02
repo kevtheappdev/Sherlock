@@ -22,6 +22,7 @@ class ServiceSelectorBar: UIView {
     init() {
         super.init(frame: CGRect.zero)
         self.backgroundColor = UIColor.white
+        scrollView.showsHorizontalScrollIndicator = false
         self.addSubview(scrollView)
         
         // setup selection view
@@ -35,23 +36,19 @@ class ServiceSelectorBar: UIView {
     }
     
     override func layoutSubviews() {
-        // setup scrollView
-        // setup contentsize
         scrollView.frame = self.bounds
-        scrollView.showsHorizontalScrollIndicator = false
-        let width = CGFloat(self.services.count) * (ServiceSelectorBar.iconSize + (2 * ServiceSelectorBar.padding))
-        let height = self.scrollView.bounds.height
-        self.scrollView.contentSize = CGSize(width: width , height: height)
-        
-        // layout scrollview elements
-        self.selectionView.frame = CGRect(x: selectedOffset.x, y: selectedOffset.y, width: ServiceSelectorBar.iconSize + (2 * ServiceSelectorBar.padding), height: height)
         self.layoutButtons()
-
     }
     
     private func layoutButtons(){
-        var curX: CGFloat = ServiceSelectorBar.padding
+        // set scrollview contentsize
+        let width = CGFloat(self.services.count) * (ServiceSelectorBar.iconSize + (2 * ServiceSelectorBar.padding))
         let height = self.scrollView.bounds.height
+        self.scrollView.contentSize = CGSize(width: width , height: height)
+        // layout scrollview elements
+        self.selectionView.frame = CGRect(x: selectedOffset.x, y: selectedOffset.y, width: ServiceSelectorBar.iconSize + (2 * ServiceSelectorBar.padding), height: height)
+        
+        var curX: CGFloat = ServiceSelectorBar.padding
         let y = (0.4 * (height - ServiceSelectorBar.iconSize))
         for button in self.buttons {
             button.frame = CGRect(x: curX, y: y, width: ServiceSelectorBar.iconSize, height: ServiceSelectorBar.iconSize)
