@@ -12,41 +12,41 @@ class ServiceSelectorBar: UIView {
     private static let iconSize: CGFloat = 85
     private static let padding: CGFloat = 20
     private let scrollView = UIScrollView()
-    private var services: [SherlockService] = Array<SherlockService>()
-    private var buttons: [UIButton] = Array<UIButton>()
+    private var services: [SherlockService] = []
+    private var buttons: [UIButton] = []
     private var selectionView: UIView!
-    private var buttonOffsets: [CGFloat] = Array<CGFloat>()
+    private var buttonOffsets: [CGFloat] = []
     private var selectedOffset = CGPoint(x: 0, y: 0)
     weak var delegate: ServiceSelectorBarDelegate?
     
     init() {
         super.init(frame: CGRect.zero)
-        self.backgroundColor = UIColor.white
+        backgroundColor = UIColor.white
         scrollView.showsHorizontalScrollIndicator = false
-        self.addSubview(scrollView)
+        addSubview(scrollView)
         
         // setup selection view
-        self.selectionView = UIGradientView(frame: CGRect.zero, andColors: ApplicationConstants._sherlockGradientColors)
-        self.selectionView.layer.cornerRadius = 2
-        self.scrollView.addSubview(selectionView)
+        selectionView = UIGradientView(frame: CGRect.zero, andColors: ApplicationConstants._sherlockGradientColors)
+        selectionView.layer.cornerRadius = 2
+        scrollView.addSubview(selectionView)
         
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.gray.cgColor
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.gray.cgColor
     }
     
     override func layoutSubviews() {
-        scrollView.frame = self.bounds
-        self.layoutButtons()
+        scrollView.frame = bounds
+        layoutButtons()
     }
     
     private func layoutButtons(){
         // set scrollview contentsize
-        let width = CGFloat(self.services.count) * ServiceSelectorBar.iconSize
-        let height = self.scrollView.bounds.height
-        self.scrollView.contentSize = CGSize(width: width , height: height)
+        let width = CGFloat(services.count) * ServiceSelectorBar.iconSize
+        let height = scrollView.bounds.height
+        scrollView.contentSize = CGSize(width: width , height: height)
         
         // layout scrollview elements
-        self.selectionView.frame = CGRect(x: selectedOffset.x, y: 0, width: ServiceSelectorBar.iconSize, height: 10)
+        selectionView.frame = CGRect(x: selectedOffset.x, y: 0, width: ServiceSelectorBar.iconSize, height: 10)
         
         var yMult: CGFloat = 0.4
         if UIApplication.shared.keyWindow!.safeAreaInsets.bottom > CGFloat(0) {
@@ -56,9 +56,9 @@ class ServiceSelectorBar: UIView {
         
         var curX: CGFloat = 0
         let y = (yMult * (height - ServiceSelectorBar.iconSize))
-        for button in self.buttons {
+        for button in buttons {
             button.frame = CGRect(x: curX, y: y, width: ServiceSelectorBar.iconSize, height: ServiceSelectorBar.iconSize)
-            self.buttonOffsets.append(curX)
+            buttonOffsets.append(curX)
             curX += ServiceSelectorBar.iconSize
         }
         
@@ -67,13 +67,13 @@ class ServiceSelectorBar: UIView {
     func display(Services services: [SherlockService]){
         self.services = services
         // clear any views
-        for button in self.buttons {
+        for button in buttons {
             button.removeFromSuperview()
         }
-        self.buttons.removeAll()
+        buttons.removeAll()
         
         var index = 1
-        for service in self.services {
+        for service in services {
             let iconButton = UIButton(type: .custom)
             iconButton.setImage(service.icon, for: .normal)
             let padding = ServiceSelectorBar.padding
@@ -81,37 +81,37 @@ class ServiceSelectorBar: UIView {
             iconButton.contentMode = .scaleAspectFit
             iconButton.tag = index
             iconButton.addTarget(self, action: #selector(self.buttonPressed(_:)), for: .touchUpInside)
-            self.scrollView.addSubview(iconButton)
-            self.buttons.append(iconButton)
+            scrollView.addSubview(iconButton)
+            buttons.append(iconButton)
             index += 1
         }
         
-        self.layoutButtons()
+        layoutButtons()
     }
     
     @objc
     func buttonPressed(_ sender: UIButton){
         // select button
         let serviceIndex = sender.tag - 1
-        self.selectButtonAt(Index: serviceIndex)
+        selectButtonAt(Index: serviceIndex)
         // notify delegate
-        let service = self.services[serviceIndex]
-        self.delegate?.selected(service: service)
+        let service = services[serviceIndex]
+        delegate?.selected(service: service)
     }
     
     func selectButtonAt(Index serviceIndex: Int){
-        if serviceIndex >= self.buttonOffsets.count {return}
-        let selectedOffset = self.buttonOffsets[serviceIndex]
+        if serviceIndex >= buttonOffsets.count {return}
+        let selectedOffset = buttonOffsets[serviceIndex]
         // scroll to make visible if necesssary
         let buttonEnd = selectedOffset + ServiceSelectorBar.iconSize
-        let scrollVisible = (self.scrollView.contentOffset.x + self.bounds.width)
+        let scrollVisible = (scrollView.contentOffset.x + bounds.width)
         if buttonEnd > scrollVisible {
             let diff = abs(scrollVisible - buttonEnd)
             let offset = CGPoint(x: diff, y: 0)
-            self.scrollView.setContentOffset(offset, animated: true)
-        } else if selectedOffset < self.scrollView.contentOffset.x {
+            scrollView.setContentOffset(offset, animated: true)
+        } else if selectedOffset < scrollView.contentOffset.x {
             let offset = CGPoint(x: selectedOffset, y: 0)
-            self.scrollView.setContentOffset(offset, animated: true)
+            scrollView.setContentOffset(offset, animated: true)
         }
         
         UIView.animate(withDuration: 0.1, animations: {() in
@@ -125,23 +125,23 @@ class ServiceSelectorBar: UIView {
     
     func scrollTo(Percent percent: CGFloat, direction: ScrollDirection){
         if  direction == .right {
-            let nextOffset = CGPoint(x: self.selectedOffset.x + ServiceSelectorBar.iconSize, y: 0)
-            self.selectionView.frame = CGRect(origin: CGPoint(x: percent * nextOffset.x, y: 0), size: self.selectionView.frame.size)
+            let nextOffset = CGPoint(x: selectedOffset.x + ServiceSelectorBar.iconSize, y: 0)
+            selectionView.frame = CGRect(origin: CGPoint(x: percent * nextOffset.x, y: 0), size: selectionView.frame.size)
         } else {
-            self.selectionView.frame = CGRect(origin: CGPoint(x: self.selectedOffset.x - (percent * ServiceSelectorBar.iconSize), y: 0), size: self.selectionView.frame.size)
+            selectionView.frame = CGRect(origin: CGPoint(x: selectedOffset.x - (percent * ServiceSelectorBar.iconSize), y: 0), size: selectionView.frame.size)
         }
     }
     
     func select(service selectedService: serviceType){
         var index = 0
-        for service in self.services {
+        for service in services {
             if service.type == selectedService  {
                 break
             }
             index += 1
         }
         
-        self.selectButtonAt(Index: index)
+        selectButtonAt(Index: index)
     }
     
     required init?(coder aDecoder: NSCoder) {

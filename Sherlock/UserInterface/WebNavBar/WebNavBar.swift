@@ -20,24 +20,24 @@ class WebNavBar: UIView {
     }
     
     override func awakeFromNib() {
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.borderWidth = 1
+        layer.borderColor = UIColor.gray.cgColor
+        layer.borderWidth = 1
     }
     
     // pass button presses through delegate
     @IBAction func backButtonPressed(_ sender: Any) {
-        self.delegate?.backButtonPressed()
+        delegate?.backButtonPressed()
     }
     
     @IBAction func forwardButtonPressed(_ sender: Any) {
-        self.delegate?.forwardButtonPressed()
+        delegate?.forwardButtonPressed()
     }
     
     @IBAction func reloadButtonPressed(_ sender: Any) {
-        self.delegate?.reloadButtonPressed()
+        delegate?.reloadButtonPressed()
     }
     
     @IBAction func shareButtonPressed(_ sender: Any) {
-        self.delegate?.shareButtonPressed()
+        delegate?.shareButtonPressed()
     }
 }

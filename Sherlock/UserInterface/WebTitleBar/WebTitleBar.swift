@@ -15,17 +15,17 @@ class WebTitleBar: UIView {
     weak var delegate: WebTitleBarDelegate?
     
     override func awakeFromNib() {
-        self.layer.borderColor = UIColor.gray.cgColor
-        self.layer.borderWidth = 1.0
+        layer.borderColor = UIColor.gray.cgColor
+        layer.borderWidth = 1.0
     }
     
     func set(title: String, url urlStr: String){
-        self.titleLabel.text = title
-        self.urlLabel.text = urlStr
+        titleLabel.text = title
+        urlLabel.text = urlStr
     }
     
     @IBAction func backButtonPressed(_ sender: Any) {
-        self.delegate?.titleBackButtonPressed()
+        delegate?.titleBackButtonPressed()
     }
     // TODO: functinality for copying URL, view full URL, overall back button, progress bar
 }

@@ -33,24 +33,24 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if self.queryToExecute { // TODO: make this a check  on the query string itself
+        if queryToExecute { // TODO: make this a check  on the query string itself
             let services = SherlockServiceManager.main.copyServices()
-            self.resultsVC.execute(query: self.query!, services: services, recordHistory: false)
+            resultsVC.execute(query: query!, services: services, recordHistory: false)
             switchTo(viewController: resultsVC)
-            self.omniBar.searchField.text = self.query
-            self.omniBar.resignActive()
-            self.queryToExecute = false
+            omniBar.searchField.text = query
+            omniBar.resignActive()
+            queryToExecute = false
         }
     }
     
     func setupOmniBar(){
         if let searchBar =  Bundle.main.loadNibNamed("OmniBar", owner: self, options: nil)?.first as? OmniBar {
             searchBar.delegate = self
-            self.omniBar = searchBar
-            self.view.addSubview(self.omniBar)
+            omniBar = searchBar
+            view.addSubview(omniBar)
             // layout
-            self.view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            self.omniBar.translatesAutoresizingMaskIntoConstraints = false
+            view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            omniBar.translatesAutoresizingMaskIntoConstraints = false
             
             let views = ["omniBar": searchBar]
             let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|[omniBar]|",
@@ -65,9 +65,9 @@ class SearchViewController: UIViewController {
             
             let heightConstraint = NSLayoutConstraint(item: searchBar, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 100)
             
-            self.view.addConstraints(verticalConstraints)
-            self.view.addConstraints(horizontalConstraints)
-            self.omniBar.addConstraint(heightConstraint)
+            view.addConstraints(verticalConstraints)
+            view.addConstraints(horizontalConstraints)
+            omniBar.addConstraint(heightConstraint)
         } else {
             fatalError("failed to load omni bar")
         }
@@ -81,13 +81,13 @@ class SearchViewController: UIViewController {
         let service = ServiceResultsTableViewController(services: services)
         register(viewController: service)
         service.delegate = self
-        self.serviceVC = service
+        serviceVC = service
         
         // web search view
         let webSearch = ScrollResultsViewController(services: services)
         webSearch.delegate = self
         register(viewController: webSearch)
-        self.resultsVC = webSearch
+        resultsVC = webSearch
         
         // set ServiceResults as default
         switchTo(viewController: service)
@@ -96,7 +96,7 @@ class SearchViewController: UIViewController {
     func register(viewController vc: UIViewController){
         addChild(vc)
         vc.didMove(toParent: self)
-        self.view.addSubview(vc.view)
+        view.addSubview(vc.view)
         
         let vcView = vc.view
         let omniBar = self.omniBar
@@ -115,13 +115,13 @@ class SearchViewController: UIViewController {
                                                                  metrics: nil,
                                                                  views: views)
         
-        self.view.addConstraints(verticalConstraints)
-        self.view.addConstraints(horizontalConstraints)
+        view.addConstraints(verticalConstraints)
+        view.addConstraints(horizontalConstraints)
         
     }
     
     func switchTo(viewController vc: UIViewController){
-        self.view.bringSubviewToFront(vc.view)
+        view.bringSubviewToFront(vc.view)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -134,46 +134,46 @@ class SearchViewController: UIViewController {
 extension SearchViewController: ServiceResultDelegate {
     func updated(query: String) {
         self.query = query
-        self.omniBar.searchField.text = query
+        omniBar.searchField.text = query
     }
     
     func didSelect(service: SherlockService) {
-        guard let queryVal = self.query else {return}
+        guard let queryVal = query else {return}
         if queryVal.isEmpty {return}
-        self.omniBar.resignActive()
+        omniBar.resignActive()
         let services = SherlockServiceManager.main.commitQuery()
-        self.resultsVC.execute(query: queryVal, service: service, services: services)
-        switchTo(viewController: self.resultsVC)
+        resultsVC.execute(query: queryVal, service: service, services: services)
+        switchTo(viewController: resultsVC)
     }
 }
 
 // MARK: OmniBarDelegate
 extension SearchViewController: OmniBarDelegate {
     func inputChanged(input: String) {
-        self.query = input
+        query = input
         if input.isEmpty {
-            self.inputCleared()
+            inputCleared()
         } else {
             SherlockServiceManager.main.begin(Query: input)
         }
     }
     
     func inputCleared() {
-        self.query = ""
+        query = ""
         // clear autocomplete suggestions
         SherlockServiceManager.main.cancelQuery()
     }
     
     func omniBarSelected() {
-        switchTo(viewController: self.serviceVC)
+        switchTo(viewController: serviceVC)
     }
     
     func omnibarSubmitted() {
-        if let queryVal = self.query {
+        if let queryVal = query {
             if queryVal.isEmpty {return}
             let services = SherlockServiceManager.main.commitQuery()
-            self.resultsVC.execute(query: queryVal, services: services)
-            self.omniBar.resignActive()
+            resultsVC.execute(query: queryVal, services: services)
+            omniBar.resignActive()
             switchTo(viewController: resultsVC)
         }
     }
@@ -184,8 +184,8 @@ extension SearchViewController: OmniBarDelegate {
             let historyVC = historySB.instantiateViewController(withIdentifier: "historyVC") as! HistoryViewController
             historyVC.delegate = self
             historyVC.transitioningDelegate = self
-            historyVC.modalInteractor = self.modalInteractor
-            self.present(historyVC, animated: true)
+            historyVC.modalInteractor = modalInteractor
+            present(historyVC, animated: true)
         }
     }
     
@@ -196,8 +196,8 @@ extension SearchViewController: ScrollResultsDelegate {
     func selectedLink(url: URL) {
         let sfVC = WebResultViewController(url: url)
         sfVC.transitioningDelegate = self
-        sfVC.interactor = self.interactor
-        self.present(sfVC, animated: true)
+        sfVC.interactor = interactor
+        present(sfVC, animated: true)
     }
     
     func switchedTo(service: serviceType) {
@@ -205,7 +205,7 @@ extension SearchViewController: ScrollResultsDelegate {
         let ss = services[service]!
         
         if ss.config.openURLScheme {
-            guard let queryStr = self.query else {
+            guard let queryStr = query else {
                 return
             }
             var urlStr = ss.searchURL.replacingOccurrences(of: "{query}", with: queryStr)
@@ -223,8 +223,8 @@ extension SearchViewController: ScrollResultsDelegate {
 // MARK: HistoryVCDDelegate
 extension SearchViewController: HistoryVCDDelegate {
     func execute(search: String) {
-        self.query = search
-        self.queryToExecute = true
+        query = search
+        queryToExecute = true
     }
     
 }
@@ -233,16 +233,16 @@ extension SearchViewController: HistoryVCDDelegate {
 extension SearchViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if let _ = presented as? HistoryViewController {
-            return self.newModal
+            return newModal
         }
-        return self.present
+        return present
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if let _ = dismissed as? HistoryViewController {
-            return self.unwindNewModal
+            return unwindNewModal
         }
-        return self.dissmiss
+        return dissmiss
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {

@@ -13,12 +13,12 @@ class CoverView: UIView {
 
     init(){
         super.init(frame: CGRect.zero)
-        self.loadingIndicator.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: 100, height: 100))
-        self.addSubview(self.loadingIndicator)
+        loadingIndicator.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: 100, height: 100))
+        addSubview(loadingIndicator)
     }
     
     override func layoutSubviews() {
-        self.loadingIndicator.center = CGPoint(x: self.frame.width / 2, y: self.frame.height / 2)
+        loadingIndicator.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
     }
  
     required init?(coder aDecoder: NSCoder) {

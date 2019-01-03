@@ -20,7 +20,7 @@ class UIGradientView: UIView {
     }
     
     public func set(colors: [CGColor]){
-        let gradientLayer = self.layer as! CAGradientLayer
+        let gradientLayer = layer as! CAGradientLayer
         gradientLayer.colors = colors
     }
     
