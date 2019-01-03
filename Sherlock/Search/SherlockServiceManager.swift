@@ -113,8 +113,8 @@ class SherlockServiceManager: NSObject {
     // update delegate subscribers
     @objc func update(_ sender: Any){
         if needsUpdate {
+            
             if canChangeOrder {
-                reorder() // ensure sorted data
                 canChangeOrder = false // limit how often we change results
                 Timer.scheduledTimer(withTimeInterval: 0.25, repeats: false) {_ in
                     self.canChangeOrder = true
@@ -253,12 +253,20 @@ extension SherlockServiceManager {
         tagger.setOrthography(NSOrthography.defaultOrthography(forLanguage: "en"), range: range)
         let options: NSLinguisticTagger.Options = [.omitPunctuation, .omitWhitespace, .joinNames]
         let tags: [NSLinguisticTag] = [.personalName, .placeName, .organizationName]
+        
+        
         tagger.enumerateTags(in: range, unit: .word, scheme: .nameType, options: options) { tag, tokenRange, stop in
             if let tag = tag, tags.contains(tag) {
                 let serviceWeights = servicesFor(tag: tag)
-                print("tag: \(tag) for str: \(query)")
-                for (service, serviceWeight) in serviceWeights {
-                    add(weight: serviceWeight, toService: service)
+                let percentOfQuery = Float(tokenRange.length) / Float(query.count)
+                if percentOfQuery >= 0.75 { // TODO: make this constant
+                    let name = (query as NSString).substring(with: tokenRange)
+                    print("tag: \(tag) for str: \(name)")
+                    for (service, serviceWeight) in serviceWeights {
+                        add(weight: serviceWeight, toService: service)
+                    }
+                } else {
+                    clearLinguisticWeights()
                 }
             } else {
                 clearLinguisticWeights()
@@ -341,12 +349,14 @@ extension SherlockServiceManager {
             ss?.weight -= weight
         }
         
+        reorder()
         needsUpdate = true
     }
     
     func add(weight: Int, toService serviceType: serviceType){
         let ss = servicesMapping[serviceType]
         ss?.weight += weight
+        reorder()
         needsUpdate = true
     }
 
@@ -365,6 +375,7 @@ extension SherlockServiceManager {
             service.weight = 0
         }
         
+        reorder()
         needsUpdate = true
     }
     

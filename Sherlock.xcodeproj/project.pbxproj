@@ -307,6 +307,15 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
+		68170B6721DEC914007DA455 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				688C1A9321CC3F4500AADE9F /* AppDelegate.swift */,
+				68834F6B21CC550200BFD9D0 /* ApplicationConstants.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
 		681849CB21D89C7500EBCEF0 /* Autocomplete */ = {
 			isa = PBXGroup;
 			children = (
@@ -422,7 +431,7 @@
 		688C1A9221CC3F4500AADE9F /* Sherlock */ = {
 			isa = PBXGroup;
 			children = (
-				688C1A9321CC3F4500AADE9F /* AppDelegate.swift */,
+				68170B6721DEC914007DA455 /* Application */,
 				683DE29C21D06124005E58F4 /* History */,
 				6811F46E21CD5AD6001DBE63 /* Search */,
 				6802427B21CC4F8000AA8899 /* ViewControllers */,
@@ -432,7 +441,6 @@
 				688C1A9F21CC3F4600AADE9F /* LaunchScreen.storyboard */,
 				688C1AA221CC3F4600AADE9F /* Info.plist */,
 				688C1A9A21CC3F4500AADE9F /* Sherlock.xcdatamodeld */,
-				68834F6B21CC550200BFD9D0 /* ApplicationConstants.swift */,
 			);
 			path = Sherlock;
 			sourceTree = "<group>";

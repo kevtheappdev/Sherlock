@@ -39,7 +39,7 @@ class GoogleAutoCompleteParser: AutoCompleteParser {
         if  results.count > 0 && !weightChanged {
             SherlockServiceManager.main.add(weight: weight, toService: .google)
             weightChanged = true
-        } else {
+        } else if results.count == 0 {
             SherlockServiceManager.main.subtract(weight: weight, forService: .google)
             weightChanged = false
         }

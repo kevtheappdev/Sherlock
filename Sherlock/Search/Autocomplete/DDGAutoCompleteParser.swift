@@ -37,7 +37,7 @@ class DDGAutoCompleteParser: AutoCompleteParser {
         if suggestions.count > 0 && !weightChanged{
             SherlockServiceManager.main.add(weight: weight, toService: .duckduckgo)
             weightChanged = true
-        } else {
+        } else if suggestions.count == 0 {
             SherlockServiceManager.main.subtract(weight: weight, forService: .duckduckgo)
             weightChanged = false
         }
