@@ -22,6 +22,7 @@ class ScrollResultsViewController: UIViewController {
     var lastContentOffset = CGPoint(x: 0, y: 0)
     var currentIndex = 0
     var webControllers: [serviceType:  WebSearchViewController] = [:]
+    var userScrolling = true
     weak var currentResult: WebSearchViewController!
     weak var delegate: ScrollResultsDelegate?
 
@@ -169,6 +170,8 @@ class ScrollResultsViewController: UIViewController {
     }
     
     func scrollToService(service: SherlockService?){
+        userScrolling = false
+        
         if let selectedService = service {
             // scroll to selected service
             let type = selectedService.type
@@ -188,6 +191,7 @@ class ScrollResultsViewController: UIViewController {
         }
         
         currentResult.webView.navigationDelegate = self
+        userScrolling = true
     }
     
     
@@ -211,6 +215,7 @@ extension ScrollResultsViewController: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if !userScrolling {return}
         let offset = scrollView.contentOffset
         let screenWidth = UIScreen.main.bounds.width
         if lastContentOffset.x > offset.x {
