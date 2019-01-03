@@ -299,6 +299,8 @@ extension HistoryViewController: UITableViewDelegate {
 
 extension HistoryViewController: HistorySectionDelegate {
     func deleteButtonPressed(dateStr: String) {
+        let notification = UINotificationFeedbackGenerator()
+        notification.notificationOccurred(.success)
         let deleteIndex = dateStrings.index(of: dateStr)!
         dateStrings.remove(at: deleteIndex)
         let deletedEntries = historyEntries.removeValue(forKey: dateStr)!
