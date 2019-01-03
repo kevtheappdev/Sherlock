@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 struct ApplicationConstants {
-// TODO: Package into a struct
     static let _sherlockGradientColors = [UIColor(red:0.50, green:0.76, blue:0.95, alpha:1.0).cgColor, UIColor(red:0.29, green:0.56, blue:0.89, alpha:1.0).cgColor]
     static let _numACResults = 3
 

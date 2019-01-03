@@ -38,6 +38,7 @@ class WebResultViewController: UIViewController {
         // web view setup
         self.webView = WKWebView()
         self.webView.navigationDelegate = self
+        self.webView.scrollView.delegate = self
         self.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
         self.view.addSubview(self.webView)
         
@@ -211,5 +212,12 @@ extension WebResultViewController: WKNavigationDelegate {
             self.recordHistory = true
         }
         decisionHandler(.allow)
+    }
+}
+
+// MARK: UIScrollViewDelegate
+extension WebResultViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // TODO: make chrome disapear on scroll
     }
 }

@@ -9,11 +9,17 @@
 import UIKit
 import WebKit
 
+enum ScrollDirection {
+    case left
+    case right
+}
+
 class ScrollResultsViewController: UIViewController {
     let scrollView = UIScrollView()
     var serviceSelector: ServiceSelectorBar
     var services: [SherlockService] = Array<SherlockService>()
     var lastQuery:  String?
+    var lastContentOffset = CGPoint(x: 0, y: 0)
     var currentIndex = 0
     var webControllers: [serviceType:  WebSearchViewController] = Dictionary<serviceType, WebSearchViewController>()
     weak var currentResult: WebSearchViewController!
@@ -202,6 +208,28 @@ extension ScrollResultsViewController: UIScrollViewDelegate {
                 break
             }
         }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offset = scrollView.contentOffset
+        let screenWidth = UIScreen.main.bounds.width
+        if self.lastContentOffset.x > offset.x {
+            // going left
+            let leftOffset = CGFloat(self.currentIndex - 1) * screenWidth
+            let cOffset = (leftOffset + screenWidth) - offset.x
+            let percentCompleted = cOffset / screenWidth
+            self.serviceSelector.scrollTo(Percent: percentCompleted, direction: .left)
+            print("going left, percenCompleted: \(percentCompleted) offset: \(offset) cOffset: \(cOffset)")
+        } else {
+            // going right
+            let rightOffset = CGFloat(self.currentIndex + 1) * screenWidth
+            let percentCompleted = offset.x / rightOffset
+            self.serviceSelector.scrollTo(Percent: percentCompleted, direction: .right)
+            print("going right, percentCompleted: \(percentCompleted) offset: \(offset)")
+        }
+        
+        self.lastContentOffset = offset
+        
     }
 }
 

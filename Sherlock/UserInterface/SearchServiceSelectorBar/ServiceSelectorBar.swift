@@ -107,9 +107,11 @@ class ServiceSelectorBar: UIView {
         let scrollVisible = (self.scrollView.contentOffset.x + self.bounds.width)
         if buttonEnd > scrollVisible {
             let diff = abs(scrollVisible - buttonEnd)
-            self.scrollView.contentOffset = CGPoint(x: diff, y: 0)
+            let offset = CGPoint(x: diff, y: 0)
+            self.scrollView.setContentOffset(offset, animated: true)
         } else if selectedOffset < self.scrollView.contentOffset.x {
-            self.scrollView.contentOffset = CGPoint(x: selectedOffset, y: 0)
+            let offset = CGPoint(x: selectedOffset, y: 0)
+            self.scrollView.setContentOffset(offset, animated: true)
         }
         
         UIView.animate(withDuration: 0.1, animations: {() in
@@ -119,6 +121,15 @@ class ServiceSelectorBar: UIView {
         })
         
 
+    }
+    
+    func scrollTo(Percent percent: CGFloat, direction: ScrollDirection){
+        if  direction == .right {
+            let nextOffset = CGPoint(x: self.selectedOffset.x + ServiceSelectorBar.iconSize, y: 0)
+            self.selectionView.frame = CGRect(origin: CGPoint(x: percent * nextOffset.x, y: 0), size: self.selectionView.frame.size)
+        } else {
+            self.selectionView.frame = CGRect(origin: CGPoint(x: self.selectedOffset.x - (percent * ServiceSelectorBar.iconSize), y: 0), size: self.selectionView.frame.size)
+        }
     }
     
     func select(service selectedService: serviceType){
