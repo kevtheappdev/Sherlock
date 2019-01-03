@@ -54,6 +54,8 @@ class HistoryViewController: UIViewController {
             self.deleteAll()
             self.loadHistory()
         }))
+        let notificationHaptic = UINotificationFeedbackGenerator()
+        notificationHaptic.notificationOccurred(.warning)
         present(alert, animated: true, completion: nil)
     }
     

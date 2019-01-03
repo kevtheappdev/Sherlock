@@ -212,7 +212,8 @@ extension SearchViewController: ScrollResultsDelegate {
     }
     
     func switchedTo(service: serviceType) {
-        // TODO: is this useless?? 
+        let selection = UISelectionFeedbackGenerator()
+        selection.selectionChanged()
     }
     
 }
