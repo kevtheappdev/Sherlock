@@ -23,12 +23,12 @@ class HistoryHeaderView: UIView {
         }
         
         set {
-            self.dateStrLabel.text = newValue
+            dateStrLabel.text = newValue
         }
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
-        self.delegate?.deleteButtonPressed(dateStr: self.dateStr)
+        delegate?.deleteButtonPressed(dateStr: dateStr)
     }
     
 }

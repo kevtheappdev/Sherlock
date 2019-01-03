@@ -22,7 +22,7 @@ class DDGAutoCompleteParser: AutoCompleteParser {
             return []
         }
         
-        var suggestions = Array<Autocomplete>()
+        var suggestions = [Autocomplete]()
         for result in results {
             if let phrase = result.dictionary {
                 if let suggestionObj = phrase["phrase"] {
@@ -35,10 +35,10 @@ class DDGAutoCompleteParser: AutoCompleteParser {
         }
         
         if suggestions.count > 0 && !weightChanged{
-            SherlockServiceManager.main.add(weight: self.weight, toService: .duckduckgo)
+            SherlockServiceManager.main.add(weight: weight, toService: .duckduckgo)
             weightChanged = true
         } else {
-            SherlockServiceManager.main.subtract(weight: self.weight, forService: .duckduckgo)
+            SherlockServiceManager.main.subtract(weight: weight, forService: .duckduckgo)
             weightChanged = false
         }
         
@@ -46,7 +46,7 @@ class DDGAutoCompleteParser: AutoCompleteParser {
     }
     
     func clear(){
-        self.weightChanged = false
+        weightChanged = false
     }
     
 }

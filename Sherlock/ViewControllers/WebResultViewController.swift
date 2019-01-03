@@ -36,28 +36,28 @@ class WebResultViewController: UIViewController {
         super.viewDidLoad()
         
         // web view setup
-        self.webView = WKWebView()
-        self.webView.navigationDelegate = self
-        self.webView.scrollView.delegate = self
-        self.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
-        self.view.addSubview(self.webView)
+        webView = WKWebView()
+        webView.navigationDelegate = self
+        webView.scrollView.delegate = self
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+        view.addSubview(webView)
         
         // title bar setup
-        self.titleBar = Bundle.main.loadNibNamed("WebTitleBar", owner: self, options: nil)?.first as? WebTitleBar
-        self.titleBar.delegate = self
-        self.view.addSubview(self.titleBar)
+        titleBar = Bundle.main.loadNibNamed("WebTitleBar", owner: self, options: nil)?.first as? WebTitleBar
+        titleBar.delegate = self
+        view.addSubview(titleBar)
         
         // nav bar setup
-        self.navBar = Bundle.main.loadNibNamed("WebNavBar", owner: self, options: nil)?.first as? WebNavBar
-        self.navBar.delegate = self
-        self.view.addSubview(self.navBar)
+        navBar = Bundle.main.loadNibNamed("WebNavBar", owner: self, options: nil)?.first as? WebNavBar
+        navBar.delegate = self
+        view.addSubview(navBar)
         
         // interaction gesture
         let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(WebResultViewController.didPan(_:)))
-        self.view.isUserInteractionEnabled = true
-        self.view.addGestureRecognizer(gestureRecognizer)
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(gestureRecognizer)
         
-        self.load()
+        load()
     }
     
     override func viewWillLayoutSubviews() {
@@ -68,14 +68,14 @@ class WebResultViewController: UIViewController {
         navBar.translatesAutoresizingMaskIntoConstraints = false
         titleBar.translatesAutoresizingMaskIntoConstraints = false
         webView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
-        let topConstraint = NSLayoutConstraint(item: titleBar, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1, constant: 0)
-        self.view.addConstraint(topConstraint)
+        let topConstraint = NSLayoutConstraint(item: titleBar, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
+        view.addConstraint(topConstraint)
         self.topConstraint = topConstraint
         
-        let bottomConstraint = NSLayoutConstraint(item: navBar, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1, constant: 0)
-        self.view.addConstraint(bottomConstraint)
+        let bottomConstraint = NSLayoutConstraint(item: navBar, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0)
+        view.addConstraint(bottomConstraint)
         self.bottomConstraint = bottomConstraint
         
         
@@ -100,28 +100,28 @@ class WebResultViewController: UIViewController {
                                                                  options: [], metrics: nil,
                                                                  views: views)
         
-        self.view.addConstraints(navConstraints)
-        self.view.addConstraints(webViewConstraints)
-        self.view.addConstraints(titleBarConstraints)
-        self.view.addConstraints(verticalConstraints)
+        view.addConstraints(navConstraints)
+        view.addConstraints(webViewConstraints)
+        view.addConstraints(titleBarConstraints)
+        view.addConstraints(verticalConstraints)
         
     }
     
     func load(){
-        let request = URLRequest(url: self.url)
-        self.webView.load(request)
+        let request = URLRequest(url: url)
+        webView.load(request)
     }
     
     // webview progress
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "estimatedProgress" {
-            self.titleBar.progressBar.progress = Float(self.webView.estimatedProgress)
+            titleBar.progressBar.progress = Float(webView.estimatedProgress)
             if webView.title  != nil  && !webView.title!.isEmpty {
-                self.titleBar.set(title: webView.title!, url: webView.url!.absoluteString)
+                titleBar.set(title: webView.title!, url: webView.url!.absoluteString)
                 // record history
-                if self.recordHistory && !self.historyRecorded {
+                if recordHistory && !historyRecorded {
                     SherlockHistoryManager.main.log(webPage: webView.url!, title: webView.title!)
-                    self.historyRecorded = true
+                    historyRecorded = true
                 }
             }
         }
@@ -131,18 +131,18 @@ class WebResultViewController: UIViewController {
     @objc func didPan(_ sender: UIPanGestureRecognizer){
         let percentThreshold: CGFloat = 0.3
         // convert x-position rightward pull progress
-        let translation = sender.translation(in: self.view)
-        let horizontalMovement = translation.x / self.view.bounds.width
+        let translation = sender.translation(in: view)
+        let horizontalMovement = translation.x / view.bounds.width
         let rightwardMovement = fmaxf(Float(horizontalMovement), 0.0)
         let rightwardMovementPercent = fminf(rightwardMovement,  1.0)
         let progress = CGFloat(rightwardMovementPercent)
         
-        guard let interactor = self.interactor else {return}
+        guard let interactor = interactor else {return}
         
         switch sender.state {
         case .began:
             interactor.hasStarted = true
-            self.dismiss(animated: true, completion: nil)
+            dismiss(animated: true, completion: nil)
         case .changed:
             interactor.shouldFinish = progress > percentThreshold
             interactor.update(progress)
@@ -164,35 +164,35 @@ class WebResultViewController: UIViewController {
 // MARK: WebNavBarDelegate
 extension WebResultViewController: WebNavBarDelegate {
     func backButtonPressed() {
-        if self.webView.canGoBack {
-            self.navBar.forwardButton.isEnabled = true
-            self.webView.goBack()
+        if webView.canGoBack {
+            navBar.forwardButton.isEnabled = true
+            webView.goBack()
         }  else {
-            self.dismiss(animated: true, completion: nil)
+            dismiss(animated: true, completion: nil)
         }
     }
     
     func forwardButtonPressed() {
-        if self.webView.canGoForward {
-            self.webView.goForward()
-            self.navBar.forwardButton.isEnabled = self.webView.canGoForward
+        if webView.canGoForward {
+            webView.goForward()
+            navBar.forwardButton.isEnabled = webView.canGoForward
         }
     }
     
     func reloadButtonPressed() {
-        self.webView.reload()
+        webView.reload()
     }
     
     func shareButtonPressed() {
-        let shareSheet = UIActivityViewController(activityItems: [self.url], applicationActivities: nil)
-        self.present(shareSheet, animated: true)
+        let shareSheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        present(shareSheet, animated: true)
     }
 }
 
 // MARK: WebTitleBarDelegate
 extension WebResultViewController: WebTitleBarDelegate {
     func titleBackButtonPressed() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 
 }
@@ -200,16 +200,16 @@ extension WebResultViewController: WebTitleBarDelegate {
 // MARK: WKNavigationDelegate
 extension WebResultViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if self.recordHistory && !self.historyRecorded {
-            self.historyRecorded = true
+        if recordHistory && !historyRecorded {
+            historyRecorded = true
             SherlockHistoryManager.main.log(webPage: webView.url!, title: webView.title!)
         }
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if navigationAction.navigationType == .linkActivated {
-            self.historyRecorded = false
-            self.recordHistory = true
+            historyRecorded = false
+            recordHistory = true
         }
         decisionHandler(.allow)
     }

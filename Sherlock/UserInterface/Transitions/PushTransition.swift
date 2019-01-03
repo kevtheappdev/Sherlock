@@ -28,7 +28,7 @@ class PushTransition: NSObject, UIViewControllerAnimatedTransitioning {
         toVC.view.frame = CGRect(origin: CGPoint(x: screenWidth, y: 0), size: toVC.view.frame.size)
         container.addSubview(toVC.view)
 
-        UIView.animate(withDuration: self.transitionDuration(using: transitionContext), animations: {() in
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {() in
             toVC.view.frame = transitionContext.finalFrame(for: toVC)
             fromVC.view.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         }, completion: {(done) in

@@ -12,19 +12,19 @@ class SherlockProgressBar: UIView {
     let progressLayer = CAGradientLayer()
     var progress: Float = 0.0 {
         didSet  {
-            self.layoutSubviews()
+            layoutSubviews()
         }
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.progressLayer.colors = ApplicationConstants._sherlockGradientColors
-        self.layer.addSublayer(self.progressLayer)
+        progressLayer.colors = ApplicationConstants._sherlockGradientColors
+        layer.addSublayer(progressLayer)
     }
     
     override func layoutSubviews() {
-        let viewWidth = self.bounds.width
-        self.progressLayer.frame = CGRect(x: 0, y: 0, width: CGFloat(progress) * viewWidth, height: self.bounds.height)
+        let viewWidth = bounds.width
+        progressLayer.frame = CGRect(x: 0, y: 0, width: CGFloat(progress) * viewWidth, height: bounds.height)
     }
     
     

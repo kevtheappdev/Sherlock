@@ -25,9 +25,9 @@ class AutoCompleteRequester {
         guard let param = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) else {
             return
         }
-        let fullURLStr = self.url.replacingOccurrences(of: "{query}", with: param)
+        let fullURLStr = url.replacingOccurrences(of: "{query}", with: param)
         guard let url = URL(string: fullURLStr) else {return}
-        self.task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+        task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let data = data {
                 let suggestions = self.autoCompleteParser.process(results: data)
                 self.suggestions = suggestions
@@ -37,22 +37,22 @@ class AutoCompleteRequester {
                 completion(error)
             }
         }
-        self.task?.resume()
+        task?.resume()
     }
     
     func cancel(){
-        self.task?.cancel()
+        task?.cancel()
     }
     
     func clear(){
-        self.suggestions.removeAll()
-        self.autoCompleteParser.clear()
+        suggestions.removeAll()
+        autoCompleteParser.clear()
     }
     
     func copy() -> AutoCompleteRequester {
-        let acr = AutoCompleteRequester(url: self.url, autocomplete: self.autoCompleteParser)
-        acr.suggestions = self.suggestions
-        acr.task = self.task
+        let acr = AutoCompleteRequester(url: url, autocomplete: autoCompleteParser)
+        acr.suggestions = suggestions
+        acr.task = task
         return acr
     }
     

@@ -21,11 +21,11 @@ class WebSearchViewController: UIViewController {
         webPrefs.javaScriptEnabled = javascriptEnabled
         let webConfig =  WKWebViewConfiguration()
         webConfig.preferences = webPrefs
-        self.webView = WKWebView(frame: CGRect.zero, configuration: webConfig)
-        self.sherlockService = service
+        webView = WKWebView(frame: CGRect.zero, configuration: webConfig)
+        sherlockService = service
         super.init(nibName: nil, bundle: nil)
         
-        self.webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
+        webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -35,37 +35,37 @@ class WebSearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.webView.scrollView.contentInsetAdjustmentBehavior = .never
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
         
         // setup cover view
-        self.coverView = CoverView()
-        self.coverView.backgroundColor = UIColor.white
+        coverView = CoverView()
+        coverView.backgroundColor = UIColor.white
     }
     
     override func loadView() {
-         self.view = webView
+         view = webView
     }
     
     override func  viewDidLayoutSubviews() {
-        self.coverView.frame = CGRect(origin: CGPoint.zero, size: self.view.frame.size)
+        coverView.frame = CGRect(origin: CGPoint.zero, size: view.frame.size)
     }
     
     func execute(query: String) {
-        self.coverView.loadingIndicator.startLoadAnimation()
-        let urlStr = self.sherlockService.searchURL
+        coverView.loadingIndicator.startLoadAnimation()
+        let urlStr = sherlockService.searchURL
         let urliFiedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!
         let completedURL = urlStr.replacingOccurrences(of: "{query}", with: urliFiedQuery)
         let url = URL(string: completedURL)!
         let request = URLRequest(url: url)
-        self.view.addSubview(self.coverView)
-        self.webView.load(request)
+        view.addSubview(coverView)
+        webView.load(request)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "loading" {
-            if !self.webView.isLoading {
+            if !webView.isLoading {
 //                print("finished loading: \(sherlockService.searchURL)")
-                self.coverView.removeFromSuperview()
+                coverView.removeFromSuperview()
             }
         }
     }

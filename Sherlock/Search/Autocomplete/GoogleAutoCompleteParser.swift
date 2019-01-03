@@ -14,7 +14,7 @@ class GoogleAutoCompleteParser: AutoCompleteParser {
     var weight = 2
     
     func clear() {
-        self.weightChanged = false
+        weightChanged = false
     }
     
     
@@ -27,7 +27,7 @@ class GoogleAutoCompleteParser: AutoCompleteParser {
             return []
         }
         
-        var results = Array<Autocomplete>()
+        var results = [Autocomplete]()
         for suggestion in suggestions {
             guard let suggestionStr = suggestion.string else {
                 continue
@@ -36,12 +36,12 @@ class GoogleAutoCompleteParser: AutoCompleteParser {
             results.append(ac)
         }
         
-        if  results.count > 0 && !self.weightChanged {
-            SherlockServiceManager.main.add(weight: self.weight, toService: .google)
-            self.weightChanged = true
+        if  results.count > 0 && !weightChanged {
+            SherlockServiceManager.main.add(weight: weight, toService: .google)
+            weightChanged = true
         } else {
-            SherlockServiceManager.main.subtract(weight: self.weight, forService: .google)
-            self.weightChanged = false
+            SherlockServiceManager.main.subtract(weight: weight, forService: .google)
+            weightChanged = false
         }
         
         return results

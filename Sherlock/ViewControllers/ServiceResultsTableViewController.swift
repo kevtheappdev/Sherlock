@@ -22,7 +22,7 @@ class ServiceResultsTableViewController: UITableViewController {
     init(services: [SherlockService]){
         self.services = services
         super.init(nibName: nil, bundle: nil)
-        self.initReducedMode()
+        initReducedMode()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,24 +30,24 @@ class ServiceResultsTableViewController: UITableViewController {
     }
     
     func initReducedMode(){
-        for service in self.services { // reduced mode for all searches
-            self.reducedModeDict[service.type] = true
+        for service in services { // reduced mode for all searches
+            reducedModeDict[service.type] = true
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.separatorStyle = .none
+        tableView.separatorStyle = .none
         
         // subscribe to SherlockServiceManager delegate
         SherlockServiceManager.main.delegate = self
         
         // register autocomplete cells
-        self.tableView.register(UINib(nibName: "AutoCompleteTableViewCell", bundle: nil), forCellReuseIdentifier: "autocomplete")
+        tableView.register(UINib(nibName: "AutoCompleteTableViewCell", bundle: nil), forCellReuseIdentifier: "autocomplete")
         
         // listen for keyboard appearance
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardAppeared(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardDissapeared(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardAppeared(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDissapeared(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     
@@ -58,32 +58,32 @@ class ServiceResultsTableViewController: UITableViewController {
     
     
     override func viewDidLayoutSubviews() {
-        if let kbdHeight = self.keyboardHeight {
-            if !self.keyboardShown || self.keyboardAdjusted {return}
-            self.ogTableFrame = self.view.frame
-            let fullHeight = self.view.frame.height
-            self.keyboardAdjusted = true
-            self.view.frame = CGRect(origin: self.view.frame.origin, size: CGSize(width: UIScreen.main.bounds.width, height: fullHeight - kbdHeight))
+        if let kbdHeight = keyboardHeight {
+            if !keyboardShown || keyboardAdjusted {return}
+            ogTableFrame = view.frame
+            let fullHeight = view.frame.height
+            keyboardAdjusted = true
+            view.frame = CGRect(origin: view.frame.origin, size: CGSize(width: UIScreen.main.bounds.width, height: fullHeight - kbdHeight))
         }
     }
     
     // MARK: - Keyboard notifications
     @objc
     func keyboardAppeared(notification: NSNotification) {
-        if self.keyboardShown {return}
-        self.keyboardShown =  true
+        if keyboardShown {return}
+        keyboardShown =  true
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            self.keyboardHeight =  keyboardFrame.cgRectValue.size.height
+            keyboardHeight =  keyboardFrame.cgRectValue.size.height
         }
     }
     
     @objc
     func keyboardDissapeared(notification: NSNotification) {
-        if !self.keyboardShown {return}
-        self.keyboardShown = false
-        self.keyboardAdjusted = false
-        if let ogFrame = self.ogTableFrame {
-            self.view.frame = ogFrame
+        if !keyboardShown {return}
+        keyboardShown = false
+        keyboardAdjusted = false
+        if let ogFrame = ogTableFrame {
+            view.frame = ogFrame
         }
     }
     
@@ -91,7 +91,7 @@ class ServiceResultsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return self.services.count
+        return services.count
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -99,7 +99,7 @@ class ServiceResultsTableViewController: UITableViewController {
             return UIView()
         }
         
-        let service = self.services[section]
+        let service = services[section]
         headerView.delegate = self
         headerView.tag = section
         headerView.set(service: service)
@@ -111,11 +111,11 @@ class ServiceResultsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let acHandler = self.services[section].automcompleteHandler {
+        if let acHandler = services[section].automcompleteHandler {
             let suggestionCount = acHandler.suggestions.count
-            let type = self.services[section].type
-            if suggestionCount > self.numAcResults && self.reducedModeDict[type]! {
-                return self.numAcResults + 1
+            let type = services[section].type
+            if suggestionCount > numAcResults && reducedModeDict[type]! {
+                return numAcResults + 1
             } else {
                 return acHandler.suggestions.count
             }
@@ -127,8 +127,8 @@ class ServiceResultsTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let type = self.services[indexPath.section].type
-        if self.reducedModeDict[type]! && indexPath.row >= self.numAcResults {
+        let type = services[indexPath.section].type
+        if reducedModeDict[type]! && indexPath.row >= numAcResults {
             guard let cell = Bundle.main.loadNibNamed("ChevronCell", owner: self, options: nil)?.first as? UITableViewCell else {
                 return UITableViewCell()
             }
@@ -137,7 +137,7 @@ class ServiceResultsTableViewController: UITableViewController {
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "autocomplete", for: indexPath) as! AutoCompleteTableViewCell
-        let suggestion = self.services[indexPath.section].automcompleteHandler!.suggestions[indexPath.row]
+        let suggestion = services[indexPath.section].automcompleteHandler!.suggestions[indexPath.row]
         if suggestion.url != nil {
             cell.iconImageView.image  = UIImage(imageLiteralResourceName: "file-text.png")
         } else {
@@ -153,32 +153,32 @@ class ServiceResultsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let type = self.services[indexPath.section].type
-        if self.reducedModeDict[type]! && indexPath.row >= self.numAcResults {
-            self.reducedModeDict[type] = false
+        let type = services[indexPath.section].type
+        if reducedModeDict[type]! && indexPath.row >= numAcResults {
+            reducedModeDict[type] = false
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-            tableView.insertRows(at: self.createIndexPaths(forSection: indexPath.section), with: UITableView.RowAnimation.automatic)
+            tableView.insertRows(at: createIndexPaths(forSection: indexPath.section), with: UITableView.RowAnimation.automatic)
             tableView.endUpdates()
             return
         }
-        let service = self.services[indexPath.section]
+        let service = services[indexPath.section]
         guard let querySuggestion = service.automcompleteHandler?.suggestions[indexPath.row] else {
             return
         }
-        self.delegate?.updated(query: querySuggestion.suggestion)
-        self.delegate?.didSelect(service: service)
+        delegate?.updated(query: querySuggestion.suggestion)
+        delegate?.didSelect(service: service)
     }
 
     
     private func createIndexPaths(forSection section: Int) -> [IndexPath]{
-        let service = self.services[section]
+        let service = services[section]
         guard let acSuggest = service.automcompleteHandler?.suggestions else {
             return []
         }
         
-        var indexPaths = Array<IndexPath>()
-        for i in self.numAcResults..<acSuggest.count {
+        var indexPaths = [IndexPath]()
+        for i in numAcResults..<acSuggest.count {
             let ip = IndexPath(row: i, section: section)
             indexPaths.append(ip)
         }
@@ -192,11 +192,11 @@ class ServiceResultsTableViewController: UITableViewController {
 // MARK: SherlockServiceManagerDelegate
 extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
     func resultsCleared() {
-        self.initReducedMode()
+        initReducedMode()
     }
     
     func resultsChanged(_ services: [SherlockService]) {
-        if self.reloadingResults {
+        if reloadingResults {
             return // skip this reload if data source is updating.
         }
         
@@ -210,12 +210,12 @@ extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
         
         
         CATransaction.begin()
-        self.reloadingResults = true
+        reloadingResults = true
         CATransaction.setCompletionBlock({() in
             self.reloadingResults = false
         })
-        self.tableView.reloadData()
-        self.tableView.layoutIfNeeded()
+        tableView.reloadData()
+        tableView.layoutIfNeeded()
         CATransaction.commit()
     }
 }
@@ -223,7 +223,7 @@ extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
 // MARK: SearchServiceHeaderDelegate
 extension ServiceResultsTableViewController: SearchServiceHeaderDelegate {
     func tapped(index: Int) {
-        self.delegate?.didSelect(service: self.services[index])
+        delegate?.didSelect(service: services[index])
     }
     
 }

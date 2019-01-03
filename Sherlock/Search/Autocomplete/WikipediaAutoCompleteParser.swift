@@ -64,15 +64,15 @@ class WikipediaAutoCompleteParser: AutoCompleteParser {
         }
         
         
-        if !self.weightUpdated {
+        if !weightUpdated {
             SherlockServiceManager.main.add(weight: 3, toService: .wikipedia)
-            self.weightUpdated = true
+            weightUpdated = true
         }
         return [Autocomplete(suggestion: title, url: url)]
     }
     
     private func resetWeight(){
-        SherlockServiceManager.main.subtract(weight: self.weight, forService: .wikipedia)
+        SherlockServiceManager.main.subtract(weight: weight, forService: .wikipedia)
     }
 
 }

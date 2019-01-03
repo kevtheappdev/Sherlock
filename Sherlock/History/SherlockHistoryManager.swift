@@ -20,7 +20,7 @@ class SherlockHistoryManager: NSObject {
         guard  let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             fatalError("shit is fucked")
         }
-        self.managedContext = appDelegate.persistentContainer.viewContext
+        managedContext = appDelegate.persistentContainer.viewContext
     }
     
     // save methods
@@ -41,7 +41,7 @@ class SherlockHistoryManager: NSObject {
     
     private func save(){
         do {
-            try self.managedContext.save()
+            try managedContext.save()
         } catch let error {
             print ("Failed to save with error: \(error)")
             return
@@ -76,13 +76,13 @@ class SherlockHistoryManager: NSObject {
     // update
     func update(entry: NSManagedObject) {
         entry.setValue(Date(), forKey: "datetime")
-        self.save()
+        save()
     }
     
     // delete
     func delete(entry: NSManagedObject){
-        self.managedContext.delete(entry)
-        self.save()
+        managedContext.delete(entry)
+        save()
     }
     
 }

@@ -14,11 +14,11 @@ class SearchServiceHeader: UIView {
     weak var delegate: SearchServiceHeaderDelegate?
     
     func set(service: SherlockService){
-        self.serviceImage.image = service.icon
-        self.serviceText.text = service.searchText
+        serviceImage.image = service.icon
+        serviceText.text = service.searchText
     }
     
     @IBAction func headerTapped(_ sender: Any) {
-        self.delegate?.tapped(index: self.tag)
+        delegate?.tapped(index: tag)
     }
 }
