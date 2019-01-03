@@ -89,6 +89,12 @@ class ScrollResultsViewController: UIViewController {
         self.scrollView.translatesAutoresizingMaskIntoConstraints = false
         self.serviceSelector.translatesAutoresizingMaskIntoConstraints = false
         
+        var serviceBarHeight: CGFloat = 100
+        if UIApplication.shared.keyWindow!.safeAreaInsets.bottom > CGFloat(0) {
+            // device with home bar
+            serviceBarHeight = 115
+        }
+        
         let scrollViewHorizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|[scrollView]|",
                                                                              options: [],
                                                                              metrics: nil,
@@ -99,9 +105,9 @@ class ScrollResultsViewController: UIViewController {
                                                                                   metrics: nil,
                                                                                   views: views)
         
-        let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|[scrollView][serviceSelector(100)]|",
+        let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|[scrollView][serviceSelector(barHeight)]|",
                                                                  options: [],
-                                                                 metrics: nil,
+                                                                 metrics: ["barHeight": serviceBarHeight],
                                                                  views: views)
         
         self.view.addConstraints(scrollViewHorizontalConstraints)
@@ -131,7 +137,7 @@ class ScrollResultsViewController: UIViewController {
         self.scrollView.contentOffset = CGPoint(x: CGFloat(self.currentIndex) * width, y: 0)
     }
     
-    func execute(query: String, service: SherlockService? = nil, services: [SherlockService]) {
+    func execute(query: String, service: SherlockService? = nil, services: [SherlockService], recordHistory: Bool = true) {
         self.set(Services: services)
         
         
@@ -144,8 +150,9 @@ class ScrollResultsViewController: UIViewController {
         }
         lastQuery = query
         
-        
-        SherlockHistoryManager.main.log(search: query)
+        if recordHistory {
+            SherlockHistoryManager.main.log(search: query)
+        }
         
         
         for (_, webVC) in webControllers { // TODO: limit this when we add more services

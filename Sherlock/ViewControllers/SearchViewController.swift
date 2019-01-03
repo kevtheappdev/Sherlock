@@ -35,7 +35,7 @@ class SearchViewController: UIViewController {
         super.viewWillAppear(animated)
         if self.queryToExecute { // TODO: make this a check  on the query string itself
             let services = SherlockServiceManager.main.copyServices()
-            self.resultsVC.execute(query: self.query!, services: services)
+            self.resultsVC.execute(query: self.query!, services: services, recordHistory: false)
             switchTo(viewController: resultsVC)
             self.omniBar.searchField.text = self.query
             self.omniBar.resignActive()
