@@ -12,8 +12,10 @@ import SafariServices
 
 class WebSearchViewController: UIViewController {
     var webView: WKWebView = WKWebView()
-    var coverView: CoverView!
+    var coverView: LoadingCoverView!
+    var openInView: URLSchemeCoverView?
     var sherlockService: SherlockService
+    var isUrlScheme = false
 
     init(service: SherlockService, javascriptEnabled: Bool = false){
         // init WKWebView
@@ -25,7 +27,18 @@ class WebSearchViewController: UIViewController {
         sherlockService = service
         super.init(nibName: nil, bundle: nil)
         
-        webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
+        if service.config.openURLScheme {
+            guard let openInView = Bundle.main.loadNibNamed("URLSchemeCoverView", owner: self, options: nil)?.first as? URLSchemeCoverView else {
+                return
+            }
+            
+            isUrlScheme = true // TODO: allocate less stuff if this is true
+            self.openInView = openInView
+            openInView.set(Service: service)
+            view.addSubview(openInView)
+        } else {
+            webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -34,11 +47,10 @@ class WebSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         webView.scrollView.contentInsetAdjustmentBehavior = .never
         
         // setup cover view
-        coverView = CoverView()
+        coverView = LoadingCoverView()
         coverView.backgroundColor = UIColor.white
     }
     
@@ -46,11 +58,16 @@ class WebSearchViewController: UIViewController {
          view = webView
     }
     
-    override func  viewDidLayoutSubviews() {
-        coverView.frame = CGRect(origin: CGPoint.zero, size: view.frame.size)
+    override func viewDidLayoutSubviews() {
+        let screenFrame = CGRect(origin: CGPoint.zero, size: view.frame.size)
+        coverView.frame = screenFrame
+        if let openInView = self.openInView {
+            openInView.frame = screenFrame
+        }
     }
     
     func execute(query: String) {
+        if isUrlScheme {return}
         coverView.loadingIndicator.startLoadAnimation()
         let urlStr = sherlockService.searchURL
         let urliFiedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!
@@ -64,7 +81,6 @@ class WebSearchViewController: UIViewController {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "loading" {
             if !webView.isLoading {
-//                print("finished loading: \(sherlockService.searchURL)")
                 coverView.removeFromSuperview()
             }
         }

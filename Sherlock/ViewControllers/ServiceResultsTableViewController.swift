@@ -50,12 +50,10 @@ class ServiceResultsTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDissapeared(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
     }
-    
     
     override func viewDidLayoutSubviews() {
         if let kbdHeight = keyboardHeight {
@@ -124,7 +122,6 @@ class ServiceResultsTableViewController: UITableViewController {
         return 0
 
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let type = services[indexPath.section].type

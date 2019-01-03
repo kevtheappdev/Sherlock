@@ -8,9 +8,9 @@
 
 import UIKit
 
-class CoverView: UIView {
+class LoadingCoverView: UIView {
     let loadingIndicator = LoadingIndicator()
-
+    
     init(){
         super.init(frame: CGRect.zero)
         loadingIndicator.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: 100, height: 100))
@@ -20,7 +20,7 @@ class CoverView: UIView {
     override func layoutSubviews() {
         loadingIndicator.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
     }
- 
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }

@@ -144,6 +144,17 @@ extension SearchViewController: ServiceResultDelegate {
         let services = SherlockServiceManager.main.commitQuery()
         resultsVC.execute(query: queryVal, service: service, services: services)
         switchTo(viewController: resultsVC)
+        
+        // Open URL scheme
+        if service.config.openURLScheme {
+            guard let queryStr = query else {
+                return
+            }
+            var urlStr = service.searchURL.replacingOccurrences(of: "{query}", with: queryStr)
+            urlStr = urlStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!
+            let url = URL(string: urlStr)!
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
 }
 
@@ -201,21 +212,7 @@ extension SearchViewController: ScrollResultsDelegate {
     }
     
     func switchedTo(service: serviceType) {
-        let services = SherlockServiceManager.main.servicesMapping
-        let ss = services[service]!
-        
-        if ss.config.openURLScheme {
-            guard let queryStr = query else {
-                return
-            }
-            var urlStr = ss.searchURL.replacingOccurrences(of: "{query}", with: queryStr)
-            urlStr = urlStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!
-            let url = URL(string: urlStr)!
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-        
-        
-        
+        // TODO: is this useless?? 
     }
     
 }

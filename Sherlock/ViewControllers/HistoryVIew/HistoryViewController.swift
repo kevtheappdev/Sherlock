@@ -14,6 +14,7 @@ class HistoryViewController: UIViewController {
     @IBOutlet weak var historyNavBar: UIGradientView!
     var historyEntries: [String: [NSManagedObject]] = [:]
     var dateStrings: [String] = []
+    var emptyCoverView: UIView?
     weak var delegate: HistoryVCDDelegate?
     
     @IBOutlet weak var clearAllButton: UIButton!
@@ -51,6 +52,7 @@ class HistoryViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Clear", style: .destructive, handler: {(_) in
             self.deleteAll()
+            self.loadHistory()
         }))
         present(alert, animated: true, completion: nil)
     }
@@ -75,6 +77,21 @@ class HistoryViewController: UIViewController {
         }
         
         allHistoryEntries.sort(by: sortEntries(a:b:))
+        
+        if allHistoryEntries.count == 0 {
+            guard let coverView = Bundle.main.loadNibNamed("EmptyHistory", owner: self, options: nil)?.first as? UIView else {
+                return
+            }
+            clearAllButton.isHidden = true
+            let navBarHeight = historyNavBar.bounds.height
+            coverView.frame = CGRect(origin: CGPoint(x: 0, y: navBarHeight), size: CGSize(width: view.bounds.width, height: view.bounds.height - navBarHeight))
+            emptyCoverView = coverView
+            view.addSubview(coverView)
+            return
+        } else {
+            clearAllButton.isHidden = false
+            emptyCoverView?.removeFromSuperview()
+        }
         
         for historyEntry in allHistoryEntries {
             let date = historyEntry.value(forKey: "datetime") as! Date

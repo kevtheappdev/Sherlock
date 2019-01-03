@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="URLSchemeCoverView" customModule="Sherlock" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="441" height="741"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="applemaps.png" translatesAutoresizingMaskIntoConstraints="NO" id="L2E-Ia-mUI">
+                    <rect key="frame" x="170" y="247" width="100" height="100"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="100" id="JVz-rg-FLU"/>
+                        <constraint firstAttribute="height" constant="100" id="quh-6D-jHk"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FwI-4f-vXA">
+                    <rect key="frame" x="154" y="355" width="133" height="30"/>
+                    <state key="normal" title="Search Apple Maps"/>
+                    <connections>
+                        <action selector="openButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="S7L-AU-mUG"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="L2E-Ia-mUI" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" constant="-0.5" id="Dha-Vl-E4q"/>
+                <constraint firstItem="L2E-Ia-mUI" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="227" id="HnS-iW-c54"/>
+                <constraint firstItem="FwI-4f-vXA" firstAttribute="top" secondItem="L2E-Ia-mUI" secondAttribute="bottom" constant="8" id="ZMJ-NA-rmz"/>
+                <constraint firstItem="FwI-4f-vXA" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="iJq-qQ-5if"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="iconView" destination="L2E-Ia-mUI" id="joy-dy-DwH"/>
+                <outlet property="openInButton" destination="FwI-4f-vXA" id="ZXo-wk-d6N"/>
+            </connections>
+            <point key="canvasLocation" x="-37.600000000000001" y="210.04497751124438"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="applemaps.png" width="258" height="258"/>
+    </resources>
+</document>

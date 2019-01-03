@@ -32,6 +32,7 @@ class SherlockServiceManager: NSObject {
     // ivars
     private var _services = [SherlockService]()
     weak var delegate: SherlockServiceManagerDelegate?
+    var currentQuery: String?
     
     // data structure access
     var services: [SherlockService] {
@@ -151,6 +152,7 @@ class SherlockServiceManager: NSObject {
 extension SherlockServiceManager {
     
     func begin(Query query: String){
+        currentQuery = query
         fetchAutocomplete(forQuery: query)
         analyze(Query: query)
     }
