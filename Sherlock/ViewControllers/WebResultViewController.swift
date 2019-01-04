@@ -16,11 +16,16 @@ class WebResultViewController: UIViewController {
     var webView: WKWebView!
     var titleBar: WebTitleBar!
     var navBar: WebNavBar!
+    var statusBarBackground: UIView!
     var interactor: PushInteractor?
+    var lastOffset: CGPoint = CGPoint.zero
+    var topChromeHidden = false
+    var bottomChromeHidden = false
+    var userScrolling = false
     
     // constraints
-    var topConstraint: NSLayoutConstraint?
-    var bottomConstraint: NSLayoutConstraint?
+    var topConstraint: NSLayoutConstraint!
+    var bottomConstraint: NSLayoutConstraint!
     
     init(url: URL, recordHistory: Bool = true) {
         self.url = url
@@ -47,6 +52,10 @@ class WebResultViewController: UIViewController {
         titleBar.delegate = self
         view.addSubview(titleBar)
         
+        statusBarBackground = UIView()
+        statusBarBackground.backgroundColor = UIColor.white
+        view.addSubview(statusBarBackground)
+        
         // nav bar setup
         navBar = Bundle.main.loadNibNamed("WebNavBar", owner: self, options: nil)?.first as? WebNavBar
         navBar.delegate = self
@@ -57,17 +66,20 @@ class WebResultViewController: UIViewController {
         view.isUserInteractionEnabled = true
         view.addGestureRecognizer(gestureRecognizer)
         
+        setupConstraints()
         load()
     }
     
-    override func viewWillLayoutSubviews() {
+    func setupConstraints(){
         let navBar = self.navBar!
         let titleBar = self.titleBar!
         let webView = self.webView!
+        let statusBarBackground = self.statusBarBackground!
         
         navBar.translatesAutoresizingMaskIntoConstraints = false
         titleBar.translatesAutoresizingMaskIntoConstraints = false
         webView.translatesAutoresizingMaskIntoConstraints = false
+        statusBarBackground.translatesAutoresizingMaskIntoConstraints = false
         view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         let topConstraint = NSLayoutConstraint(item: titleBar, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0)
@@ -78,9 +90,20 @@ class WebResultViewController: UIViewController {
         view.addConstraint(bottomConstraint)
         self.bottomConstraint = bottomConstraint
         
+        let views = ["navBar": navBar, "titleBar": titleBar, "webView": webView, "sbMask": statusBarBackground]
+        let metrics = ["sbHeight": UIApplication.shared.statusBarFrame.height]
+        
+        let sbVertical = NSLayoutConstraint.constraints(withVisualFormat: "V:|[sbMask(sbHeight)]",
+                                                        options: [],
+                                                        metrics: metrics,
+                                                        views: views)
+        
+        let sbHorizontal = NSLayoutConstraint.constraints(withVisualFormat: "H:|[sbMask]|",
+                                                          options: [],
+                                                          metrics: nil,
+                                                          views: views)
         
         
-        let views = ["navBar": navBar, "titleBar": titleBar, "webView": webView]
         let navConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|[navBar]|",
                                                             options: [],
                                                             metrics: nil,
@@ -100,12 +123,14 @@ class WebResultViewController: UIViewController {
                                                                  options: [], metrics: nil,
                                                                  views: views)
         
+        view.addConstraints(sbVertical)
+        view.addConstraints(sbHorizontal)
         view.addConstraints(navConstraints)
         view.addConstraints(webViewConstraints)
         view.addConstraints(titleBarConstraints)
         view.addConstraints(verticalConstraints)
-        
     }
+    
     
     func load(){
         let request = URLRequest(url: url)
@@ -126,6 +151,7 @@ class WebResultViewController: UIViewController {
             }
         }
     }
+    
     
     // transition gesture
     @objc func didPan(_ sender: UIPanGestureRecognizer){
@@ -213,11 +239,75 @@ extension WebResultViewController: WKNavigationDelegate {
         }
         decisionHandler(.allow)
     }
+    
 }
 
 // MARK: UIScrollViewDelegate
 extension WebResultViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // TODO: make chrome disapear on scroll
+        let offset = scrollView.contentOffset
+        if !userScrolling {return} // ensure scrolling occurs from user
+        if offset.y < 0 || offset.y > webView.scrollView.contentSize.height {return}
+        
+        let diff = abs(offset.y - lastOffset.y)
+        if offset.y > lastOffset.y {
+            // going down
+            print("going down: \(offset.y) diff: \(diff)")
+            if !topChromeHidden {
+                let curTopVal = topConstraint.constant
+                let destTopVal = -titleBar.bounds.height
+                
+                if curTopVal > destTopVal {
+                    topConstraint.constant -= diff
+                } else {
+                    topChromeHidden = true
+                }
+
+            }
+            
+            if !bottomChromeHidden {
+                let curBottomVal = bottomConstraint.constant
+                let destBottomVal = navBar.bounds.height
+
+                if curBottomVal < destBottomVal {
+                    bottomConstraint.constant += diff
+                } else {
+                    bottomChromeHidden = true
+                }
+                
+                view.layoutIfNeeded()
+                
+            }
+        } else {
+            // going up
+            if topChromeHidden {
+                if topConstraint.constant < 0 && diff <= abs(topConstraint.constant) {
+                    topConstraint.constant += diff
+                } else if topConstraint.constant < 0 {
+                    topConstraint.constant = 0
+                } else {
+                    topChromeHidden = false
+                }
+            }
+            
+            if bottomChromeHidden {
+                if bottomConstraint.constant > 0 && diff <= abs(bottomConstraint.constant){
+                    bottomConstraint.constant -=  diff
+                } else if bottomConstraint.constant > 0 {
+                    bottomConstraint.constant = 0
+                } else {
+                    bottomChromeHidden = false
+                }
+                
+                view.layoutIfNeeded()
+                
+            }
+        }
+        lastOffset = offset
+        
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        userScrolling = true
     }
 }

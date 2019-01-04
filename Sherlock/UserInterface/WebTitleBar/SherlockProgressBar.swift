@@ -19,6 +19,7 @@ class SherlockProgressBar: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         progressLayer.colors = ApplicationConstants._sherlockGradientColors
+        progressLayer.cornerRadius = 2
         layer.addSublayer(progressLayer)
     }
     

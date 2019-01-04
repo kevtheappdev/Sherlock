@@ -54,6 +54,7 @@ class ScrollResultsViewController: UIViewController {
         view.addSubview(serviceSelector)
         
         setupWebViews()
+        setupConstraints()
     }
     
     func setupWebViews(){
@@ -84,12 +85,7 @@ class ScrollResultsViewController: UIViewController {
         view.layoutIfNeeded()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    private func setupConstraints() {
         // layout scrollview and service selector
         let views = ["scrollView": scrollView, "serviceSelector": serviceSelector]
         view.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -97,7 +93,7 @@ class ScrollResultsViewController: UIViewController {
         serviceSelector.translatesAutoresizingMaskIntoConstraints = false
         
         var serviceBarHeight: CGFloat = 100
-        if UIApplication.shared.keyWindow!.safeAreaInsets.bottom > CGFloat(0) {
+        if view.safeAreaInsets.bottom > CGFloat(0) {
             // device with home bar
             serviceBarHeight = 115
         }
@@ -121,11 +117,10 @@ class ScrollResultsViewController: UIViewController {
         view.addConstraints(serviceSelectorHorizontalConstraints)
         view.addConstraints(verticalConstraints)
         
-       
+        
         
         // layout webviews
         layoutWebviews()
-
     }
     
     
