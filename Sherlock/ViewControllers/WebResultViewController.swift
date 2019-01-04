@@ -19,8 +19,6 @@ class WebResultViewController: UIViewController {
     var statusBarBackground: UIView!
     var interactor: PushInteractor?
     var lastOffset: CGPoint = CGPoint.zero
-    var topChromeHidden = false
-    var bottomChromeHidden = false
     var userScrolling = false
     
     // constraints
@@ -253,55 +251,41 @@ extension WebResultViewController: UIScrollViewDelegate {
         if offset.y > lastOffset.y {
             // going down
             print("going down: \(offset.y) diff: \(diff)")
-            if !topChromeHidden {
-                let curTopVal = topConstraint.constant
-                let destTopVal = -titleBar.bounds.height
-                
-                if curTopVal > destTopVal {
-                    topConstraint.constant -= diff
-                } else {
-                    topChromeHidden = true
-                }
-
+            
+            let curTopVal = topConstraint.constant
+            let destTopVal = -titleBar.bounds.height
+            
+            if curTopVal > destTopVal {
+                topConstraint.constant -= diff
             }
             
-            if !bottomChromeHidden {
-                let curBottomVal = bottomConstraint.constant
-                let destBottomVal = navBar.bounds.height
-
-                if curBottomVal < destBottomVal {
-                    bottomConstraint.constant += diff
-                } else {
-                    bottomChromeHidden = true
-                }
-                
-                view.layoutIfNeeded()
-                
+            let curBottomVal = bottomConstraint.constant
+            let destBottomVal = navBar.bounds.height
+            
+            if curBottomVal < destBottomVal {
+                bottomConstraint.constant += diff
             }
+            
+            view.layoutIfNeeded()
+            
         } else {
             // going up
-            if topChromeHidden {
-                if topConstraint.constant < 0 && diff <= abs(topConstraint.constant) {
-                    topConstraint.constant += diff
-                } else if topConstraint.constant < 0 {
-                    topConstraint.constant = 0
-                } else {
-                    topChromeHidden = false
-                }
+            
+            if topConstraint.constant < 0 && diff <= abs(topConstraint.constant) {
+                topConstraint.constant += diff
+            } else if topConstraint.constant < 0 {
+                topConstraint.constant = 0
             }
             
-            if bottomChromeHidden {
-                if bottomConstraint.constant > 0 && diff <= abs(bottomConstraint.constant){
-                    bottomConstraint.constant -=  diff
-                } else if bottomConstraint.constant > 0 {
-                    bottomConstraint.constant = 0
-                } else {
-                    bottomChromeHidden = false
-                }
-                
-                view.layoutIfNeeded()
-                
+            
+            if bottomConstraint.constant > 0 && diff <= abs(bottomConstraint.constant){
+                bottomConstraint.constant -=  diff
+            } else if bottomConstraint.constant > 0 {
+                bottomConstraint.constant = 0
             }
+            
+            view.layoutIfNeeded()
+            
         }
         lastOffset = offset
         
