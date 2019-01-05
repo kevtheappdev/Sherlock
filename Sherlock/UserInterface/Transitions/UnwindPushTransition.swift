@@ -14,13 +14,11 @@ class UnwindPushTransition: NSObject, UIViewControllerAnimatedTransitioning {
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        guard
-            let fromView = transitionContext.view(forKey: .from),
-            let toView = transitionContext.view(forKey: .to),
-            let toVC  = transitionContext.viewController(forKey: .to)
-            else {
-                return
-        }
+        
+        let fromView = transitionContext.view(forKey: .from)!
+        let toView = transitionContext.view(forKey: .to)!
+        let toVC  = transitionContext.viewController(forKey: .to)!
+        
         
         let containerView = transitionContext.containerView
         toView.frame = transitionContext.finalFrame(for: toVC)

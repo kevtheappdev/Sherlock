@@ -251,7 +251,11 @@ extension SherlockServiceManager {
 // MARK: Autocomplete
 extension SherlockServiceManager {
     private func fetchAutocomplete(forQuery query: String){
+        let disabledList = SherlockSettingsManager.main.disabledAutoComplete
         for service in services {
+            if disabledList.contains(service.type.rawValue) {
+                continue
+            }
             service.automcompleteHandler?.makeRequest(withQuery: query) {(error) in
                 if error == nil {
                     self.needsUpdate = true

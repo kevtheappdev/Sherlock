@@ -43,6 +43,18 @@ class SherlockSettingsManager: NSObject {
         }
     }
     
+    var disabledAutoComplete: Set<String> {
+        get {
+            let arr = userDefaults.array(forKey: ApplicationConstants.autocompleteKey) as! [String]
+            return Set<String>(arr)
+        }
+        
+        set {
+            let newSet = Array<String>(newValue)
+            userDefaults.set(newSet, forKey: ApplicationConstants.autocompleteKey)
+        }
+    }
+    
     private override init() {
         super.init()
     }
@@ -61,6 +73,7 @@ class SherlockSettingsManager: NSObject {
         if !userDefaults.bool(forKey: ApplicationConstants.setupKey) { // set booleans and other default values
             userDefaults.set(true, forKey: ApplicationConstants.magicOrderKey)
             userDefaults.set(true, forKey: ApplicationConstants.setupKey)
+            userDefaults.set([], forKey: ApplicationConstants.autocompleteKey)
         }
         
         
@@ -87,6 +100,19 @@ class SherlockSettingsManager: NSObject {
         SherlockServiceManager.main.update(Services: services, otherServices: otherServices)
         userServices = extractRawValues(fromServices: services)
         supportedServices = extractRawValues(fromServices: otherServices)
+    }
+    
+    // MARK: autocomplete
+    func addDisabledAutocomplete(Service service: SherlockService){
+        var disabled = disabledAutoComplete
+        disabled.insert(service.type.rawValue)
+        disabledAutoComplete = disabled
+    }
+    
+    func removeDisabledAutocomplete(Service service: SherlockService){
+        var disabled = disabledAutoComplete
+        disabled.remove(service.type.rawValue)
+        disabledAutoComplete = disabled
     }
     
     private func extractRawValues(fromServices services: [SherlockService]) -> [String] {

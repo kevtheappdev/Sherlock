@@ -18,6 +18,7 @@ struct ApplicationConstants {
     static let allServicesKey = "allServices"
     static let magicOrderKey = "magicOrder"
     static let setupKey = "setupKey"
+    static let autocompleteKey = "disabledAutocomplete"
 
 // TODO: replace key with enum vals
     static let autocomplete: [String: AutoCompleteParser] = [
