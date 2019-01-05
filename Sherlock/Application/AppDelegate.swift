@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         // application setup
-        setServices()
+        SherlockSettingsManager.main.setupPrefs()
         SherlockServiceManager.main.load()
         
         // initial VC setup
@@ -29,15 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func setServices(){
-        // set default service list if first launch (for now)
-        let userDefaults = UserDefaults.standard
-//        if userDefaults.array(forKey: "services") == nil {
-            userDefaults.set([serviceType.google.rawValue, serviceType.duckduckgo.rawValue, serviceType.wikipedia.rawValue, serviceType.facebook.rawValue, serviceType.twitter.rawValue, serviceType.applemaps.rawValue
-                ], forKey: "services")
-//        }
-    }
-    
+
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.

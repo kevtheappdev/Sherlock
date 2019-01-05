@@ -13,10 +13,8 @@ class SherlockServiceManager: NSObject {
     static let main = SherlockServiceManager()
     private var timer: Timer!
     private var needsUpdate = false
-    private var canChangeOrder = true
     private var cleared = false
     private var loaded = false
-    private var ogOrder = [serviceType: Int]() // Maps service types with their original index
     private lazy var _servicesMapping: [serviceType: SherlockService] = {
         if !loaded {
             fatalError("Must call load() before accessing")
@@ -31,6 +29,7 @@ class SherlockServiceManager: NSObject {
     
     // ivars
     private var _services = [SherlockService]()
+    private var _allServices = [SherlockService]()
     weak var delegate: SherlockServiceManagerDelegate?
     var currentQuery: String?
     
@@ -43,7 +42,13 @@ class SherlockServiceManager: NSObject {
     
     var servicesMapping: [serviceType: SherlockService] {
         get {
-            return self._servicesMapping
+            return _servicesMapping
+        }
+    }
+    
+    var allServices: [SherlockService] {
+        get {
+            return _allServices
         }
     }
 
@@ -61,65 +66,91 @@ class SherlockServiceManager: NSObject {
         resetRankings() // fresh rank
     }
     
+    // TODO: Clean this up
     private func loadServices(){
         // Load from UserDefaults and construct instances from json
         let defaults = UserDefaults.standard
-        guard let userServices = defaults.array(forKey: "services") as? [String] else {return}
-        
+        guard var userServices = defaults.array(forKey: "services") as? [String] else {return}
+        guard var allServices = defaults.array(forKey: "allServices") as? [String] else {return}
         guard let path = Bundle.main.path(forResource: "search_services", ofType: "json") else {return}
         
         var jsonString: String!
         jsonString = try! String(contentsOfFile: path, encoding: .utf8)
-
-        
         guard let data = jsonString.data(using: .utf8) else {return}
         let serviceData = try! JSON(data: data).dictionary!
         
+        let userServicesSet = Set<String>(userServices)
+        userServices += allServices // combine all services and user services
+        
         var index = 0
-        for service in userServices {
-            let serviceDetails = serviceData[service]!.dictionary
+        for serviceName in userServices {
+            let serviceDetails = serviceData[serviceName]?.dictionary
             if serviceDetails != nil {
-                let name = service
-                let searchName = serviceDetails!["searchText"]!.string!
-                let searchURL = serviceDetails!["searchURL"]!.string!
-                let iconPath = serviceDetails!["icon"]!.string!
-                let icon = UIImage(named: iconPath)!
                 
-                let serviceObj = SherlockService(name: name, searchText: searchName, searchURL: searchURL, icon: icon)
-                if let config = serviceDetails!["config"]?.dictionary {
-                    serviceObj.config = parse(config: config)
-                }
-                
-                // parse out categories if they exist
-                if let categories = serviceDetails!["categories"]?.dictionary {
-                   serviceObj.categories = parse(categories: categories)
-                }
-                
-                if let acURL = serviceDetails!["acURL"]?.string {
-                    if let acParser = ApplicationConstants.autocomplete[name] {
-                        serviceObj.automcompleteHandler = AutoCompleteRequester(url: acURL, autocomplete: acParser)
-                    }
-                }
-                
+                let serviceObj = parse(serviceDetails: serviceDetails!, serviceName: serviceName)
                 serviceObj.ogIndex = index // preserve original indexing
                 index += 1
                 
-                _services.append(serviceObj)
+                if userServicesSet.contains(serviceName) {
+                    _services.append(serviceObj)
+                } else {
+                    _allServices.append(serviceObj)
+                }
             }
         }
         
+        // load all available services
+        var firstRun = false // populate available services
+        let settingsManager = SherlockSettingsManager.main
+        firstRun = settingsManager.supportedServices.count == 0
+        if !firstRun {return}
+        
+        
+        for (serviceName, service) in serviceData {
+            if !userServicesSet.contains(serviceName) {
+                if let serviceDetails = service.dictionary {
+                    let serviceObj = parse(serviceDetails: serviceDetails, serviceName: serviceName)
+                    allServices.append(serviceName)
+                    _allServices.append(serviceObj)
+                }
+            }
+        }
+        
+        
+        
+    }
+    
+    // TODO: cut down on the number of parrse overloads
+    private func parse(serviceDetails: [String: JSON], serviceName: String) -> SherlockService {
+        let name = serviceName
+        let searchName = serviceDetails["searchText"]!.string!
+        let searchURL = serviceDetails["searchURL"]!.string!
+        let iconPath = serviceDetails["icon"]!.string!
+        let icon = UIImage(named: iconPath)!
+        
+        let serviceObj = SherlockService(name: name, searchText: searchName, searchURL: searchURL, icon: icon)
+        if let config = serviceDetails["config"]?.dictionary {
+            serviceObj.config = parse(config: config)
+        }
+        
+        // parse out categories if they exist
+        if let categories = serviceDetails["categories"]?.dictionary {
+            serviceObj.categories = parse(categories: categories)
+        }
+        
+        if let acURL = serviceDetails["acURL"]?.string {
+            if let acParser = ApplicationConstants.autocomplete[name] {
+                serviceObj.automcompleteHandler = AutoCompleteRequester(url: acURL, autocomplete: acParser)
+            }
+        }
+        
+        return serviceObj
     }
     
     // update delegate subscribers
     @objc func update(_ sender: Any){
         if needsUpdate {
             
-            if canChangeOrder {
-                canChangeOrder = false // limit how often we change results
-                Timer.scheduledTimer(withTimeInterval: 0.25, repeats: false) {_ in
-                    self.canChangeOrder = true
-                }
-            }
             delegate?.resultsChanged(copyServices())
             needsUpdate = false
             
@@ -168,6 +199,16 @@ extension SherlockServiceManager {
         clearAutocomplete()
         resetRankings()
         cleared = true
+    }
+    
+    // TODO: revisit the design of these methods
+    func updateOrder(OfServices services: [SherlockService]){
+        self._services = services
+    }
+    
+    func update(Services services: [SherlockService], otherServices: [SherlockService]){
+        self._allServices = otherServices
+        self._services = services
     }
 }
 
@@ -332,6 +373,7 @@ extension SherlockServiceManager {
 extension SherlockServiceManager {
 
     func removeWeight(forService serviceType: serviceType){
+        if !SherlockSettingsManager.main.magicOrderingOn {return}
         
         let ss = servicesMapping[serviceType]
         ss?.weight = 0
@@ -339,6 +381,7 @@ extension SherlockServiceManager {
     }
     
     func subtract(weight: Int, forService serviceType: serviceType){
+        if !SherlockSettingsManager.main.magicOrderingOn {return}
         
         let ss = servicesMapping[serviceType]
         guard let curWeight = ss?.weight else {
@@ -354,6 +397,8 @@ extension SherlockServiceManager {
     }
     
     func add(weight: Int, toService serviceType: serviceType){
+        if !SherlockSettingsManager.main.magicOrderingOn {return}
+        
         let ss = servicesMapping[serviceType]
         ss?.weight += weight
         reorder()

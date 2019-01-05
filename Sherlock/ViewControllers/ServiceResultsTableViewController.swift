@@ -50,9 +50,11 @@ class ServiceResultsTableViewController: UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDissapeared(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.services = SherlockServiceManager.main.services
+        tableView.reloadData()
+        initReducedMode() // TODO: look into better way than calling this every time the data changes
     }
     
     override func viewDidLayoutSubviews() {
@@ -203,7 +205,6 @@ extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
         for service in services {
             print("\(service.type.rawValue):  \(service.weight)")
         }
-        
         
         
         CATransaction.begin()

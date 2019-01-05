@@ -12,6 +12,12 @@ import UIKit
 struct ApplicationConstants {
     static let _sherlockGradientColors = [UIColor(red:0.50, green:0.76, blue:0.95, alpha:1.0).cgColor, UIColor(red:0.29, green:0.56, blue:0.89, alpha:1.0).cgColor]
     static let _numACResults = 3
+    
+    // userdefaults keys
+    static let servicesKey = "services"
+    static let allServicesKey = "allServices"
+    static let magicOrderKey = "magicOrder"
+    static let setupKey = "setupKey"
 
 // TODO: replace key with enum vals
     static let autocomplete: [String: AutoCompleteParser] = [

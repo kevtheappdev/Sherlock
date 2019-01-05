@@ -15,6 +15,8 @@ class SearchViewController: UIViewController {
     let dissmiss = UnwindPushTransition()
     let newModal = NewModal()
     let unwindNewModal = UnwindNewModal()
+    let flipTransition = FlipTransition()
+    let unwindFlipTransition = UnwindFlipTransition()
     let interactor = PushInteractor()
     let modalInteractor = NewModalInteractor()
     
@@ -197,6 +199,13 @@ extension SearchViewController: OmniBarDelegate {
             historyVC.transitioningDelegate = self
             historyVC.modalInteractor = modalInteractor
             present(historyVC, animated: true)
+        } else {
+            let settingsSB = UIStoryboard(name: "Settings", bundle: nil)
+            let settingsVC = settingsSB.instantiateViewController(withIdentifier: "settings") as! ServiceSettingsViewController
+            settingsVC.services = SherlockServiceManager.main.services
+            settingsVC.otherServices = SherlockServiceManager.main.allServices
+            settingsVC.transitioningDelegate = self
+            present(settingsVC, animated: true)
         }
     }
     
@@ -232,6 +241,8 @@ extension SearchViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if let _ = presented as? HistoryViewController {
             return newModal
+        } else if let _ = presented as? ServiceSettingsViewController {
+            return flipTransition
         }
         return present
     }
@@ -239,6 +250,9 @@ extension SearchViewController: UIViewControllerTransitioningDelegate {
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if let _ = dismissed as? HistoryViewController {
             return unwindNewModal
+        }
+        else if let _ = dismissed as? ServiceSettingsViewController {
+            return unwindFlipTransition
         }
         return dissmiss
     }
