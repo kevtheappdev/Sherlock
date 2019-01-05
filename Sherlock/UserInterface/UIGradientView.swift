@@ -9,6 +9,7 @@
 import UIKit
 
 class UIGradientView: UIView {
+    var staticColor = false
 
     override class var layerClass: AnyClass {
         return CAGradientLayer.self
@@ -17,6 +18,19 @@ class UIGradientView: UIView {
     init(frame: CGRect, andColors colors: [CGColor]) {
         super.init(frame: frame)
         set(colors: colors)
+        NotificationCenter.default.addObserver(self, selector: #selector(UIGradientView.colorChanged), name: .appearanceChanged, object: nil)
+    }
+    
+    
+    @objc func colorChanged() {
+        if staticColor {return}
+        DispatchQueue.main.async {
+            self.set(colors: ApplicationConstants._sherlockGradientColors)
+        }
+    }
+    
+    override func awakeFromNib() {
+        NotificationCenter.default.addObserver(self, selector: #selector(UIGradientView.colorChanged), name: .appearanceChanged, object: nil)
     }
     
     public func set(colors: [CGColor]){

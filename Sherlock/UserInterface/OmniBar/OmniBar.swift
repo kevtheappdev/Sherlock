@@ -19,6 +19,7 @@ class OmniBar: UIGradientView {
     }
     
     override func awakeFromNib() {
+        super.awakeFromNib()
         searchField.delegate = self
         searchField.becomeFirstResponder()
     }

@@ -10,7 +10,12 @@ import Foundation
 import UIKit
 
 struct ApplicationConstants {
-    static let _sherlockGradientColors = [UIColor(red:0.50, green:0.76, blue:0.95, alpha:1.0).cgColor, UIColor(red:0.29, green:0.56, blue:0.89, alpha:1.0).cgColor]
+    static var _sherlockGradientColors: [CGColor] {
+        get {
+            return colors[currentColorKey]!
+        }
+    }
+    static var currentColorKey = "blue"
     static let _numACResults = 3
     
     // userdefaults keys
@@ -19,6 +24,14 @@ struct ApplicationConstants {
     static let magicOrderKey = "magicOrder"
     static let setupKey = "setupKey"
     static let autocompleteKey = "disabledAutocomplete"
+    static let appearanceKey = "appearance"
+    
+    // colors
+    static let colors = [
+        "blue": [UIColor(red:0.50, green:0.76, blue:0.95, alpha:1.0).cgColor, UIColor(red:0.29, green:0.56, blue:0.89, alpha:1.0).cgColor] ,
+        "red": [UIColor(red:0.96, green:0.32, blue:0.37, alpha:1.0).cgColor, UIColor(red:0.62, green:0.02, blue:0.11, alpha:1.0).cgColor],
+        "orange": [UIColor(red:0.98, green:0.85, blue:0.38, alpha:1.0).cgColor, UIColor(red:0.97, green:0.42, blue:0.11, alpha:1.0).cgColor]
+    ]
 
 // TODO: replace key with enum vals
     static let autocomplete: [String: AutoCompleteParser] = [
@@ -29,4 +42,7 @@ struct ApplicationConstants {
 
 }
 
+extension Notification.Name  {
+    static let appearanceChanged = Notification.Name(rawValue: "appearanceChanged")
+}
 

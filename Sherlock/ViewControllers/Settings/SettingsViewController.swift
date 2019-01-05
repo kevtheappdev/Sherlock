@@ -50,7 +50,7 @@ class SettingsViewController: UIViewController {
                 return
             }
         
-        versionLabel.text = "Version \(version)| Build \(build)"
+        versionLabel.text = "Version \(version) | Build \(build)"
     }
     
 
@@ -59,6 +59,7 @@ class SettingsViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // TODO: try and avoid this mess...
         if let destVC = segue.destination as? ServiceSettingsViewController {
             destVC.transitioningDelegate = self
             destVC.services = services
@@ -66,6 +67,9 @@ class SettingsViewController: UIViewController {
         } else if let destVC = segue.destination as? AutocompleteSettingsViewController {
             destVC.transitioningDelegate = self
             destVC.services = services
+        } else {
+            let destVC = segue.destination
+            destVC.transitioningDelegate = self
         }
     }
     
@@ -99,6 +103,8 @@ extension SettingsViewController:  UITableViewDelegate {
             performSegue(withIdentifier: "toServices", sender: self)
         } else if indexPath.row == 1 {
             performSegue(withIdentifier: "toAutocomplete", sender: self)
+        } else if indexPath.row == 2 {
+            performSegue(withIdentifier: "toAppearance", sender: self)
         }
     }
 }
