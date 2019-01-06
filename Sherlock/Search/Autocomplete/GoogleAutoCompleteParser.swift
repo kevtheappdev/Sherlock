@@ -12,6 +12,11 @@ import SwiftyJSON
 class GoogleAutoCompleteParser: AutoCompleteParser {
     var weightChanged = false
     var weight = 2
+    var type: serviceType
+    
+    init(type: serviceType){
+        self.type = type
+    }
     
     func clear() {
         weightChanged = false
@@ -37,10 +42,10 @@ class GoogleAutoCompleteParser: AutoCompleteParser {
         }
         
         if  results.count > 0 && !weightChanged {
-            SherlockServiceManager.main.add(weight: weight, toService: .google)
+            SherlockServiceManager.main.add(weight: weight, toService: type)
             weightChanged = true
         } else if results.count == 0 {
-            SherlockServiceManager.main.subtract(weight: weight, forService: .google)
+            SherlockServiceManager.main.subtract(weight: weight, forService: type)
             weightChanged = false
         }
         

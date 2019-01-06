@@ -35,14 +35,16 @@ struct ApplicationConstants {
 
 // TODO: replace key with enum vals
     static let autocomplete: [String: AutoCompleteParser] = [
-        "google": GoogleAutoCompleteParser(),
+        "google": GoogleAutoCompleteParser(type: .google),
         "duckduckgo": DDGAutoCompleteParser(),
-        "wikipedia": WikipediaAutoCompleteParser()
+        "wikipedia": WikipediaAutoCompleteParser(),
+        "youtube": GoogleAutoCompleteParser(type: .youtube)
     ]
 
 }
 
 extension Notification.Name  {
     static let appearanceChanged = Notification.Name(rawValue: "appearanceChanged")
+    static let servicesChanged = Notification.Name(rawValue: "servicesChanged")
 }
 

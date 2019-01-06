@@ -28,7 +28,7 @@
 		681582E721E023BF00E934EF /* SherlockSettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681582E621E023BF00E934EF /* SherlockSettingsManager.swift */; };
 		681582E921E05B1600E934EF /* AutOrderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681582E821E05B1600E934EF /* AutOrderTableViewCell.swift */; };
 		681582EB21E07D5D00E934EF /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 681582EA21E07D5D00E934EF /* Icon.png */; };
-		681582ED21E07DAE00E934EF /* big_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 681582EC21E07DAE00E934EF /* big_icon.png */; };
+		681582ED21E07DAE00E934EF /* blue_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 681582EC21E07DAE00E934EF /* blue_background.png */; };
 		681582EF21E07FA900E934EF /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681582EE21E07FA900E934EF /* SettingsViewController.swift */; };
 		681582F321E08DF800E934EF /* settings_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 681582F221E08DF800E934EF /* settings_back.png */; };
 		681582F521E08EE400E934EF /* arrow-left-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 681582F421E08EE400E934EF /* arrow-left-white.png */; };
@@ -44,6 +44,11 @@
 		682C557E21E135A5005C59E7 /* AutocompleteSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682C557D21E135A5005C59E7 /* AutocompleteSettingTableViewCell.swift */; };
 		682C558021E14A5C005C59E7 /* AppearanceSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682C557F21E14A5C005C59E7 /* AppearanceSettingsViewController.swift */; };
 		682C558221E14B8E005C59E7 /* AppearanceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682C558121E14B8E005C59E7 /* AppearanceTableViewCell.swift */; };
+		682C558721E185D4005C59E7 /* red_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 682C558521E185D4005C59E7 /* red_background.png */; };
+		682C558821E185D4005C59E7 /* orange_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 682C558621E185D4005C59E7 /* orange_background.png */; };
+		682C558A21E18FC6005C59E7 /* imdb.png in Resources */ = {isa = PBXBuildFile; fileRef = 682C558921E18FC6005C59E7 /* imdb.png */; };
+		682C558C21E191AC005C59E7 /* SherlockSwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682C558B21E191AC005C59E7 /* SherlockSwipeViewController.swift */; };
+		682C559021E1A83B005C59E7 /* youtube.png in Resources */ = {isa = PBXBuildFile; fileRef = 682C558F21E1A83A005C59E7 /* youtube.png */; };
 		683DE28821CFFA11005E58F4 /* WebNavBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 683DE28721CFFA11005E58F4 /* WebNavBar.xib */; };
 		683DE28B21CFFAD1005E58F4 /* arrow-right2.png in Resources */ = {isa = PBXBuildFile; fileRef = 683DE28921CFFAD1005E58F4 /* arrow-right2.png */; };
 		683DE28C21CFFAD1005E58F4 /* arrow-left2.png in Resources */ = {isa = PBXBuildFile; fileRef = 683DE28A21CFFAD1005E58F4 /* arrow-left2.png */; };
@@ -147,7 +152,7 @@
 		681582E621E023BF00E934EF /* SherlockSettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockSettingsManager.swift; sourceTree = "<group>"; };
 		681582E821E05B1600E934EF /* AutOrderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutOrderTableViewCell.swift; sourceTree = "<group>"; };
 		681582EA21E07D5D00E934EF /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		681582EC21E07DAE00E934EF /* big_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = big_icon.png; sourceTree = "<group>"; };
+		681582EC21E07DAE00E934EF /* blue_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blue_background.png; sourceTree = "<group>"; };
 		681582EE21E07FA900E934EF /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		681582F221E08DF800E934EF /* settings_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settings_back.png; path = ../../../icons/settings_back.png; sourceTree = "<group>"; };
 		681582F421E08EE400E934EF /* arrow-left-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-left-white.png"; sourceTree = "<group>"; };
@@ -163,6 +168,11 @@
 		682C557D21E135A5005C59E7 /* AutocompleteSettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteSettingTableViewCell.swift; sourceTree = "<group>"; };
 		682C557F21E14A5C005C59E7 /* AppearanceSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsViewController.swift; sourceTree = "<group>"; };
 		682C558121E14B8E005C59E7 /* AppearanceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceTableViewCell.swift; sourceTree = "<group>"; };
+		682C558521E185D4005C59E7 /* red_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red_background.png; sourceTree = "<group>"; };
+		682C558621E185D4005C59E7 /* orange_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orange_background.png; sourceTree = "<group>"; };
+		682C558921E18FC6005C59E7 /* imdb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = imdb.png; sourceTree = "<group>"; };
+		682C558B21E191AC005C59E7 /* SherlockSwipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockSwipeViewController.swift; sourceTree = "<group>"; };
+		682C558F21E1A83A005C59E7 /* youtube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube.png; sourceTree = "<group>"; };
 		683DE28721CFFA11005E58F4 /* WebNavBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WebNavBar.xib; sourceTree = "<group>"; };
 		683DE28921CFFAD1005E58F4 /* arrow-right2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrow-right2.png"; path = "../../../icons/arrow-right2.png"; sourceTree = "<group>"; };
 		683DE28A21CFFAD1005E58F4 /* arrow-left2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrow-left2.png"; path = "../../../icons/arrow-left2.png"; sourceTree = "<group>"; };
@@ -292,8 +302,12 @@
 			children = (
 				681582F421E08EE400E934EF /* arrow-left-white.png */,
 				681582F221E08DF800E934EF /* settings_back.png */,
-				681582EC21E07DAE00E934EF /* big_icon.png */,
+				682C558621E185D4005C59E7 /* orange_background.png */,
+				682C558521E185D4005C59E7 /* red_background.png */,
+				681582EC21E07DAE00E934EF /* blue_background.png */,
+				682C558F21E1A83A005C59E7 /* youtube.png */,
 				68E569AB21D9C4D1004346C7 /* applemaps.png */,
+				682C558921E18FC6005C59E7 /* imdb.png */,
 				681582EA21E07D5D00E934EF /* Icon.png */,
 				68AA33EB21D8361B003E07BB /* file-text.png */,
 				68F7575E21D7FA9F0047B24D /* linkedin.png */,
@@ -329,6 +343,7 @@
 				68CC169021CFF8C0005AEF42 /* WebResultViewController.swift */,
 				68662D8A21D5ABC200A67B4C /* HistoryVIew */,
 				681582DC21DFE75700E934EF /* Settings */,
+				682C558B21E191AC005C59E7 /* SherlockSwipeViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -678,11 +693,12 @@
 				681582EB21E07D5D00E934EF /* Icon.png in Resources */,
 				68F7575921D7EE4A0047B24D /* SearchServiceHeader.xib in Resources */,
 				6802427621CC47B700AA8899 /* history.png in Resources */,
+				682C558821E185D4005C59E7 /* orange_background.png in Resources */,
 				68170B6521DEB2D0007DA455 /* EmptyHistory.xib in Resources */,
 				683DE29021CFFB0E005E58F4 /* spinner11.png in Resources */,
 				683DE28B21CFFAD1005E58F4 /* arrow-right2.png in Resources */,
 				68F7575F21D7FA9F0047B24D /* linkedin.png in Resources */,
-				681582ED21E07DAE00E934EF /* big_icon.png in Resources */,
+				681582ED21E07DAE00E934EF /* blue_background.png in Resources */,
 				68F7575321D7E5940047B24D /* chevron.png in Resources */,
 				6811F47821CD7DD7001DBE63 /* facebook_icon.png in Resources */,
 				68170B6321DEABC3007DA455 /* URLSchemeCoverView.xib in Resources */,
@@ -692,6 +708,7 @@
 				6811F47A21CD80BD001DBE63 /* search_services.json in Resources */,
 				68FA235E21D14C06006290FD /* search.png in Resources */,
 				68F9F13E21CEF2D0001E7FD7 /* duckduckgo.png in Resources */,
+				682C558721E185D4005C59E7 /* red_background.png in Resources */,
 				683DE28F21CFFB0E005E58F4 /* share.png in Resources */,
 				6802427521CC47B700AA8899 /* cog.png in Resources */,
 				683DE29721CFFFDC005E58F4 /* WebTitleBar.xib in Resources */,
@@ -703,8 +720,10 @@
 				68FA236521D19AB9006290FD /* sphere.png in Resources */,
 				686C68C321D6E5BB00270E41 /* AutoCompleteTableViewCell.xib in Resources */,
 				681582DB21DFE75300E934EF /* Settings.storyboard in Resources */,
+				682C558A21E18FC6005C59E7 /* imdb.png in Resources */,
 				688C1AA121CC3F4600AADE9F /* LaunchScreen.storyboard in Resources */,
 				68AA33EC21D8361B003E07BB /* file-text.png in Resources */,
+				682C559021E1A83B005C59E7 /* youtube.png in Resources */,
 				683DE28C21CFFAD1005E58F4 /* arrow-left2.png in Resources */,
 				6811F47421CD79F2001DBE63 /* google_icon.png in Resources */,
 				688C1A9E21CC3F4600AADE9F /* Assets.xcassets in Resources */,
@@ -768,6 +787,7 @@
 				68FA236721D19E5E006290FD /* HistorySectionDelegate.swift in Sources */,
 				686C68C221D6E5BB00270E41 /* AutoCompleteTableViewCell.swift in Sources */,
 				681582E921E05B1600E934EF /* AutOrderTableViewCell.swift in Sources */,
+				682C558C21E191AC005C59E7 /* SherlockSwipeViewController.swift in Sources */,
 				68C4618221D344DE00A1E1CC /* PushInteractor.swift in Sources */,
 				6843F2C521DAAEEF00E94DE7 /* HistoryHeaderView.swift in Sources */,
 				688C1A9C21CC3F4500AADE9F /* Sherlock.xcdatamodeld in Sources */,

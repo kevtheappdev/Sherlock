@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AppearanceSettingsViewController: UIViewController {
+class AppearanceSettingsViewController: SherlockSwipeViewController {
 
     @IBOutlet weak var navBar: UIGradientView!
     @IBOutlet weak var tableView: UITableView!
@@ -29,6 +29,38 @@ class AppearanceSettingsViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        get {
+            return .lightContent
+        }
+    }
+    
+    func updateAppIcon(){
+        guard UIApplication.shared.supportsAlternateIcons else {
+            return
+        }
+        
+        
+        
+        let colorName = ApplicationConstants.currentColorKey
+        var iconName: String? = "\(colorName)Icon"
+        if colorName == "blue" {
+            iconName = nil
+        }
+        
+        
+        UIApplication.shared.setAlternateIconName(iconName, completionHandler: {(error) in
+            if let error = error {
+                
+                print("App icon failed to change due to \(error.localizedDescription)")
+                
+            } else {
+                
+                print("App icon changed successfully")
+                
+            }
+        })
+    }
 }
 
 extension AppearanceSettingsViewController: UITableViewDataSource {
@@ -62,6 +94,7 @@ extension AppearanceSettingsViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         SherlockSettingsManager.main.appearanceColor = appearanceKeys[indexPath.row]
         tableView.reloadData()
+        updateAppIcon()
         NotificationCenter.default.post(name: .appearanceChanged, object: nil)
     }
     

@@ -80,6 +80,8 @@ class SherlockServiceManager: NSObject {
         let serviceData = try! JSON(data: data).dictionary!
         
         let userServicesSet = Set<String>(userServices)
+        let allServicesSet = Set<String>(allServices)
+        
         userServices += allServices // combine all services and user services
         
         var index = 0
@@ -107,7 +109,7 @@ class SherlockServiceManager: NSObject {
         
         
         for (serviceName, service) in serviceData {
-            if !userServicesSet.contains(serviceName) {
+            if !allServicesSet.contains(serviceName) {
                 if let serviceDetails = service.dictionary {
                     let serviceObj = parse(serviceDetails: serviceDetails, serviceName: serviceName)
                     allServices.append(serviceName)
@@ -116,7 +118,7 @@ class SherlockServiceManager: NSObject {
             }
         }
         
-        
+        settingsManager.supportedServices = allServices
         
     }
     
@@ -150,7 +152,6 @@ class SherlockServiceManager: NSObject {
     // update delegate subscribers
     @objc func update(_ sender: Any){
         if needsUpdate {
-            
             delegate?.resultsChanged(copyServices())
             needsUpdate = false
             
@@ -179,7 +180,7 @@ class SherlockServiceManager: NSObject {
     
 }
 
-// MARK: API Methods
+// nc
 extension SherlockServiceManager {
     
     func begin(Query query: String){

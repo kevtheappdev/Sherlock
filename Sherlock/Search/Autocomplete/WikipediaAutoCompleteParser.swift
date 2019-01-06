@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class WikipediaAutoCompleteParser: AutoCompleteParser {
     var weightUpdated = false
-    var weight = 3
+    var weight = 5
     
     func clear() {
         weightUpdated = true

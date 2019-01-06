@@ -55,13 +55,24 @@ class SherlockSettingsManager: NSObject {
         }
     }
     
+    var appearanceColor: String {
+        get {
+            return userDefaults.string(forKey: ApplicationConstants.appearanceKey)!
+        }
+        
+        set {
+            ApplicationConstants.currentColorKey = newValue
+            userDefaults.set(newValue, forKey: ApplicationConstants.appearanceKey)
+        }
+    }
+    
     private override init() {
         super.init()
     }
     
     func setupPrefs(){
         // set all available services here
-        if userDefaults.array(forKey: ApplicationConstants.allServicesKey) == nil { // TODO: Make keys a constant
+        if userDefaults.array(forKey: ApplicationConstants.allServicesKey) == nil { 
             userDefaults.set([], forKey: ApplicationConstants.allServicesKey)
         }
         
@@ -74,8 +85,10 @@ class SherlockSettingsManager: NSObject {
             userDefaults.set(true, forKey: ApplicationConstants.magicOrderKey)
             userDefaults.set(true, forKey: ApplicationConstants.setupKey)
             userDefaults.set([], forKey: ApplicationConstants.autocompleteKey)
+            userDefaults.set("blue", forKey: ApplicationConstants.appearanceKey)
         }
-        
+    
+        ApplicationConstants.currentColorKey = appearanceColor
         
     }
     

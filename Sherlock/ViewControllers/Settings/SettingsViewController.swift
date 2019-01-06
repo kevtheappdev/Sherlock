@@ -18,6 +18,7 @@ class SettingsViewController: UIViewController {
     // transitions
     let push = PushTransition()
     let pop = UnwindPushTransition()
+    let interactor = PushInteractor()
     
     var services: [SherlockService]!
     var otherServices: [SherlockService]!
@@ -34,6 +35,8 @@ class SettingsViewController: UIViewController {
         tableView.delegate = self
         
         loadVersion()
+        loadImage()
+        NotificationCenter.default.addObserver(self, selector: #selector(SettingsViewController.loadImage), name: .appearanceChanged, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -53,7 +56,10 @@ class SettingsViewController: UIViewController {
         versionLabel.text = "Version \(version) | Build \(build)"
     }
     
-
+    @objc func loadImage(){
+        appIcon.image = UIImage(named: "\(ApplicationConstants.currentColorKey)_background.png")
+    }
+    
     @IBAction func doneButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -62,13 +68,15 @@ class SettingsViewController: UIViewController {
         // TODO: try and avoid this mess...
         if let destVC = segue.destination as? ServiceSettingsViewController {
             destVC.transitioningDelegate = self
+            destVC.interactor = interactor
             destVC.services = services
             destVC.otherServices = otherServices
         } else if let destVC = segue.destination as? AutocompleteSettingsViewController {
             destVC.transitioningDelegate = self
+            destVC.interactor = interactor
             destVC.services = services
-        } else {
-            let destVC = segue.destination
+        } else if let destVC = segue.destination as? SherlockSwipeViewController {
+            destVC.interactor = interactor
             destVC.transitioningDelegate = self
         }
     }
@@ -117,5 +125,9 @@ extension SettingsViewController: UIViewControllerTransitioningDelegate {
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return pop
+    }
+    
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return interactor.hasStarted ? interactor : nil
     }
 }

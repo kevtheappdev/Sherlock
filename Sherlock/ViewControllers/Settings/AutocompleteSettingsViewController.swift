@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AutocompleteSettingsViewController: UIViewController {
+class AutocompleteSettingsViewController: SherlockSwipeViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navBar: UIGradientView!
     
@@ -40,6 +40,12 @@ class AutocompleteSettingsViewController: UIViewController {
 
     @IBAction func backButtonPressedd(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        get {
+            return .lightContent
+        }
     }
 }
 

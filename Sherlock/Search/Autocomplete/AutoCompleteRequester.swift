@@ -33,6 +33,7 @@ class AutoCompleteRequester {
                 self.suggestions = suggestions
             }
             
+            
             DispatchQueue.main.async {
                 completion(error)
             }

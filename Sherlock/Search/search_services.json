@@ -3,7 +3,12 @@
 		"searchText": "Search with Google",
 		"searchURL": "http://www.google.com/search?q={query}",
 		"acURL": "http://suggestqueries.google.com/complete/search?client=firefox&q={query}",
-		"icon": "google_icon.png"
+		"icon": "google_icon.png",
+		"config": {
+			"resultsPage": {
+				"javascriptEnabled": true
+			}
+		}
 	},
 
 	"wikipedia": {
@@ -70,6 +75,24 @@
     	"config": {
     		"resultsPage": {
     			"openURL": true,
+    		}
+    	}
+    },
+
+    "imdb": {
+    	"searchText": "Search IMDb",
+    	"searchURL": "https://www.imdb.com/find?ref_=nv_sr_fn&q={query}",
+    	"icon": "imdb.png"
+    },
+
+    "youtube": {
+    	"searchText": "Search YouTube",
+    	"searchURL": "https://www.youtube.com/results?search_query={query}",
+    	"icon": "youtube.png",
+    	"acURL": "http://suggestqueries.google.com/complete/search?client=youtube&ds=yt&client=firefox&q={query}",
+    	"config": {
+    		"resultsPage": {
+    			"javascriptEnabled": true
     		}
     	}
     }

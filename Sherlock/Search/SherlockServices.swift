@@ -18,6 +18,8 @@ enum serviceType: String {
     case twitter = "twitter"
     case linkedin = "linkedin"
     case applemaps = "applemaps"
+    case imdb = "imdb"
+    case youtube = "youtube"
     case none =  "none"
 }
 

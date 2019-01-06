@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ServiceSettingsViewController: UIViewController {
+class ServiceSettingsViewController: SherlockSwipeViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var settingsNavBar: UIGradientView!
     

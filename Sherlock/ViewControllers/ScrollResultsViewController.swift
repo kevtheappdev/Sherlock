@@ -55,9 +55,10 @@ class ScrollResultsViewController: UIViewController {
         
         setupWebViews()
         setupConstraints()
+        NotificationCenter.default.addObserver(self, selector: #selector(ScrollResultsViewController.setupWebViews), name: .servicesChanged, object: nil)
     }
     
-    func setupWebViews(){
+    @objc func setupWebViews(){
         // clear previous webviews
         for (_, webVC) in webControllers {
             webVC.removeFromParent()

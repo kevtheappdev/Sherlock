@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class WebResultViewController: UIViewController {
+class WebResultViewController: SherlockSwipeViewController {
     var url: URL
     var recordHistory: Bool
     var historyRecorded = false
@@ -17,13 +17,13 @@ class WebResultViewController: UIViewController {
     var titleBar: WebTitleBar!
     var navBar: WebNavBar!
     var statusBarBackground: UIView!
-    var interactor: PushInteractor?
     var lastOffset: CGPoint = CGPoint.zero
     var userScrolling = false
     
     // constraints
     var topConstraint: NSLayoutConstraint!
     var bottomConstraint: NSLayoutConstraint!
+    
     
     init(url: URL, recordHistory: Bool = true) {
         self.url = url
@@ -58,11 +58,6 @@ class WebResultViewController: UIViewController {
         navBar = Bundle.main.loadNibNamed("WebNavBar", owner: self, options: nil)?.first as? WebNavBar
         navBar.delegate = self
         view.addSubview(navBar)
-        
-        // interaction gesture
-        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(WebResultViewController.didPan(_:)))
-        view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(gestureRecognizer)
         
         setupConstraints()
         load()
@@ -150,38 +145,7 @@ class WebResultViewController: UIViewController {
         }
     }
     
-    
-    // transition gesture
-    @objc func didPan(_ sender: UIPanGestureRecognizer){
-        let percentThreshold: CGFloat = 0.3
-        // convert x-position rightward pull progress
-        let translation = sender.translation(in: view)
-        let horizontalMovement = translation.x / view.bounds.width
-        let rightwardMovement = fmaxf(Float(horizontalMovement), 0.0)
-        let rightwardMovementPercent = fminf(rightwardMovement,  1.0)
-        let progress = CGFloat(rightwardMovementPercent)
-        
-        guard let interactor = interactor else {return}
-        
-        switch sender.state {
-        case .began:
-            interactor.hasStarted = true
-            dismiss(animated: true, completion: nil)
-        case .changed:
-            interactor.shouldFinish = progress > percentThreshold
-            interactor.update(progress)
-        case .ended:
-            interactor.hasStarted = false
-            interactor.completionSpeed = 0.99
-            if interactor.shouldFinish {
-                 interactor.finish()
-            } else {
-                interactor.cancel()
-            }
-        default:
-            break
-        }
-    }
+
 
 }
 
