@@ -59,6 +59,11 @@ class WebResultViewController: SherlockSwipeViewController {
         navBar.delegate = self
         view.addSubview(navBar)
         
+        // interactive transition gesture
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SherlockSwipeViewController.didPan(_:)))
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(gestureRecognizer)
+        
         setupConstraints()
         load()
     }
