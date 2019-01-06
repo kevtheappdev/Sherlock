@@ -13,7 +13,8 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    weak var searchVC: SearchViewController?
+    var shortcutItem: UIApplicationShortcutItem?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
@@ -26,9 +27,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let searchVC = SearchViewController()
         window?.rootViewController = searchVC
         window?.makeKeyAndVisible()
+        self.searchVC = searchVC
+        
+        // shortcuts
+        if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
+            self.shortcutItem = shortcutItem
+        }
+        
         return true
     }
     
+    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        self.shortcutItem = shortcutItem
+    }
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -46,6 +58,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        guard let shortcutItem = shortcutItem else {
+            return
+        }
+        
+        if shortcutItem.type == "HistoryAction" {
+            searchVC?.displayHistory()
+        } else if shortcutItem.type == "SearchAction" {
+            searchVC?.startNewSearch()
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

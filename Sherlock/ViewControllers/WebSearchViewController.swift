@@ -39,6 +39,8 @@ class WebSearchViewController: UIViewController {
         } else {
             webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
         }
+        
+
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -83,6 +85,14 @@ class WebSearchViewController: UIViewController {
             if !webView.isLoading {
                 coverView.removeFromSuperview()
             }
+            
+            // run any javascript
+            if let js = sherlockService.config.jsString {
+                webView.evaluateJavaScript(js, completionHandler: {(data, error) in
+                    print("data: \(data) error: \(error)")
+                })
+            }
+            
         }
     }
     

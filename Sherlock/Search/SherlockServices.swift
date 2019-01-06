@@ -48,8 +48,8 @@ class SherlockService {
 
 struct SherlockServiceConfig {
     var resultsJavascriptEnabled = false
-    var searchURLS: [String] = []
     var openURLScheme = false
+    var jsString: String?
 }
 
 

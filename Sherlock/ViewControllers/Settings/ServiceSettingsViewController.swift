@@ -15,6 +15,7 @@ class ServiceSettingsViewController: SherlockSwipeViewController {
     var services: [SherlockService]!
     var otherServices: [SherlockService]! // services the user hasn't enabled
     
+    
     // header titles
     let headers = ["Automatic Ordering", "Enabled Services", "Available Services"]
     
@@ -24,6 +25,10 @@ class ServiceSettingsViewController: SherlockSwipeViewController {
         tableView.delegate = self
         settingsNavBar.set(colors: ApplicationConstants._sherlockGradientColors)
         tableView.setEditing(true, animated: false)
+        
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SherlockSwipeViewController.didPan(_:)))
+        settingsNavBar.isUserInteractionEnabled = true
+        settingsNavBar.addGestureRecognizer(gestureRecognizer)
     }
 
     @IBAction func doneButtonPressed(_ sender: Any) {

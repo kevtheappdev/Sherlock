@@ -74,7 +74,7 @@
     	"icon": "applemaps.png",
     	"config": {
     		"resultsPage": {
-    			"openURL": true,
+    			"openURL": true
     		}
     	}
     },

@@ -26,6 +26,11 @@ class AutocompleteSettingsViewController: SherlockSwipeViewController {
         tableView.delegate = self
         
         navBar.set(colors: ApplicationConstants._sherlockGradientColors)
+        
+        // interaction gesture
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SherlockSwipeViewController.didPan(_:)))
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(gestureRecognizer)
     }
     
     func loadAcServices(){

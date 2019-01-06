@@ -11,4 +11,5 @@ import Foundation
 protocol ServiceResultDelegate: class {
     func didSelect(service: SherlockService)
     func updated(query: String)
+    func addServices()
 }

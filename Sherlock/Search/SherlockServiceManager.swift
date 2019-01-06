@@ -109,7 +109,7 @@ class SherlockServiceManager: NSObject {
         
         
         for (serviceName, service) in serviceData {
-            if !allServicesSet.contains(serviceName) {
+            if !allServicesSet.contains(serviceName) && !userServicesSet.contains(serviceName){
                 if let serviceDetails = service.dictionary {
                     let serviceObj = parse(serviceDetails: serviceDetails, serviceName: serviceName)
                     allServices.append(serviceName)
@@ -227,6 +227,11 @@ extension SherlockServiceManager {
             
             if let openURL = resultsConfig["openURL"]?.bool {
                 serviceConfig.openURLScheme = openURL
+            }
+            
+            if let jsSource = resultsConfig["jsSource"]?.string {
+                let path = Bundle.main.path(forResource: jsSource, ofType: "js")!
+                serviceConfig.jsString = try! String(contentsOfFile: path, encoding: .utf8)
             }
         }
         

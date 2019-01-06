@@ -107,12 +107,15 @@ class SherlockSettingsManager: NSObject {
         
         SherlockServiceManager.main.updateOrder(OfServices: services)
         userServices = extractRawValues(fromServices: services)
+        
+        NotificationCenter.default.post(name: .servicesChanged, object: nil)
     }
     
     func update(Services services: [SherlockService], otherServices: [SherlockService]){
         SherlockServiceManager.main.update(Services: services, otherServices: otherServices)
         userServices = extractRawValues(fromServices: services)
         supportedServices = extractRawValues(fromServices: otherServices)
+        NotificationCenter.default.post(name: .servicesChanged, object: nil)
     }
     
     // MARK: autocomplete

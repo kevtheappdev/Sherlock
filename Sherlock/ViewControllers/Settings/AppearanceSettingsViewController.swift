@@ -23,6 +23,11 @@ class AppearanceSettingsViewController: SherlockSwipeViewController {
         navBar.set(colors: ApplicationConstants._sherlockGradientColors)
         
         appearanceKeys.sort()
+        
+        // interaction gesture
+        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SherlockSwipeViewController.didPan(_:)))
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(gestureRecognizer)
     }
     
     @IBAction func backButtonPressed(_ sender: Any) {

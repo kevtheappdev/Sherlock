@@ -10,14 +10,7 @@ import UIKit
 
 class SherlockSwipeViewController: UIViewController {
     var interactor: PushInteractor!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // interaction gesture
-        let gestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SherlockSwipeViewController.didPan(_:)))
-        view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(gestureRecognizer)
-    }
+
     
     // transition gesture
     @objc func didPan(_ sender: UIPanGestureRecognizer){

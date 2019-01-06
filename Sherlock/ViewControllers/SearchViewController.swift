@@ -132,8 +132,39 @@ class SearchViewController: UIViewController {
 
 }
 
+// 3D touch shortcut handling
+extension SearchViewController {
+    func startNewSearch(){
+        query = ""
+        omniBar.searchField.text = ""
+        SherlockServiceManager.main.cancelQuery()
+        switchTo(viewController: serviceVC)
+        if !omniBar.isFirstResponder {
+            omniBar.searchField.becomeFirstResponder()
+        }
+    }
+    
+    func displayHistory(){
+        let historySB = UIStoryboard(name: "History", bundle: nil)
+        let historyVC = historySB.instantiateViewController(withIdentifier: "historyVC") as! HistoryViewController
+        historyVC.delegate = self
+        historyVC.transitioningDelegate = self
+        historyVC.modalInteractor = modalInteractor
+        present(historyVC, animated: true)
+    }
+}
+
 // MARK:  ServiceResultDelegate
 extension SearchViewController: ServiceResultDelegate {
+    func addServices() {
+        let settingsSB = UIStoryboard(name: "Settings", bundle: nil)
+        let svc = settingsSB.instantiateViewController(withIdentifier: "settings") as! ServiceSettingsViewController
+        svc.services = SherlockServiceManager.main.services
+        svc.otherServices = SherlockServiceManager.main.allServices
+        svc.transitioningDelegate = self
+        present(svc, animated: true)
+    }
+    
     func updated(query: String) {
         self.query = query
         omniBar.searchField.text = query
@@ -193,12 +224,7 @@ extension SearchViewController: OmniBarDelegate {
     
     func omniBarButtonPressed(_ button: OmniBarButton) {
         if button == .history {
-            let historySB = UIStoryboard(name: "History", bundle: nil)
-            let historyVC = historySB.instantiateViewController(withIdentifier: "historyVC") as! HistoryViewController
-            historyVC.delegate = self
-            historyVC.transitioningDelegate = self
-            historyVC.modalInteractor = modalInteractor
-            present(historyVC, animated: true)
+            displayHistory()
         } else {
             let settingsSB = UIStoryboard(name: "Settings", bundle: nil)
             let settingsVC = settingsSB.instantiateViewController(withIdentifier: "mainSettings") as! SettingsViewController

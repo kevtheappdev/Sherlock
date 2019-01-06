@@ -91,10 +91,24 @@ class ServiceResultsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return services.count
+        var count = services.count
+        if SherlockSettingsManager.main.supportedServices.count > 0 {
+            count += 1
+        }
+        return count
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == services.count {
+            guard let headerView = Bundle.main.loadNibNamed("AddServices", owner: self, options: nil)?.first as? AddServiceHeader else  {
+                return UIView()
+            }
+            
+            headerView.tag = section
+            headerView.delegate = self
+            return headerView
+        }
+        
         guard let headerView = Bundle.main.loadNibNamed("SearchServiceHeader", owner: self, options: nil)?.first as? SearchServiceHeader else {
             return UIView()
         }
@@ -111,6 +125,10 @@ class ServiceResultsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == services.count {
+            return 0
+        }
+        
         if let acHandler = services[section].automcompleteHandler {
             let suggestionCount = acHandler.suggestions.count
             let type = services[section].type
@@ -221,7 +239,11 @@ extension ServiceResultsTableViewController: SherlockServiceManagerDelegate {
 // MARK: SearchServiceHeaderDelegate
 extension ServiceResultsTableViewController: SearchServiceHeaderDelegate {
     func tapped(index: Int) {
-        delegate?.didSelect(service: services[index])
+        if index == services.count {
+            delegate?.addServices()
+        } else {
+            delegate?.didSelect(service: services[index])
+        }
     }
     
 }
