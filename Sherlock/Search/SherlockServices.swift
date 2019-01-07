@@ -32,6 +32,7 @@ class SherlockService {
     var automcompleteHandler: AutoCompleteRequester?
     var categories: [NSLinguisticTag:Int] = [:]
     var categoriesApplied: [Int] = []
+    var addressFound = false
     var ogIndex = 0
     
     // Default values

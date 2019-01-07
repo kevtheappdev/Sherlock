@@ -15,7 +15,6 @@ class SherlockServiceManager: NSObject {
     private var needsUpdate = false
     private var cleared = false
     private var loaded = false
-    private var addressDetected = false
     private lazy var _servicesMapping: [serviceType: SherlockService] = {
         if !loaded {
             fatalError("Must call load() before accessing")
@@ -356,11 +355,11 @@ extension SherlockServiceManager {
             if sWeight != nil {
                 if foundAddress {
                     add(weight: sWeight! * 2, toService: service.type)
-                    addressDetected = true
+                    service.addressFound = true
                 } else {
-                    if addressDetected {
+                    if service.addressFound {
                         subtract(weight: sWeight! * 2, forService: service.type)
-                        addressDetected = false
+                        service.addressFound = false
                     }
                 }
             }
