@@ -102,7 +102,6 @@
 		68F7575F21D7FA9F0047B24D /* linkedin.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7575E21D7FA9F0047B24D /* linkedin.png */; };
 		68F7576121D801330047B24D /* Autocomplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F7576021D801330047B24D /* Autocomplete.swift */; };
 		68F9F13A21CE9239001E7FD7 /* ScrollResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F9F13921CE9239001E7FD7 /* ScrollResultsViewController.swift */; };
-		68F9F13C21CEA2E2001E7FD7 /* ScrollResultsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F9F13B21CEA2E2001E7FD7 /* ScrollResultsDelegate.swift */; };
 		68F9F13E21CEF2D0001E7FD7 /* duckduckgo.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F9F13D21CEF2D0001E7FD7 /* duckduckgo.png */; };
 		68F9F14021CF0943001E7FD7 /* ServiceSelectorBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F9F13F21CF0943001E7FD7 /* ServiceSelectorBar.swift */; };
 		68F9F14221CF1E18001E7FD7 /* ServiceSelectorBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F9F14121CF1E18001E7FD7 /* ServiceSelectorBarDelegate.swift */; };
@@ -236,7 +235,6 @@
 		68F7575E21D7FA9F0047B24D /* linkedin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = linkedin.png; sourceTree = "<group>"; };
 		68F7576021D801330047B24D /* Autocomplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Autocomplete.swift; sourceTree = "<group>"; };
 		68F9F13921CE9239001E7FD7 /* ScrollResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollResultsViewController.swift; sourceTree = "<group>"; };
-		68F9F13B21CEA2E2001E7FD7 /* ScrollResultsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollResultsDelegate.swift; sourceTree = "<group>"; };
 		68F9F13D21CEF2D0001E7FD7 /* duckduckgo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = duckduckgo.png; path = ../../../../Downloads/duckduckgo.png; sourceTree = "<group>"; };
 		68F9F13F21CF0943001E7FD7 /* ServiceSelectorBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSelectorBar.swift; sourceTree = "<group>"; };
 		68F9F14121CF1E18001E7FD7 /* ServiceSelectorBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSelectorBarDelegate.swift; sourceTree = "<group>"; };
@@ -348,7 +346,6 @@
 				68C1875621CDD87300EED415 /* ServiceResultDelegate.swift */,
 				68C1875821CDDB0A00EED415 /* WebSearchViewController.swift */,
 				68F9F13921CE9239001E7FD7 /* ScrollResultsViewController.swift */,
-				68F9F13B21CEA2E2001E7FD7 /* ScrollResultsDelegate.swift */,
 				68CC169021CFF8C0005AEF42 /* WebResultViewController.swift */,
 				68662D8A21D5ABC200A67B4C /* HistoryVIew */,
 				681582DC21DFE75700E934EF /* Settings */,
@@ -607,8 +604,8 @@
 				688C1A8C21CC3F4500AADE9F /* Sources */,
 				688C1A8D21CC3F4500AADE9F /* Frameworks */,
 				688C1A8E21CC3F4500AADE9F /* Resources */,
-				686290A321CD9CCA00085FFE /* Increment Build */,
 				682C559921E1E8A7005C59E7 /* ShellScript */,
+				686290A321CD9CCA00085FFE /* Increment Build */,
 			);
 			buildRules = (
 			);
@@ -782,7 +779,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n\n";
 		};
 		686290A321CD9CCA00085FFE /* Increment Build */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -802,7 +799,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n\n";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -814,7 +811,6 @@
 				68F9F14221CF1E18001E7FD7 /* ServiceSelectorBarDelegate.swift in Sources */,
 				6802427A21CC4E5E00AA8899 /* SearchViewController.swift in Sources */,
 				68F9F13A21CE9239001E7FD7 /* ScrollResultsViewController.swift in Sources */,
-				68F9F13C21CEA2E2001E7FD7 /* ScrollResultsDelegate.swift in Sources */,
 				68F7576121D801330047B24D /* Autocomplete.swift in Sources */,
 				68662D8921D5A27E00A67B4C /* AutoCompleteRequester.swift in Sources */,
 				6802426F21CC45BD00AA8899 /* OmniBar.swift in Sources */,

@@ -87,7 +87,6 @@ class SearchViewController: UIViewController {
         
         // web search view
         let webSearch = ScrollResultsViewController(services: services)
-        webSearch.delegate = self
         register(viewController: webSearch)
         resultsVC = webSearch
         
@@ -132,7 +131,7 @@ class SearchViewController: UIViewController {
 
 }
 
-// 3D touch shortcut handling
+// MARK: 3D touch shortcut handling
 extension SearchViewController {
     func startNewSearch(){
         query = ""
@@ -162,6 +161,7 @@ extension SearchViewController: ServiceResultDelegate {
         svc.services = SherlockServiceManager.main.services
         svc.otherServices = SherlockServiceManager.main.allServices
         svc.transitioningDelegate = self
+        svc.interactor = interactor
         present(svc, animated: true)
     }
     
@@ -237,21 +237,6 @@ extension SearchViewController: OmniBarDelegate {
     
 }
 
-// MARK: ScrollResultsDelegate
-extension SearchViewController: ScrollResultsDelegate {
-    func selectedLink(url: URL) {
-        let sfVC = WebResultViewController(url: url)
-        sfVC.transitioningDelegate = self
-        sfVC.interactor = interactor
-        present(sfVC, animated: true)
-    }
-    
-    func switchedTo(service: serviceType) {
-        let selection = UISelectionFeedbackGenerator()
-        selection.selectionChanged()
-    }
-    
-}
 
 // MARK: HistoryVCDDelegate
 extension SearchViewController: HistoryVCDDelegate {
@@ -267,20 +252,21 @@ extension SearchViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if let _ = presented as? HistoryViewController {
             return newModal
-        } else if let _ = presented as? SettingsViewController {
+        } else if let _ = presented as? SettingsViewController{
             return flipTransition
+        } else {
+            return present
         }
-        return present
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if let _ = dismissed as? HistoryViewController {
             return unwindNewModal
-        }
-        else if let _ = dismissed as? SettingsViewController {
+        } else if let _ = dismissed as? SettingsViewController {
             return unwindFlipTransition
+        } else {
+            return dissmiss
         }
-        return dissmiss
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {

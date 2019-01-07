@@ -64,8 +64,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if shortcutItem.type == "HistoryAction" {
             searchVC?.displayHistory()
+            self.shortcutItem = nil
         } else if shortcutItem.type == "SearchAction" {
             searchVC?.startNewSearch()
+            self.shortcutItem = nil
         }
     }
 

@@ -49,6 +49,7 @@ class SherlockService {
 struct SherlockServiceConfig {
     var resultsJavascriptEnabled = false
     var openURLScheme = false
+    var allowedUrls: [String] = []
     var jsString: String?
 }
 

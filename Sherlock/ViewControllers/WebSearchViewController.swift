@@ -16,6 +16,12 @@ class WebSearchViewController: UIViewController {
     var openInView: URLSchemeCoverView?
     var sherlockService: SherlockService
     var isUrlScheme = false
+    
+    // transitions
+    let present = PushTransition()
+    let dissmiss = UnwindPushTransition()
+    let interactor = PushInteractor()
+
 
     init(service: SherlockService, javascriptEnabled: Bool = false){
         // init WKWebView
@@ -37,7 +43,10 @@ class WebSearchViewController: UIViewController {
             openInView.set(Service: service)
             view.addSubview(openInView)
         } else {
-            webView.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
+            // setup oberservers
+            webView.addObserver(self, forKeyPath: #keyPath(WKWebView.isLoading), options: .new, context: nil)
+            webView.addObserver(self, forKeyPath: #keyPath(WKWebView.url), options: .new, context: nil)
+            webView.navigationDelegate = self
         }
         
 
@@ -84,16 +93,65 @@ class WebSearchViewController: UIViewController {
         if keyPath == "loading" {
             if !webView.isLoading {
                 coverView.removeFromSuperview()
+                
+                // run any javascript
+                if let js = sherlockService.config.jsString {
+                    webView.evaluateJavaScript(js, completionHandler: nil)
+                }
             }
-            
-            // run any javascript
-            if let js = sherlockService.config.jsString {
-                webView.evaluateJavaScript(js, completionHandler: {(data, error) in
-                    print("data: \(data) error: \(error)")
-                })
+        } else if keyPath == #keyPath(WKWebView.url) {
+            if !webView.isLoading {
+                let url = webView.url!
+                let allowedUrls = sherlockService.config.allowedUrls
+                for allowedUrl in allowedUrls {
+                    if url.absoluteString.contains(allowedUrl){
+                        return
+                    }
+                }
+                openWebResultsVC(url: url)
+                webView.goBack()
             }
             
         }
+        
     }
     
+    
+    func openWebResultsVC(url: URL){
+        let sfVC = WebResultViewController(url: url)
+        sfVC.transitioningDelegate = self
+        sfVC.interactor = interactor
+        present(sfVC, animated: true)
+    }
+    
+}
+
+// MARK: WKNavigationDelegate
+extension WebSearchViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        // prevent clicks on search results - to be overridden with custom content viewer
+        if navigationAction.navigationType == .linkActivated {
+            decisionHandler(.cancel)
+            guard let url = navigationAction.request.url else {
+                return
+            }
+            openWebResultsVC(url: url)
+        } else {
+            decisionHandler(.allow)
+        }
+    }
+}
+
+extension WebSearchViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return present
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return dissmiss
+    }
+    
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+            return interactor.hasStarted ? interactor : nil
+    }
 }

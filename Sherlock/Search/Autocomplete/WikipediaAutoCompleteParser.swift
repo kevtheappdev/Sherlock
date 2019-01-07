@@ -10,11 +10,11 @@ import UIKit
 import SwiftyJSON
 
 class WikipediaAutoCompleteParser: AutoCompleteParser {
-    var weightUpdated = false
+    var weightChanged = false
     var weight = 5
     
     func clear() {
-        weightUpdated = true
+        weightChanged = false
     }
     
     func process(results data: Data) -> [Autocomplete] {
@@ -64,15 +64,18 @@ class WikipediaAutoCompleteParser: AutoCompleteParser {
         }
         
         
-        if !weightUpdated {
-            SherlockServiceManager.main.add(weight: 3, toService: .wikipedia)
-            weightUpdated = true
+        if !weightChanged {
+            SherlockServiceManager.main.add(weight: weight, toService: .wikipedia)
+            weightChanged = true
         }
         return [Autocomplete(suggestion: title, url: url)]
     }
     
     private func resetWeight(){
-        SherlockServiceManager.main.subtract(weight: weight, forService: .wikipedia)
+        if weightChanged {
+            SherlockServiceManager.main.subtract(weight: weight, forService: .wikipedia)
+            weightChanged = false
+        }
     }
 
 }

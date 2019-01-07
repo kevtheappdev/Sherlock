@@ -6,7 +6,8 @@
 		"icon": "google_icon.png",
 		"config": {
 			"resultsPage": {
-				"javascriptEnabled": true
+				"javascriptEnabled": true,
+				"allowedUrls": ["www.google.com/search"]
 			}
 		}
 	},

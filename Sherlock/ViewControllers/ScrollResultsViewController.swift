@@ -24,7 +24,6 @@ class ScrollResultsViewController: UIViewController {
     var webControllers: [serviceType:  WebSearchViewController] = [:]
     var userScrolling = true
     weak var currentResult: WebSearchViewController!
-    weak var delegate: ScrollResultsDelegate?
 
 
     
@@ -175,20 +174,29 @@ class ScrollResultsViewController: UIViewController {
             guard let curVC = webControllers[type] else {
                 return
             }
-            delegate?.switchedTo(service: selectedService.type)
             currentResult = curVC
             scrollView.contentOffset = curVC.view.frame.origin
             currentIndex = Int(scrollView.contentOffset.x / currentResult.view.frame.size.width)
             serviceSelector.select(service: type)
         } else {
             let firstType = services.first!.type
-            delegate?.switchedTo(service: firstType)
             currentResult = webControllers[firstType]
             currentIndex = 0
         }
         
-        currentResult.webView.navigationDelegate = self
         userScrolling = true
+        serviceSelected()
+    }
+    
+    func serviceSelected(){
+        // haptic feedback
+        let selection = UISelectionFeedbackGenerator()
+        selection.selectionChanged()
+        
+        // make sure loading view is removed
+        if !currentResult.webView.isLoading {
+            currentResult.coverView.removeFromSuperview()
+        }
     }
     
     
@@ -199,13 +207,12 @@ extension ScrollResultsViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset
 
-        for (serviceType, webVC) in webControllers { // TODO: refactor this - use dictionary to map offsets to viewcontroller instances
+        for (serviceType, webVC) in webControllers {
             if offset == webVC.view.frame.origin && currentResult.sherlockService.type != webVC.sherlockService.type {
-                delegate?.switchedTo(service: serviceType)
                 currentResult = webVC
-                webVC.webView.navigationDelegate = self
                 serviceSelector.select(service: serviceType)
                 currentIndex = Int(offset.x / webVC.view.frame.width)
+                serviceSelected()
                 break
             }
         }
@@ -232,19 +239,6 @@ extension ScrollResultsViewController: UIScrollViewDelegate {
         
         lastContentOffset = offset
         
-    }
-}
-
-// MARK: WKNavigationDelegate
-extension ScrollResultsViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        // prevent clicks on search results - to be overridden with custom content viewer
-        if navigationAction.navigationType == .linkActivated {
-            decisionHandler(.cancel)
-            delegate?.selectedLink(url: navigationAction.request.url!)
-        } else {
-            decisionHandler(.allow)
-        }
     }
 }
 

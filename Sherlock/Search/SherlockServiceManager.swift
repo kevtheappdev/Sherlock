@@ -15,6 +15,7 @@ class SherlockServiceManager: NSObject {
     private var needsUpdate = false
     private var cleared = false
     private var loaded = false
+    private var addressDetected = false
     private lazy var _servicesMapping: [serviceType: SherlockService] = {
         if !loaded {
             fatalError("Must call load() before accessing")
@@ -180,7 +181,7 @@ class SherlockServiceManager: NSObject {
     
 }
 
-// nc
+// MARK: API Methods
 extension SherlockServiceManager {
     
     func begin(Query query: String){
@@ -214,7 +215,7 @@ extension SherlockServiceManager {
 }
 
 // MARK: Parsing functions for services
-extension SherlockServiceManager {
+extension SherlockServiceManager { // TODO: break out these keys into constants
     // configure SherlockServiceConfig objectr from the JSON
     private func parse(config configDict: [String: JSON]) -> SherlockServiceConfig {
         var serviceConfig = SherlockServiceConfig()
@@ -232,6 +233,16 @@ extension SherlockServiceManager {
             if let jsSource = resultsConfig["jsSource"]?.string {
                 let path = Bundle.main.path(forResource: jsSource, ofType: "js")!
                 serviceConfig.jsString = try! String(contentsOfFile: path, encoding: .utf8)
+            }
+            
+            if let allowedUrls = resultsConfig["allowedUrls"]?.array {
+                var allowedUrlStrings: [String] = []
+                for urlJson in allowedUrls {
+                    if let url = urlJson.string {
+                        allowedUrlStrings.append(url)
+                    }
+                }
+                serviceConfig.allowedUrls = allowedUrlStrings
             }
         }
         
@@ -259,7 +270,7 @@ extension SherlockServiceManager {
     private func fetchAutocomplete(forQuery query: String){
         let disabledList = SherlockSettingsManager.main.disabledAutoComplete
         for service in services {
-            if disabledList.contains(service.type.rawValue) {
+            if disabledList.contains(service.type.rawValue) { // disable if its been toggled off
                 continue
             }
             service.automcompleteHandler?.makeRequest(withQuery: query) {(error) in
@@ -345,8 +356,12 @@ extension SherlockServiceManager {
             if sWeight != nil {
                 if foundAddress {
                     add(weight: sWeight! * 2, toService: service.type)
+                    addressDetected = true
                 } else {
-                    subtract(weight: sWeight! * 2, forService: service.type)
+                    if addressDetected {
+                        subtract(weight: sWeight! * 2, forService: service.type)
+                        addressDetected = false
+                    }
                 }
             }
         }

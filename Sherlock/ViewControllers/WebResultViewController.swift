@@ -195,6 +195,7 @@ extension WebResultViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if recordHistory && !historyRecorded {
             historyRecorded = true
+            titleBar.set(title: webView.title!, url: webView.url!.absoluteString)
             SherlockHistoryManager.main.log(webPage: webView.url!, title: webView.title!)
         }
     }

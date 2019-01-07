@@ -19,7 +19,8 @@ class AddServiceHeader: UIView {
         addIcon.set(colors: ApplicationConstants._sherlockGradientColors)
     }
 
-    @IBAction func addHeaderTapped(_ sender: Any) {
+    @IBAction func headerTapped(_ sender: Any) {
         delegate?.tapped(index: tag)
     }
+    
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import WebKit
 
 struct ApplicationConstants {
     static var _sherlockGradientColors: [CGColor] {
@@ -47,4 +48,3 @@ extension Notification.Name  {
     static let appearanceChanged = Notification.Name(rawValue: "appearanceChanged")
     static let servicesChanged = Notification.Name(rawValue: "servicesChanged")
 }
-

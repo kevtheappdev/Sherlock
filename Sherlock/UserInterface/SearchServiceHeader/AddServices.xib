@@ -56,13 +56,13 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="addIcon" destination="GA4-Vb-hks" id="kqK-Pt-F4e"/>
-                <outletCollection property="gestureRecognizers" destination="AOg-xJ-Hm8" appends="YES" id="voc-gb-ZlN"/>
+                <outletCollection property="gestureRecognizers" destination="X2k-XB-jDH" appends="YES" id="uUb-Ub-eKR"/>
             </connections>
             <point key="canvasLocation" x="248.80000000000001" y="400.29985007496254"/>
         </view>
-        <tapGestureRecognizer id="AOg-xJ-Hm8">
+        <tapGestureRecognizer id="X2k-XB-jDH">
             <connections>
-                <action selector="addHeaderTapped:" destination="iN0-l3-epB" id="bRp-kv-cm6"/>
+                <action selector="headerTapped:" destination="iN0-l3-epB" id="oaK-qO-le3"/>
             </connections>
         </tapGestureRecognizer>
     </objects>
