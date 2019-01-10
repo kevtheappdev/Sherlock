@@ -19,6 +19,7 @@ class WebResultViewController: SherlockSwipeViewController {
     var statusBarBackground: UIView!
     var lastOffset: CGPoint = CGPoint.zero
     var userScrolling = false
+    var okToScroll = false
     
     // constraints
     var topConstraint: NSLayoutConstraint!
@@ -138,7 +139,12 @@ class WebResultViewController: SherlockSwipeViewController {
     // webview progress
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "estimatedProgress" {
-            titleBar.progressBar.progress = Float(webView.estimatedProgress)
+            let progress = Float(webView.estimatedProgress)
+            titleBar.progressBar.progress = progress
+            if progress > 0.5 {
+                okToScroll = true
+            }
+            
             if webView.title  != nil  && !webView.title!.isEmpty {
                 titleBar.set(title: webView.title!, url: webView.url!.absoluteString)
                 // record history
@@ -204,6 +210,14 @@ extension WebResultViewController: WKNavigationDelegate {
         if navigationAction.navigationType == .linkActivated {
             historyRecorded = false
             recordHistory = true
+            okToScroll = false
+            
+            // reset chrome bars
+            topConstraint.constant = 0
+            bottomConstraint.constant = 0
+            UIView.animate(withDuration: 0.5, animations: {() in
+                self.view.layoutIfNeeded()
+            })
         }
         decisionHandler(.allow)
     }
@@ -214,13 +228,14 @@ extension WebResultViewController: WKNavigationDelegate {
 extension WebResultViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset
-        if !userScrolling {return} // ensure scrolling occurs from user
-        if offset.y < 0 || offset.y > webView.scrollView.contentSize.height {return}
+        if !userScrolling || !okToScroll {return} // ensure scrolling occurs from user
+        if offset.y < 0 || (offset.y + webView.bounds.height) > webView.scrollView.contentSize.height {return}
+        
         
         let diff = abs(offset.y - lastOffset.y)
         if offset.y > lastOffset.y {
             // going down
-            print("going down: \(offset.y) diff: \(diff)")
+            print("going down: \(offset.y + scrollView.bounds.height) diff: \(diff) page height: \(scrollView.contentSize.height)")
             
             let curTopVal = topConstraint.constant
             let destTopVal = -titleBar.bounds.height
