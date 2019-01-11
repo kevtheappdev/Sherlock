@@ -27,7 +27,7 @@ class UserServiceTableViewCell: UITableViewCell {
     
     func set(Service service: SherlockService){
         iconView.image = service.icon
-        serviceTitle.text = service.type.rawValue.capitalized
+        serviceTitle.text = service.searchText
     }
 
 }

@@ -20,6 +20,7 @@ enum serviceType: String {
     case applemaps = "applemaps"
     case imdb = "imdb"
     case youtube = "youtube"
+    case urbandictionary = "urbandictionary"
     case none =  "none"
 }
 

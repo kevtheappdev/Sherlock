@@ -102,12 +102,7 @@ class SherlockServiceManager: NSObject {
         }
         
         // load all available services
-        var firstRun = false // populate available services
         let settingsManager = SherlockSettingsManager.main
-        firstRun = settingsManager.supportedServices.count == 0
-        if !firstRun {return}
-        
-        
         for (serviceName, service) in serviceData {
             if !allServicesSet.contains(serviceName) && !userServicesSet.contains(serviceName){
                 if let serviceDetails = service.dictionary {

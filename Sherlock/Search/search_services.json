@@ -1,6 +1,6 @@
 {
 	"google": {
-		"searchText": "Search with Google",
+		"searchText": "Google",
 		"searchURL": "http://www.google.com/search?q={query}",
 		"acURL": "http://suggestqueries.google.com/complete/search?client=firefox&q={query}",
 		"icon": "google_icon.png",
@@ -26,7 +26,7 @@
 	},
 
 	"facebook": {
-		"searchText": "Search Facebook",
+		"searchText": "Facebook",
 		"searchURL": "https://www.facebook.com/search/top/?q={query}",
 		"icon": "facebook_icon.png",
 		"categories": {"PersonalName": 5},
@@ -38,14 +38,14 @@
 	},
     
     "duckduckgo": {
-        "searchText": "Search with DuckDuckGo",
+        "searchText": "DuckDuckGo",
         "searchURL": "https://duckduckgo.com/?q={query}",
         "acURL": "http://duckduckgo.com/ac/?q={query}",
         "icon": "duckduckgo.png"
     },
 
     "twitter": {
-    	"searchText": "Search Twitter",
+    	"searchText": "Twitter",
     	"searchURL": "https://twitter.com/search?q={query}",
     	"categories": {"PersonalName": 5},
     	"icon": "twitter.png",
@@ -57,7 +57,7 @@
     },
 
     "linkedin":  {
-    	"searchText": "Search LinkedIn",
+    	"searchText": "LinkedIn",
     	"searchURL": "https://www.linkedin.com/search/results/all/?keywords={query}",
     	"categories": {"PersonalName": 2},	
     	"icon": "linkedin.png",
@@ -69,7 +69,7 @@
     },
 
     "applemaps": {
-    	"searchText": "Search Apple Maps",
+    	"searchText": "Apple Maps",
     	"searchURL": "http://maps.apple.com/?q={query}",
     	"categories": {"PlaceName": 3},
     	"icon": "applemaps.png",
@@ -81,13 +81,13 @@
     },
 
     "imdb": {
-    	"searchText": "Search IMDb",
+    	"searchText": "IMDb",
     	"searchURL": "https://www.imdb.com/find?ref_=nv_sr_fn&q={query}",
     	"icon": "imdb.png"
     },
 
     "youtube": {
-    	"searchText": "Search YouTube",
+    	"searchText": "YouTube",
     	"searchURL": "https://www.youtube.com/results?search_query={query}",
     	"icon": "youtube.png",
     	"acURL": "http://suggestqueries.google.com/complete/search?client=youtube&ds=yt&client=firefox&q={query}",
@@ -96,5 +96,11 @@
     			"javascriptEnabled": true
     		}
     	}
+    },
+
+    "urbandictionary": {
+    	"searchText": "Urban Dictionary",
+    	"searchURL": "https://www.urbandictionary.com/define.php?term={query}",
+    	"icon": "ud.jpg"
     }
 }

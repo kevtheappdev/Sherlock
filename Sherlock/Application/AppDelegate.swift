@@ -62,6 +62,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
         
+        // TODO: account for the case where the user is in the history or settings screen
+        
         if shortcutItem.type == "HistoryAction" {
             searchVC?.displayHistory()
             self.shortcutItem = nil
