@@ -304,7 +304,7 @@ extension SherlockServiceManager {
     }
     
     private func categorize(withQuery query: String){
-        clearLinguisticWeights()//  fresh start on rankings
+        resetRankings()//  fresh start on rankings
         
         let query = query.capitalized
         let schemes = NSLinguisticTagger.availableTagSchemes(forLanguage: "en")
@@ -442,6 +442,7 @@ extension SherlockServiceManager {
     func resetRankings(){
         for service in services {
             service.weight = 0
+            service.categoriesApplied.removeAll()
         }
         
         reorder()
