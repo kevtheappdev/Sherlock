@@ -65,6 +65,22 @@ class SherlockSettingsManager: NSObject {
             userDefaults.set(newValue, forKey: ApplicationConstants.appearanceKey)
         }
     }
+
+    var shortcutKeys: [String] {
+        get {
+            // TODO: implement this for all properties instead of relying on default being set
+            if userDefaults.array(forKey: ApplicationConstants.shortcutKey) == nil {
+                userDefaults.set([], forKey: ApplicationConstants.shortcutKey)
+                return []
+            }
+            
+            return userDefaults.array(forKey: ApplicationConstants.shortcutKey) as! [String]
+        }
+        
+        set {
+            userDefaults.set(newValue, forKey: ApplicationConstants.shortcutKey)
+        }
+    }
     
     private override init() {
         super.init()
@@ -85,6 +101,7 @@ class SherlockSettingsManager: NSObject {
             userDefaults.set(true, forKey: ApplicationConstants.magicOrderKey)
             userDefaults.set(true, forKey: ApplicationConstants.setupKey)
             userDefaults.set([], forKey: ApplicationConstants.autocompleteKey)
+            userDefaults.set([], forKey: ApplicationConstants.shortcutKey)
             userDefaults.set("blue", forKey: ApplicationConstants.appearanceKey)
         }
     
@@ -139,4 +156,16 @@ class SherlockSettingsManager: NSObject {
         return serviceTypes
     }
     
+    // MARK: Shortcuts
+    func add(Shortcut shortcut: SherlockShortcut){
+        var keys = shortcutKeys
+        keys.append(shortcut.activationText)
+        shortcutKeys = keys
+        
+        var serviceTypes = [String]()
+        for service in shortcut.services {
+            serviceTypes.append(service.rawValue)
+        }
+        userDefaults.set(serviceTypes, forKey: shortcut.activationText)
+    }
 }

@@ -16,6 +16,7 @@ class ShortcutSettingsViewController: SherlockSwipeViewController {
     // data
     var shortcuts: [SherlockShortcut]!
     var addButtonIndex = 0
+    var selectedShortcut: SherlockShortcut?
     
     // transitions
     let modalTransition = NewModal()
@@ -26,9 +27,19 @@ class ShortcutSettingsViewController: SherlockSwipeViewController {
         navBar.set(colors: ApplicationConstants._sherlockGradientColors)
         tableView.dataSource = self
         tableView.delegate = self
-        
+
+        loadShortcuts()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        loadShortcuts()
+    }
+    
+    func loadShortcuts(){
         shortcuts = SherlockShortcutManager.main.shortcuts
         addButtonIndex = shortcuts.count
+        tableView.reloadData()
     }
     
     @IBAction func backButtonPressed(_ sender: Any) {
@@ -44,7 +55,7 @@ extension ShortcutSettingsViewController {
             return
         }
         destinationVC.transitioningDelegate = self
-        // TODO: pass any selected shortcut here
+        destinationVC.shortcut = selectedShortcut
     }
 }
 
@@ -58,8 +69,12 @@ extension ShortcutSettingsViewController: UITableViewDataSource {
         if indexPath.row == addButtonIndex {
             let cell = tableView.dequeueReusableCell(withIdentifier: "addShortcut")!
             return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "shortcut") as! ShortcutTableViewCell
+            let shortcut = shortcuts[indexPath.row]
+            cell.set(Shortcut: shortcut)
+            return cell
         }
-        return UITableViewCell()
     }
     
     
@@ -69,10 +84,10 @@ extension ShortcutSettingsViewController: UITableViewDataSource {
 extension ShortcutSettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.row == addButtonIndex {
-            // segue to create shortcut
-            performSegue(withIdentifier: "newShortcut", sender: self)
+        if indexPath.row != addButtonIndex {
+            selectedShortcut = shortcuts[indexPath.row]
         }
+        performSegue(withIdentifier: "newShortcut", sender: self)
     }
 }
 

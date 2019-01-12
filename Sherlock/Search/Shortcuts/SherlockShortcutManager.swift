@@ -24,6 +24,26 @@ class SherlockShortcutManager: NSObject {
     
     private override init(){
         super.init()
+        load()
+    }
+    
+    private func load(){
+        let shortcuts = SherlockSettingsManager.main.shortcutKeys
+        for key in shortcuts {
+            let serviceVals = UserDefaults.standard.array(forKey: key) as! [String]
+            var serviceTypes = [serviceType]()
+            for serviceVal in serviceVals {
+                serviceTypes.append(serviceType(rawValue: serviceVal)!)
+            }
+            
+            let shortcutObj = SherlockShortcut(activationText: key, services: serviceTypes)
+            _shortcuts.append(shortcutObj)
+        }
+    }
+    
+    func add(Shortcut shortcut: SherlockShortcut){
+        _shortcuts.append(shortcut)
+        SherlockSettingsManager.main.add(Shortcut: shortcut)
     }
     
 }

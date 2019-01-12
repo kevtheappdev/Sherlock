@@ -80,11 +80,7 @@ extension ServiceSettingsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 1 {
-            return true
-        } else {
-            return false
-        }
+        return indexPath.section == 1
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -111,6 +107,24 @@ extension ServiceSettingsViewController: UITableViewDataSource {
             return nil
         }
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .insert{
+            // update data source
+            let serviceToAdd = otherServices.remove(at: indexPath.row)
+            services.append(serviceToAdd)
+            
+            // update tableview
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.insertRows(at: [IndexPath(row: services.count - 1, section: 1)], with: .top)
+            tableView.endUpdates()
+        }
+        
+        // update settings
+        SherlockSettingsManager.main.update(Services: services, otherServices: otherServices)
+    }
+    
     
 }
 
@@ -145,21 +159,5 @@ extension ServiceSettingsViewController: UITableViewDelegate {
     }
     
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .insert{
-            // update data source
-            let serviceToAdd = otherServices.remove(at: indexPath.row)
-            services.append(serviceToAdd)
-            
-            // update tableview
-            tableView.beginUpdates()
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            tableView.insertRows(at: [IndexPath(row: services.count - 1, section: 1)], with: .top)
-            tableView.endUpdates()
-        }
-        
-        // update settings
-        SherlockSettingsManager.main.update(Services: services, otherServices: otherServices)
-    }
-    
+
 }

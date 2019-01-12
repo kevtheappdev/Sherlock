@@ -16,13 +16,26 @@ class ShortcutComposeViewController: UIViewController {
     
     // data
     var shortcut: SherlockShortcut?
+    var shortcutText: String?
     var shortcutServices = [SherlockService]()
     var otherServices = [SherlockService]()
+    var servicesSet = false {
+        didSet {
+            toggleSaveButton()
+        }
+    }
+    var textSet = false {
+        didSet {
+            toggleSaveButton()
+        }
+    }
+    
+    weak var textField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navBar.set(colors: ApplicationConstants._sherlockGradientColors)
-        saveButton.isEnabled = false
+        toggleSaveButton()
         tableView.dataSource = self
         tableView.delegate = self
         tableView.setEditing(true, animated: false)
@@ -33,6 +46,10 @@ class ShortcutComposeViewController: UIViewController {
     func loadServices(){
         var shortcutServicesSet = Set<serviceType>()
         if let shortcutObj = shortcut {
+            textSet = true
+            servicesSet = true
+            
+            shortcutText = shortcutObj.activationText
             let serviceMapping = SherlockServiceManager.main.servicesMapping
             let services = shortcutObj.services
             for service in services {
@@ -50,9 +67,31 @@ class ShortcutComposeViewController: UIViewController {
         
     }
     
-
-    @IBAction func cancelButtonPressed(_ sender: Any) {
+    @IBAction func saveButtonPressed(_ sender: Any) {
+        var serviceTypes = [serviceType]()
+        for service in shortcutServices {
+            serviceTypes.append(service.type)
+        }
+        
+        let shortcut = SherlockShortcut(activationText: textField.text!, services: serviceTypes)
+        SherlockShortcutManager.main.add(Shortcut: shortcut)
         dismiss(animated: true, completion: nil)
+        
+    }
+    
+    @IBAction func cancelButtonPressed(_ sender: Any) {
+        // TODO: have a pop up if user has inputted information
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func toggleSaveButton(){
+        if servicesSet && textSet {
+            saveButton.isEnabled = true
+            saveButton.layer.opacity = 1.0
+        } else {
+            saveButton.isEnabled = false
+            saveButton.layer.opacity = 0.4
+        }
     }
 }
 
@@ -69,14 +108,46 @@ extension ShortcutComposeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        if indexPath.section == 0{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "shortcutEdit") as! ShortcutComposeTableViewCell
+            cell.textField.delegate = self
+            textField = cell.textField
+            cell.textField.text = shortcutText
+            cell.textField.becomeFirstResponder()
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "serviceSetting") as! UserServiceTableViewCell
+            var service: SherlockService
+            if indexPath.section == 1 {
+                service = shortcutServices[indexPath.row]
+            } else {
+                service = otherServices[indexPath.row]
+            }
+            
+            cell.set(Service: service)
+            return cell
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
     
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.section == 1
+    }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .insert {
+            let addedService = otherServices.remove(at: indexPath.row)
+            shortcutServices.append(addedService)
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.insertRows(at: [IndexPath(row: shortcutServices.count - 1, section: 1)], with: .left)
+            tableView.endUpdates()
+            servicesSet = true
+        }
+    }
 }
 
 // MARK: TableView Delegate
@@ -89,6 +160,49 @@ extension ShortcutComposeViewController: UITableViewDelegate {
         } else {
             return UITableViewCell.EditingStyle.none
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 45
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: {(action, indexPath) in
+            let removedService = self.shortcutServices.remove(at: indexPath.row)
+            self.otherServices.insert(removedService, at: removedService.ogIndex)
+            tableView.beginUpdates()
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.insertRows(at: [IndexPath(row: removedService.ogIndex, section: 2)], with: .left)
+            tableView.endUpdates()
+            self.servicesSet = self.shortcutServices.count > 0
+        })
+        
+        return [deleteAction]
+    }
+    
+}
+
+// MARK: Textfield delegate
+extension ShortcutComposeViewController: UITextFieldDelegate {
+    // TODO: handle the enabling and disabling of the save button
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let prohibited = [" ", "\n"]
+        for c in prohibited {
+            if string.contains(c) {
+                return false
+            }
+        }
+        
+        guard let oldInput = textField.text else { return true}
+        let newInput = NSString(string: oldInput).replacingCharacters(in: range, with: string)
+        
+        if !newInput.isEmpty {
+            textSet = true
+        } else {
+            textSet = false
+        }
+        
+        return true
     }
 }
 

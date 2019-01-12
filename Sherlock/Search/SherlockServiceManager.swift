@@ -15,17 +15,19 @@ class SherlockServiceManager: NSObject {
     private var needsUpdate = false
     private var cleared = false
     private var loaded = false
+    
     private lazy var _servicesMapping: [serviceType: SherlockService] = {
         if !loaded {
             fatalError("Must call load() before accessing")
         }
         
         var mapping = [serviceType: SherlockService]()
-        for service in userServices {
+        for service in allServices {
             mapping[service.type] = service
         }
         return mapping
     }()
+    
     
     // ivars
     private var _userServices = [SherlockService]()

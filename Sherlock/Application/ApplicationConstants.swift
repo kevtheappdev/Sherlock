@@ -26,6 +26,7 @@ struct ApplicationConstants {
     static let setupKey = "setupKey"
     static let autocompleteKey = "disabledAutocomplete"
     static let appearanceKey = "appearance"
+    static let shortcutKey = "shortcut"
     
     // colors
     static let colors = [
