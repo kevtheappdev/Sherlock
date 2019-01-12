@@ -77,7 +77,7 @@ class SearchViewController: UIViewController {
     
     // MARK: View Controller logic
     func loadViewControllers(){
-        let services = SherlockServiceManager.main.services
+        let services = SherlockServiceManager.main.userServices
         
         // service results view
         let service = ServiceResultsTableViewController(services: services)
@@ -158,8 +158,8 @@ extension SearchViewController: ServiceResultDelegate {
     func addServices() {
         let settingsSB = UIStoryboard(name: "Settings", bundle: nil)
         let svc = settingsSB.instantiateViewController(withIdentifier: "settings") as! ServiceSettingsViewController
-        svc.services = SherlockServiceManager.main.services
-        svc.otherServices = SherlockServiceManager.main.allServices
+        svc.services = SherlockServiceManager.main.userServices
+        svc.otherServices = SherlockServiceManager.main.otherServices
         svc.transitioningDelegate = self
         svc.interactor = interactor
         present(svc, animated: true)
@@ -228,8 +228,8 @@ extension SearchViewController: OmniBarDelegate {
         } else {
             let settingsSB = UIStoryboard(name: "Settings", bundle: nil)
             let settingsVC = settingsSB.instantiateViewController(withIdentifier: "mainSettings") as! SettingsViewController
-            settingsVC.services = SherlockServiceManager.main.services
-            settingsVC.otherServices = SherlockServiceManager.main.allServices
+            settingsVC.services = SherlockServiceManager.main.userServices
+            settingsVC.otherServices = SherlockServiceManager.main.otherServices
             settingsVC.transitioningDelegate = self
             present(settingsVC, animated: true)
         }

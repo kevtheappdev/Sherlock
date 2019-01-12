@@ -52,7 +52,7 @@ class ServiceResultsTableViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.services = SherlockServiceManager.main.services
+        self.services = SherlockServiceManager.main.userServices
         tableView.reloadData()
         initReducedMode() // TODO: look into better way than calling this every time the data changes
     }

@@ -58,7 +58,7 @@ class ScrollResultsViewController: UIViewController {
     }
     
     @objc func setupWebViews(){
-        services =  SherlockServiceManager.main.services
+        services =  SherlockServiceManager.main.userServices
         // clear previous webviews
         for (_, webVC) in webControllers {
             webVC.removeFromParent()

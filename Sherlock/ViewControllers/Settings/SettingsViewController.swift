@@ -23,7 +23,7 @@ class SettingsViewController: UIViewController {
     var services: [SherlockService]!
     var otherServices: [SherlockService]!
     
-    let options = ["Services", "Autocomplete", "Appearance"]
+    let options = ["Services", "Autocomplete", "Shortcuts", "Appearance"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,8 +41,8 @@ class SettingsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        services = SherlockServiceManager.main.services
-        otherServices = SherlockServiceManager.main.allServices
+        services = SherlockServiceManager.main.userServices
+        otherServices = SherlockServiceManager.main.otherServices
     }
     
     func loadVersion(){
@@ -112,6 +112,8 @@ extension SettingsViewController:  UITableViewDelegate {
         } else if indexPath.row == 1 {
             performSegue(withIdentifier: "toAutocomplete", sender: self)
         } else if indexPath.row == 2 {
+            performSegue(withIdentifier: "toShortcuts", sender: self)
+        } else if indexPath.row == 3 {
             performSegue(withIdentifier: "toAppearance", sender: self)
         }
     }

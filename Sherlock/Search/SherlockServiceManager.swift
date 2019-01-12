@@ -21,22 +21,22 @@ class SherlockServiceManager: NSObject {
         }
         
         var mapping = [serviceType: SherlockService]()
-        for service in services {
+        for service in userServices {
             mapping[service.type] = service
         }
         return mapping
     }()
     
     // ivars
-    private var _services = [SherlockService]()
-    private var _allServices = [SherlockService]()
+    private var _userServices = [SherlockService]()
+    private var _otherServices = [SherlockService]()
     weak var delegate: SherlockServiceManagerDelegate?
     var currentQuery: String?
     
     // data structure access
-    var services: [SherlockService] {
+    var userServices: [SherlockService] {
         get {
-            return _services
+            return _userServices
         }
     }
     
@@ -46,9 +46,15 @@ class SherlockServiceManager: NSObject {
         }
     }
     
+    var otherServices: [SherlockService] {
+        get {
+            return _otherServices
+        }
+    }
+    
     var allServices: [SherlockService] {
         get {
-            return _allServices
+            return _userServices + _otherServices
         }
     }
 
@@ -94,9 +100,9 @@ class SherlockServiceManager: NSObject {
                 index += 1
                 
                 if userServicesSet.contains(serviceName) {
-                    _services.append(serviceObj)
+                    _userServices.append(serviceObj)
                 } else {
-                    _allServices.append(serviceObj)
+                    _otherServices.append(serviceObj)
                 }
             }
         }
@@ -108,7 +114,7 @@ class SherlockServiceManager: NSObject {
                 if let serviceDetails = service.dictionary {
                     let serviceObj = parse(serviceDetails: serviceDetails, serviceName: serviceName)
                     allServices.append(serviceName)
-                    _allServices.append(serviceObj)
+                    _otherServices.append(serviceObj)
                 }
             }
         }
@@ -161,7 +167,7 @@ class SherlockServiceManager: NSObject {
     func copyServices() -> [SherlockService]
     {
         var copy: [SherlockService] = []
-        for service in services {
+        for service in userServices {
             let copyService = SherlockService(name: service.type.rawValue, searchText: service.searchText, searchURL: service.searchURL, icon: service.icon)
             copyService.config = service.config
             copyService.automcompleteHandler = service.automcompleteHandler?.copy()
@@ -199,12 +205,12 @@ extension SherlockServiceManager {
     
     // TODO: revisit the design of these methods
     func updateOrder(OfServices services: [SherlockService]){
-        self._services = services
+        self._userServices = services
     }
     
     func update(Services services: [SherlockService], otherServices: [SherlockService]){
-        self._allServices = otherServices
-        self._services = services
+        self._otherServices = otherServices
+        self._userServices = services
     }
 }
 
@@ -263,7 +269,7 @@ extension SherlockServiceManager { // TODO: break out these keys into constants
 extension SherlockServiceManager {
     private func fetchAutocomplete(forQuery query: String){
         let disabledList = SherlockSettingsManager.main.disabledAutoComplete
-        for service in services {
+        for service in userServices {
             if disabledList.contains(service.type.rawValue) { // disable if its been toggled off
                 continue
             }
@@ -276,7 +282,7 @@ extension SherlockServiceManager {
     }
     
     private func clearAutocomplete(){
-        for service in services {
+        for service in userServices {
             service.automcompleteHandler?.clear()
         }
         
@@ -284,7 +290,7 @@ extension SherlockServiceManager {
     }
     
     private func cancelAutocomplete(){
-        for service in services {
+        for service in userServices {
             service.automcompleteHandler?.cancel()
         }
     }
@@ -345,7 +351,7 @@ extension SherlockServiceManager {
         }
         
         
-        for service in services {
+        for service in userServices {
             let sWeight = service.categories[.placeName]
             if sWeight != nil {
                 if foundAddress {
@@ -364,7 +370,7 @@ extension SherlockServiceManager {
     
     private func servicesFor(tag: NSLinguisticTag) -> [serviceType: Int]{
         var services: [serviceType: Int] = [:]
-        for service in self.services {
+        for service in self.userServices {
             if service.categories[tag] != nil {
                 let weight = service.categories[tag]!
                 service.categoriesApplied.append(weight)
@@ -376,7 +382,7 @@ extension SherlockServiceManager {
     }
     
     private func clearLinguisticWeights(){
-        for service in services {
+        for service in userServices {
             for weight in service.categoriesApplied {
                 if weight > service.weight {
                     break
@@ -426,7 +432,7 @@ extension SherlockServiceManager {
 
     
     private func reorder(){
-        self._services.sort {a, b in
+        self._userServices.sort {a, b in
             if a.weight == b.weight {
                 return a.ogIndex < b.ogIndex
             }
@@ -435,7 +441,7 @@ extension SherlockServiceManager {
     }
     
     func resetRankings(){
-        for service in services {
+        for service in userServices {
             service.weight = 0
             service.categoriesApplied.removeAll()
         }
