@@ -54,10 +54,16 @@ class ScrollResultsViewController: UIViewController {
         
         setupWebViews()
         setupConstraints()
-        NotificationCenter.default.addObserver(self, selector: #selector(ScrollResultsViewController.setupWebViews), name: .servicesChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ScrollResultsViewController.updateUI), name: .servicesChanged, object: nil)
     }
     
-    @objc func setupWebViews(){
+    @objc func updateUI(){
+        DispatchQueue.main.async {
+            self.setupWebViews()
+        }
+    }
+    
+    func setupWebViews(){
         services =  SherlockServiceManager.main.userServices
         // clear previous webviews
         for (_, webVC) in webControllers {

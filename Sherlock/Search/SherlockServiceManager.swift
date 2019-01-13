@@ -15,6 +15,8 @@ class SherlockServiceManager: NSObject {
     private var needsUpdate = false
     private var cleared = false
     private var loaded = false
+    private var inShortcutMode = false
+    private var currentShortcut: SherlockShortcut?
     
     private lazy var _servicesMapping: [serviceType: SherlockService] = {
         if !loaded {
@@ -32,12 +34,16 @@ class SherlockServiceManager: NSObject {
     // ivars
     private var _userServices = [SherlockService]()
     private var _otherServices = [SherlockService]()
+    private var _shortcutServices = [SherlockService]()
     weak var delegate: SherlockServiceManagerDelegate?
     var currentQuery: String?
     
     // data structure access
     var userServices: [SherlockService] {
         get {
+            if inShortcutMode {
+                return _shortcutServices
+            }
             return _userServices
         }
     }
@@ -187,9 +193,16 @@ class SherlockServiceManager: NSObject {
 extension SherlockServiceManager {
     
     func begin(Query query: String){
-        currentQuery = query
-        fetchAutocomplete(forQuery: query)
-        analyze(Query: query)
+        let parsedShortcut = SherlockShortcutManager.main.screen(Query: query)
+        inShortcutMode = parse(Shortcut: parsedShortcut.0)
+        if inShortcutMode {
+            currentQuery = parsedShortcut.1
+        } else {
+            currentQuery = query
+        }
+        
+        fetchAutocomplete(forQuery: currentQuery!)
+        analyze(Query: currentQuery!)
     }
     
     func commitQuery() -> [SherlockService]{
@@ -202,6 +215,7 @@ extension SherlockServiceManager {
         cancelAutocomplete()
         clearAutocomplete()
         resetRankings()
+        clearShortcut()
         cleared = true
     }
     
@@ -452,4 +466,35 @@ extension SherlockServiceManager {
         needsUpdate = true
     }
     
+}
+
+// MARK: Shortcut handling
+extension SherlockServiceManager {
+    func parse(Shortcut shortcut: SherlockShortcut?) -> Bool{
+        if let validShortcut = shortcut {
+            if currentShortcut != nil && validShortcut.activationText == currentShortcut!.activationText {
+                return true
+            }
+            
+            var shortcutServices = [SherlockService]()
+            for serviceType in validShortcut.services {
+                let service = servicesMapping[serviceType]!
+                shortcutServices.append(service)
+            }
+            
+            clearAutocomplete()
+            currentShortcut = validShortcut
+            _shortcutServices = shortcutServices
+            NotificationCenter.default.post(name: .servicesChanged, object: nil)
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func clearShortcut(){
+        inShortcutMode = false
+        currentShortcut = nil
+        NotificationCenter.default.post(name: .servicesChanged, object: nil)
+    }
 }

@@ -48,13 +48,18 @@ class ServiceResultsTableViewController: UITableViewController {
         // listen for keyboard appearance
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardAppeared(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDissapeared(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        // listen for service changes
+        NotificationCenter.default.addObserver(self, selector: #selector(ServiceResultsTableViewController.reloadServices), name: .servicesChanged, object: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.services = SherlockServiceManager.main.userServices
-        tableView.reloadData()
-        initReducedMode() // TODO: look into better way than calling this every time the data changes
+    
+    @objc func reloadServices(){
+        DispatchQueue.main.async {
+            self.services = SherlockServiceManager.main.userServices
+            self.initReducedMode()
+            self.tableView.reloadData()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -68,8 +73,7 @@ class ServiceResultsTableViewController: UITableViewController {
     }
     
     // MARK: - Keyboard notifications
-    @objc
-    func keyboardAppeared(notification: NSNotification) {
+    @objc func keyboardAppeared(notification: NSNotification) {
         if keyboardShown {return}
         keyboardShown =  true
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -77,8 +81,7 @@ class ServiceResultsTableViewController: UITableViewController {
         }
     }
     
-    @objc
-    func keyboardDissapeared(notification: NSNotification) {
+    @objc func keyboardDissapeared(notification: NSNotification) {
         if !keyboardShown {return}
         keyboardShown = false
         keyboardAdjusted = false

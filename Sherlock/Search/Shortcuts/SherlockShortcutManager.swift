@@ -13,6 +13,7 @@ class SherlockShortcutManager: NSObject {
     
     // ivars
     private var _shortcuts = [SherlockShortcut]()
+    private var currentShortcut: String?
     
     
     // getters
@@ -22,18 +23,15 @@ class SherlockShortcutManager: NSObject {
         }
     }
     
-    private lazy var shortcutKeys: Set<String> = {
-        let keys = SherlockSettingsManager.main.shortcutKeys
-        var set = Set<String>(keys)
-        return set
-    }()
+    private var shortcutMap: [String: SherlockShortcut]!
     
     private override init(){
         super.init()
-        load()
+        loadShortcuts()
+        loadMap()
     }
     
-    private func load(){
+    private func loadShortcuts(){
         let shortcuts = SherlockSettingsManager.main.shortcutKeys
         for key in shortcuts {
             let serviceVals = UserDefaults.standard.array(forKey: key) as! [String]
@@ -47,17 +45,34 @@ class SherlockShortcutManager: NSObject {
         }
     }
     
+    private func loadMap() {
+        var map = [String: SherlockShortcut]()
+        for shortcut in _shortcuts {
+            map[shortcut.activationText] = shortcut
+        }
+        shortcutMap = map
+    }
+    
     func add(Shortcut shortcut: SherlockShortcut){
         _shortcuts.append(shortcut)
         SherlockSettingsManager.main.add(Shortcut: shortcut)
+        loadMap()
     }
     
     func update(Shortcut shortcutKey: String, updatedShortcut: SherlockShortcut){
         _shortcuts.removeAll(keepingCapacity: true) // reload
         SherlockSettingsManager.main.update(Shortcut: shortcutKey, updatedShortcut: updatedShortcut)
-        load()
+        loadShortcuts()
+        loadMap()
     }
     
-    
+    func screen(Query query: String) -> (SherlockShortcut?, String?) {
+        if query.isEmpty {return (nil, nil)}
+        var queryComponents = query.split(separator: " ")
+        let comp = String(queryComponents.remove(at: 0))
+        if comp.count == 0 {return (nil, nil)}
+        let cleanedQuery = queryComponents.joined(separator: " ")
+        return (shortcutMap[comp], cleanedQuery)
+    }
     
 }
