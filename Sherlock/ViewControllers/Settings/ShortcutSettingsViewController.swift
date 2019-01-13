@@ -86,6 +86,8 @@ extension ShortcutSettingsViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row != addButtonIndex {
             selectedShortcut = shortcuts[indexPath.row]
+        } else {
+            selectedShortcut = nil
         }
         performSegue(withIdentifier: "newShortcut", sender: self)
     }

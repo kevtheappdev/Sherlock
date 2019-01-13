@@ -32,6 +32,8 @@
 		681582EF21E07FA900E934EF /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681582EE21E07FA900E934EF /* SettingsViewController.swift */; };
 		681582F321E08DF800E934EF /* settings_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 681582F221E08DF800E934EF /* settings_back.png */; };
 		681582F521E08EE400E934EF /* arrow-left-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 681582F421E08EE400E934EF /* arrow-left-white.png */; };
+		6816CCDE21EA695A00C0D930 /* ShortcutComposeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816CCDD21EA695A00C0D930 /* ShortcutComposeTableViewCell.swift */; };
+		6816CCE021EA875A00C0D930 /* ShortcutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816CCDF21EA875A00C0D930 /* ShortcutTableViewCell.swift */; };
 		68170B6121DEA46C007DA455 /* URLSchemeCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68170B6021DEA46C007DA455 /* URLSchemeCoverView.swift */; };
 		68170B6321DEABC3007DA455 /* URLSchemeCoverView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68170B6221DEABC3007DA455 /* URLSchemeCoverView.xib */; };
 		68170B6521DEB2D0007DA455 /* EmptyHistory.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68170B6421DEB2D0007DA455 /* EmptyHistory.xib */; };
@@ -93,6 +95,10 @@
 		68CC169121CFF8C0005AEF42 /* WebResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CC169021CFF8C0005AEF42 /* WebResultViewController.swift */; };
 		68CC169321CFF972005AEF42 /* WebNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CC169221CFF972005AEF42 /* WebNavBar.swift */; };
 		68DFB4D821E944A80024F592 /* ud.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 68DFB4D721E944A80024F592 /* ud.jpg */; };
+		68DFB4DB21E98D280024F592 /* SherlockShortcutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DFB4DA21E98D280024F592 /* SherlockShortcutManager.swift */; };
+		68DFB4DD21E99FF40024F592 /* SherlockShortcut.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DFB4DC21E99FF40024F592 /* SherlockShortcut.swift */; };
+		68DFB4DF21E9A1D90024F592 /* ShortcutSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DFB4DE21E9A1D90024F592 /* ShortcutSettingsViewController.swift */; };
+		68DFB4E121E9A6D00024F592 /* ShortcutComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DFB4E021E9A6D00024F592 /* ShortcutComposeViewController.swift */; };
 		68E569AC21D9C4D1004346C7 /* applemaps.png in Resources */ = {isa = PBXBuildFile; fileRef = 68E569AB21D9C4D1004346C7 /* applemaps.png */; };
 		68F7575321D7E5940047B24D /* chevron.png in Resources */ = {isa = PBXBuildFile; fileRef = 68F7575221D7E5930047B24D /* chevron.png */; };
 		68F7575521D7E5BB0047B24D /* ChevronCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68F7575421D7E5BB0047B24D /* ChevronCell.xib */; };
@@ -160,6 +166,8 @@
 		681582EE21E07FA900E934EF /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		681582F221E08DF800E934EF /* settings_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settings_back.png; path = ../../../icons/settings_back.png; sourceTree = "<group>"; };
 		681582F421E08EE400E934EF /* arrow-left-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-left-white.png"; sourceTree = "<group>"; };
+		6816CCDD21EA695A00C0D930 /* ShortcutComposeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutComposeTableViewCell.swift; sourceTree = "<group>"; };
+		6816CCDF21EA875A00C0D930 /* ShortcutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutTableViewCell.swift; sourceTree = "<group>"; };
 		68170B6021DEA46C007DA455 /* URLSchemeCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSchemeCoverView.swift; sourceTree = "<group>"; };
 		68170B6221DEABC3007DA455 /* URLSchemeCoverView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = URLSchemeCoverView.xib; sourceTree = "<group>"; };
 		68170B6421DEB2D0007DA455 /* EmptyHistory.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyHistory.xib; sourceTree = "<group>"; };
@@ -227,6 +235,10 @@
 		68CC169021CFF8C0005AEF42 /* WebResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebResultViewController.swift; sourceTree = "<group>"; };
 		68CC169221CFF972005AEF42 /* WebNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebNavBar.swift; sourceTree = "<group>"; };
 		68DFB4D721E944A80024F592 /* ud.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ud.jpg; sourceTree = "<group>"; };
+		68DFB4DA21E98D280024F592 /* SherlockShortcutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockShortcutManager.swift; sourceTree = "<group>"; };
+		68DFB4DC21E99FF40024F592 /* SherlockShortcut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SherlockShortcut.swift; sourceTree = "<group>"; };
+		68DFB4DE21E9A1D90024F592 /* ShortcutSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutSettingsViewController.swift; sourceTree = "<group>"; };
+		68DFB4E021E9A6D00024F592 /* ShortcutComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutComposeViewController.swift; sourceTree = "<group>"; };
 		68E569AB21D9C4D1004346C7 /* applemaps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = applemaps.png; sourceTree = "<group>"; };
 		68F7575221D7E5930047B24D /* chevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chevron.png; sourceTree = "<group>"; };
 		68F7575421D7E5BB0047B24D /* ChevronCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChevronCell.xib; sourceTree = "<group>"; };
@@ -364,6 +376,7 @@
 				6811F47121CD6985001DBE63 /* SherlockServices.swift */,
 				6811F47921CD80BD001DBE63 /* search_services.json */,
 				686290A121CD987F00085FFE /* SherlockServiceManagerDelegates.swift */,
+				68DFB4D921E98D040024F592 /* Shortcuts */,
 				6860AFED21D73F8100F00602 /* Autocomplete */,
 			);
 			path = Search;
@@ -377,6 +390,8 @@
 				682C557B21E13226005C59E7 /* AutocompleteSettingsViewController.swift */,
 				682C557F21E14A5C005C59E7 /* AppearanceSettingsViewController.swift */,
 				681582DA21DFE75300E934EF /* Settings.storyboard */,
+				68DFB4DE21E9A1D90024F592 /* ShortcutSettingsViewController.swift */,
+				68DFB4E021E9A6D00024F592 /* ShortcutComposeViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -388,6 +403,8 @@
 				681582E821E05B1600E934EF /* AutOrderTableViewCell.swift */,
 				682C558121E14B8E005C59E7 /* AppearanceTableViewCell.swift */,
 				682C557D21E135A5005C59E7 /* AutocompleteSettingTableViewCell.swift */,
+				6816CCDD21EA695A00C0D930 /* ShortcutComposeTableViewCell.swift */,
+				6816CCDF21EA875A00C0D930 /* ShortcutTableViewCell.swift */,
 			);
 			path = SettingsCells;
 			sourceTree = "<group>";
@@ -595,6 +612,15 @@
 				683DE28721CFFA11005E58F4 /* WebNavBar.xib */,
 			);
 			path = WebNavBar;
+			sourceTree = "<group>";
+		};
+		68DFB4D921E98D040024F592 /* Shortcuts */ = {
+			isa = PBXGroup;
+			children = (
+				68DFB4DA21E98D280024F592 /* SherlockShortcutManager.swift */,
+				68DFB4DC21E99FF40024F592 /* SherlockShortcut.swift */,
+			);
+			path = Shortcuts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -825,11 +851,13 @@
 				682C559621E1C342005C59E7 /* AddServiceHeader.swift in Sources */,
 				68C4618221D344DE00A1E1CC /* PushInteractor.swift in Sources */,
 				6843F2C521DAAEEF00E94DE7 /* HistoryHeaderView.swift in Sources */,
+				6816CCE021EA875A00C0D930 /* ShortcutTableViewCell.swift in Sources */,
 				688C1A9C21CC3F4500AADE9F /* Sherlock.xcdatamodeld in Sources */,
 				681582EF21E07FA900E934EF /* SettingsViewController.swift in Sources */,
 				681582E721E023BF00E934EF /* SherlockSettingsManager.swift in Sources */,
 				681582E421DFF33D00E934EF /* UserServiceTableViewCell.swift in Sources */,
 				683DE29521CFFEC6005E58F4 /* WebTitleBar.swift in Sources */,
+				68DFB4DD21E99FF40024F592 /* SherlockShortcut.swift in Sources */,
 				682483A821D405A0003D189A /* WebTitleBarDelegate.swift in Sources */,
 				68AA33EA21D82D1E003E07BB /* WikipediaAutoCompleteParser.swift in Sources */,
 				68FA236321D1994E006290FD /* WebTableViewCell.swift in Sources */,
@@ -841,6 +869,7 @@
 				68834F7321CCB97A00BFD9D0 /* ServiceResultsTableViewController.swift in Sources */,
 				68834F6C21CC550200BFD9D0 /* ApplicationConstants.swift in Sources */,
 				686C68BD21D6B50600270E41 /* AutoCompleteParser.swift in Sources */,
+				68DFB4DB21E98D280024F592 /* SherlockShortcutManager.swift in Sources */,
 				6811F47221CD6985001DBE63 /* SherlockServices.swift in Sources */,
 				68FA235321D14730006290FD /* HistoryViewController.swift in Sources */,
 				682C557E21E135A5005C59E7 /* AutocompleteSettingTableViewCell.swift in Sources */,
@@ -849,6 +878,8 @@
 				68C1875721CDD87300EED415 /* ServiceResultDelegate.swift in Sources */,
 				68CC169121CFF8C0005AEF42 /* WebResultViewController.swift in Sources */,
 				681582DE21DFEC5A00E934EF /* FlipTransition.swift in Sources */,
+				68DFB4E121E9A6D00024F592 /* ShortcutComposeViewController.swift in Sources */,
+				68DFB4DF21E9A1D90024F592 /* ShortcutSettingsViewController.swift in Sources */,
 				68C412E021D362A800DAC3EA /* NewModal.swift in Sources */,
 				682C558021E14A5C005C59E7 /* AppearanceSettingsViewController.swift in Sources */,
 				681582D921DFE72C00E934EF /* ServiceSettingsViewController.swift in Sources */,
@@ -865,6 +896,7 @@
 				68F9F14021CF0943001E7FD7 /* ServiceSelectorBar.swift in Sources */,
 				68F7575B21D7F26B0047B24D /* SearchServiceHeaderDelegate.swift in Sources */,
 				68C412DF21D362A800DAC3EA /* UnwindNewModal.swift in Sources */,
+				6816CCDE21EA695A00C0D930 /* ShortcutComposeTableViewCell.swift in Sources */,
 				6811F47021CD5AEB001DBE63 /* SherlockServiceManager.swift in Sources */,
 				683DE29221CFFD70005E58F4 /* WebNavBarDelegate.swift in Sources */,
 				688C1A9421CC3F4500AADE9F /* AppDelegate.swift in Sources */,

@@ -545,7 +545,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jxZ-bK-ctE">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no"/>
@@ -614,6 +614,7 @@
                         <outlet property="navBar" destination="vJT-Zc-G9b" id="DzH-bN-2PR"/>
                         <outlet property="saveButton" destination="x3w-Wt-ZGI" id="1me-5P-c6D"/>
                         <outlet property="tableView" destination="JWz-gu-jAi" id="9Z6-8M-kOi"/>
+                        <outlet property="titleLabel" destination="rOg-Z4-Xzq" id="nmG-WO-u7R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eVw-VN-t61" userLabel="First Responder" sceneMemberID="firstResponder"/>

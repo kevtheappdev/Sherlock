@@ -13,12 +13,15 @@ class ShortcutComposeViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navBar: UIGradientView!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var titleLabel: UILabel!
     
     // data
     var shortcut: SherlockShortcut?
     var shortcutText: String?
+    var originalShortcutText: String? // for editing
     var shortcutServices = [SherlockService]()
     var otherServices = [SherlockService]()
+    var editMode = false
     var servicesSet = false {
         didSet {
             toggleSaveButton()
@@ -48,8 +51,11 @@ class ShortcutComposeViewController: UIViewController {
         if let shortcutObj = shortcut {
             textSet = true
             servicesSet = true
+            editMode = true
             
             shortcutText = shortcutObj.activationText
+            originalShortcutText = shortcutText
+            titleLabel.text = "Edit Shortcut"
             let serviceMapping = SherlockServiceManager.main.servicesMapping
             let services = shortcutObj.services
             for service in services {
@@ -74,9 +80,14 @@ class ShortcutComposeViewController: UIViewController {
         }
         
         let shortcut = SherlockShortcut(activationText: textField.text!, services: serviceTypes)
-        SherlockShortcutManager.main.add(Shortcut: shortcut)
-        dismiss(animated: true, completion: nil)
         
+        if !editMode {
+            SherlockShortcutManager.main.add(Shortcut: shortcut)
+        } else {
+            SherlockShortcutManager.main.update(Shortcut: originalShortcutText!, updatedShortcut: shortcut)
+        }
+        
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {

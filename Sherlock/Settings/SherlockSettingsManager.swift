@@ -168,4 +168,14 @@ class SherlockSettingsManager: NSObject {
         }
         userDefaults.set(serviceTypes, forKey: shortcut.activationText)
     }
+    
+    func update(Shortcut shortcutKey: String, updatedShortcut: SherlockShortcut) {
+        var keys = shortcutKeys
+        let removeIndex = keys.index(of: shortcutKey)! // TODO: Look into making sure this never fails
+        keys.remove(at: removeIndex)
+        shortcutKeys = keys
+        userDefaults.removeObject(forKey: shortcutKey)
+        add(Shortcut: updatedShortcut)
+    }
+    
 }

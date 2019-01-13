@@ -22,6 +22,12 @@ class SherlockShortcutManager: NSObject {
         }
     }
     
+    private lazy var shortcutKeys: Set<String> = {
+        let keys = SherlockSettingsManager.main.shortcutKeys
+        var set = Set<String>(keys)
+        return set
+    }()
+    
     private override init(){
         super.init()
         load()
@@ -45,5 +51,13 @@ class SherlockShortcutManager: NSObject {
         _shortcuts.append(shortcut)
         SherlockSettingsManager.main.add(Shortcut: shortcut)
     }
+    
+    func update(Shortcut shortcutKey: String, updatedShortcut: SherlockShortcut){
+        _shortcuts.removeAll(keepingCapacity: true) // reload
+        SherlockSettingsManager.main.update(Shortcut: shortcutKey, updatedShortcut: updatedShortcut)
+        load()
+    }
+    
+    
     
 }
