@@ -21,7 +21,12 @@ class ShortcutComposeViewController: UIViewController {
     var originalShortcutText: String? // for editing
     var shortcutServices = [SherlockService]()
     var otherServices = [SherlockService]()
-    var editMode = false
+    var editMode = false {
+        didSet {
+            tableView.allowsSelectionDuringEditing = editMode
+        }
+    }
+    
     var servicesSet = false {
         didSet {
             toggleSaveButton()
@@ -33,6 +38,15 @@ class ShortcutComposeViewController: UIViewController {
         }
     }
     
+    
+    //keyboard
+    var keyboardShown = false
+    var keyboardHeight: CGFloat?
+    var keyboardAdjusted = false
+    var ogTblViewFrame: CGRect?
+    var initialLayoutComplete = false
+    
+    // cell UI elements
     weak var textField: UITextField!
     
     override func viewDidLoad() {
@@ -43,7 +57,16 @@ class ShortcutComposeViewController: UIViewController {
         tableView.delegate = self
         tableView.setEditing(true, animated: false)
         
+        // listen for keyboard
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardAppeared(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDissapeared(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
         loadServices()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        initialLayoutComplete = true
+        layoutForKeyboard()
     }
     
     func loadServices(){
@@ -71,6 +94,38 @@ class ShortcutComposeViewController: UIViewController {
             }
         }
         
+    }
+    
+    // MARK: Keyboard notifications
+    // TODO: break this out into a library of sorts
+    @objc func keyboardAppeared(notification: NSNotification){
+        if keyboardShown { return }
+        keyboardShown = true
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            keyboardHeight =  keyboardFrame.cgRectValue.size.height
+            if initialLayoutComplete {
+                layoutForKeyboard()
+            }
+        }
+    }
+    
+    @objc func keyboardDissapeared(notification: NSNotification){
+        if !keyboardShown {return}
+        keyboardShown = false
+        keyboardAdjusted = false
+        if let ogFrame = ogTblViewFrame {
+            view.frame = ogFrame
+        }
+    }
+    
+    func layoutForKeyboard(){
+        if let kbdHeight = keyboardHeight {
+            if !keyboardShown || keyboardAdjusted {return}
+            ogTblViewFrame = view.frame
+            let fullHeight = view.frame.height
+            keyboardAdjusted = true
+            view.frame = CGRect(origin: view.frame.origin, size: CGSize(width: UIScreen.main.bounds.width, height: fullHeight - kbdHeight))
+        }
     }
     
     @IBAction func saveButtonPressed(_ sender: Any) {
@@ -104,12 +159,18 @@ class ShortcutComposeViewController: UIViewController {
             saveButton.layer.opacity = 0.4
         }
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        get {
+            return .lightContent
+        }
+    }
 }
 
 // MARK: TableView Data source
 extension ShortcutComposeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+        if section == 0 || section == 3 {
             return 1
         } else if section == 1 {
             return shortcutServices.count
@@ -126,6 +187,10 @@ extension ShortcutComposeViewController: UITableViewDataSource {
             cell.textField.text = shortcutText
             cell.textField.becomeFirstResponder()
             return cell
+        } else if indexPath.section == 3 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "delete")!
+            cell.contentView.layer.opacity = servicesSet && textSet ? 1.0 : 0.4
+            return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "serviceSetting") as! UserServiceTableViewCell
             var service: SherlockService
@@ -141,7 +206,7 @@ extension ShortcutComposeViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 4
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
@@ -158,6 +223,28 @@ extension ShortcutComposeViewController: UITableViewDataSource {
             tableView.endUpdates()
             servicesSet = true
         }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return "Shortcut text"
+        } else if section == 1 {
+            return "Shortcut Services"
+        } else if section == 2{
+            return "Services"
+        } else {
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        if section == 0 {
+            return "Up to 15 characters, no spaces."
+        } else if section == 1 {
+            return "Services that will be searched when the shortcut text is entered"
+        }
+        
+        return nil
     }
 }
 
@@ -191,11 +278,30 @@ extension ShortcutComposeViewController: UITableViewDelegate {
         return [deleteAction]
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if indexPath.section == 3 && textSet && servicesSet {
+            let alert = UIAlertController(title: "Delete", message: "Are you sure would like to delete this shortcut?", preferredStyle: .actionSheet)
+            let deleteAction = UIAlertAction(title: "Delete Shortcut", style: .destructive, handler: {(action) in
+                guard let activationText = self.shortcutText else {
+                    fatalError("can't delete it if its not there dum dum")
+                }
+                SherlockShortcutManager.main.delete(Shortcut: activationText)
+                self.dismiss(animated: true, completion: nil)
+            })
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alert.addAction(cancelAction)
+            alert.addAction(deleteAction)
+            present(alert, animated: true)
+        }
+    }
+    
 }
 
 // MARK: Textfield delegate
 extension ShortcutComposeViewController: UITextFieldDelegate {
-    // TODO: handle the enabling and disabling of the save button
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let prohibited = [" ", "\n"]
         for c in prohibited {
@@ -206,6 +312,7 @@ extension ShortcutComposeViewController: UITextFieldDelegate {
         
         guard let oldInput = textField.text else { return true}
         let newInput = NSString(string: oldInput).replacingCharacters(in: range, with: string)
+        if oldInput.count == 15 && newInput.count > oldInput.count { return false }
         
         if !newInput.isEmpty {
             textSet = true

@@ -53,6 +53,12 @@ class SherlockShortcutManager: NSObject {
         shortcutMap = map
     }
     
+    private func reload(){
+        _shortcuts.removeAll(keepingCapacity: true)
+        loadShortcuts()
+        loadMap()
+    }
+    
     func add(Shortcut shortcut: SherlockShortcut){
         _shortcuts.append(shortcut)
         SherlockSettingsManager.main.add(Shortcut: shortcut)
@@ -60,10 +66,13 @@ class SherlockShortcutManager: NSObject {
     }
     
     func update(Shortcut shortcutKey: String, updatedShortcut: SherlockShortcut){
-        _shortcuts.removeAll(keepingCapacity: true) // reload
         SherlockSettingsManager.main.update(Shortcut: shortcutKey, updatedShortcut: updatedShortcut)
-        loadShortcuts()
-        loadMap()
+        reload()
+    }
+    
+    func delete(Shortcut shortcutKey: String){
+        SherlockSettingsManager.main.delete(Shortcut: shortcutKey)
+        reload()
     }
     
     func screen(Query query: String) -> (SherlockShortcut?, String?) {

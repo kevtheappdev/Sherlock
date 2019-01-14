@@ -482,6 +482,7 @@ extension SherlockServiceManager {
                 shortcutServices.append(service)
             }
             
+            cancelAutocomplete()
             clearAutocomplete()
             currentShortcut = validShortcut
             _shortcutServices = shortcutServices

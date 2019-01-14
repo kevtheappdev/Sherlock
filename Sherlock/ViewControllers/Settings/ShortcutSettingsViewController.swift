@@ -45,6 +45,12 @@ class ShortcutSettingsViewController: SherlockSwipeViewController {
     @IBAction func backButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        get {
+            return .lightContent
+        }
+    }
 
 }
 
@@ -77,6 +83,14 @@ extension ShortcutSettingsViewController: UITableViewDataSource {
         }
     }
     
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Shortcuts"
+    }
+    
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return "Shortcuts allow you to jump to searching a specific service or set of services with a particular set of characters. Tap on one to edit or create a new one."
+    }
     
 }
 
