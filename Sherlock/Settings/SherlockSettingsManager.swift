@@ -170,12 +170,16 @@ class SherlockSettingsManager: NSObject {
     }
     
     func update(Shortcut shortcutKey: String, updatedShortcut: SherlockShortcut) {
+        delete(Shortcut: shortcutKey)
+        add(Shortcut: updatedShortcut)
+    }
+    
+    func delete(Shortcut shortcutKey: String){
         var keys = shortcutKeys
-        let removeIndex = keys.index(of: shortcutKey)! // TODO: Look into making sure this never fails
+        let removeIndex = keys.index(of: shortcutKey)!
         keys.remove(at: removeIndex)
         shortcutKeys = keys
         userDefaults.removeObject(forKey: shortcutKey)
-        add(Shortcut: updatedShortcut)
     }
     
 }
