@@ -47,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let viewController = window?.rootViewController as! SearchViewController
         let shortcutStr = userActivity.userInfo!["shortcut"] as! String
         viewController.start(Shortcut: shortcutStr)
+        viewController.dismiss(animated: true, completion: nil)
         
         return true
     }

@@ -242,6 +242,7 @@ extension SearchViewController {
     func start(Shortcut shortcutText: String){
         query = shortcutText
         omniBar.searchField.text = query! + " "
+        omniBar.searchField.becomeFirstResponder()
         SherlockServiceManager.main.begin(Query: shortcutText)
     }
 }
