@@ -44,7 +44,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>208</string>
+	<string>263</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -52,6 +52,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSUserActivityTypes </key>
+	<array>
+		<string>com.kevinturner.Sherlock.shortcutSearch</string>
+	</array>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>

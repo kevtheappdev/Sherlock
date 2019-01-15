@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Intents
 
 class SherlockServiceManager: NSObject {
     static let main = SherlockServiceManager()
@@ -476,6 +477,11 @@ extension SherlockServiceManager {
                 return true
             }
             
+            let activity = SherlockShortcutManager.main.createUserActivity(withShortcut: validShortcut)
+            let viewController = UIApplication.shared.windows.first?.rootViewController as! SearchViewController
+            viewController.userActivity = activity
+            activity.becomeCurrent()
+            
             var shortcutServices = [SherlockService]()
             for serviceType in validShortcut.services {
                 let service = servicesMapping[serviceType]!
@@ -498,4 +504,5 @@ extension SherlockServiceManager {
         currentShortcut = nil
         NotificationCenter.default.post(name: .servicesChanged, object: nil)
     }
+    
 }

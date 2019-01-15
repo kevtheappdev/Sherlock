@@ -77,6 +77,7 @@
 		686C68C321D6E5BB00270E41 /* AutoCompleteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 686C68C121D6E5BB00270E41 /* AutoCompleteTableViewCell.xib */; };
 		68834F6C21CC550200BFD9D0 /* ApplicationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68834F6B21CC550200BFD9D0 /* ApplicationConstants.swift */; };
 		68834F7321CCB97A00BFD9D0 /* ServiceResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68834F7221CCB97A00BFD9D0 /* ServiceResultsTableViewController.swift */; };
+		6886B51C21ED4E7B00BA39E7 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6886B51B21ED4E7B00BA39E7 /* Intents.framework */; };
 		688C1A9421CC3F4500AADE9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688C1A9321CC3F4500AADE9F /* AppDelegate.swift */; };
 		688C1A9C21CC3F4500AADE9F /* Sherlock.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 688C1A9A21CC3F4500AADE9F /* Sherlock.xcdatamodeld */; };
 		688C1A9E21CC3F4600AADE9F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 688C1A9D21CC3F4600AADE9F /* Assets.xcassets */; };
@@ -85,6 +86,7 @@
 		688C1AB721CC3F4600AADE9F /* SherlockUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688C1AB621CC3F4600AADE9F /* SherlockUITests.swift */; };
 		68AA33EA21D82D1E003E07BB /* WikipediaAutoCompleteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68AA33E921D82D1E003E07BB /* WikipediaAutoCompleteParser.swift */; };
 		68AA33EC21D8361B003E07BB /* file-text.png in Resources */ = {isa = PBXBuildFile; fileRef = 68AA33EB21D8361B003E07BB /* file-text.png */; };
+		68B41BEA21ED7789001B3271 /* IntentsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B41BE921ED7789001B3271 /* IntentsUI.framework */; };
 		68C1875721CDD87300EED415 /* ServiceResultDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C1875621CDD87300EED415 /* ServiceResultDelegate.swift */; };
 		68C1875921CDDB0A00EED415 /* WebSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C1875821CDDB0A00EED415 /* WebSearchViewController.swift */; };
 		68C412DF21D362A800DAC3EA /* UnwindNewModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C412DD21D362A800DAC3EA /* UnwindNewModal.swift */; };
@@ -212,6 +214,7 @@
 		68834F6B21CC550200BFD9D0 /* ApplicationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationConstants.swift; sourceTree = "<group>"; };
 		68834F7221CCB97A00BFD9D0 /* ServiceResultsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceResultsTableViewController.swift; sourceTree = "<group>"; };
 		6886B51A21ED4D1600BA39E7 /* Sherlock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sherlock.entitlements; sourceTree = "<group>"; };
+		6886B51B21ED4E7B00BA39E7 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		688C1A9021CC3F4500AADE9F /* Sherlock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sherlock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		688C1A9321CC3F4500AADE9F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		688C1A9B21CC3F4500AADE9F /* Sherlock.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sherlock.xcdatamodel; sourceTree = "<group>"; };
@@ -226,6 +229,7 @@
 		688C1AB821CC3F4600AADE9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		68AA33E921D82D1E003E07BB /* WikipediaAutoCompleteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikipediaAutoCompleteParser.swift; sourceTree = "<group>"; };
 		68AA33EB21D8361B003E07BB /* file-text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "file-text.png"; sourceTree = "<group>"; };
+		68B41BE921ED7789001B3271 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		68C1875621CDD87300EED415 /* ServiceResultDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceResultDelegate.swift; sourceTree = "<group>"; };
 		68C1875821CDDB0A00EED415 /* WebSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSearchViewController.swift; sourceTree = "<group>"; };
 		68C412DD21D362A800DAC3EA /* UnwindNewModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnwindNewModal.swift; sourceTree = "<group>"; };
@@ -269,6 +273,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68B41BEA21ED7789001B3271 /* IntentsUI.framework in Frameworks */,
+				6886B51C21ED4E7B00BA39E7 /* Intents.framework in Frameworks */,
 				686290A021CD842400085FFE /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -505,6 +511,8 @@
 		6862909E21CD842300085FFE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				68B41BE921ED7789001B3271 /* IntentsUI.framework */,
+				6886B51B21ED4E7B00BA39E7 /* Intents.framework */,
 				6862909F21CD842400085FFE /* SwiftyJSON.framework */,
 			);
 			name = Frameworks;

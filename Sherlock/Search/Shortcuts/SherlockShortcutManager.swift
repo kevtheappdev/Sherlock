@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Intents
 
 class SherlockShortcutManager: NSObject {
     static let main = SherlockShortcutManager()
@@ -84,4 +85,12 @@ class SherlockShortcutManager: NSObject {
         return (shortcutMap[comp], cleanedQuery)
     }
     
+    func createUserActivity(withShortcut shortcut: SherlockShortcut) -> NSUserActivity {
+        let activity = NSUserActivity(activityType: "com.kevinturner.Sherlock.shortcutSearch")
+        activity.title = shortcut.activationText
+        activity.userInfo = ["shortcut": shortcut.activationText]
+        activity.isEligibleForSearch = true
+        activity.isEligibleForPrediction = true
+        return activity
+    }
 }

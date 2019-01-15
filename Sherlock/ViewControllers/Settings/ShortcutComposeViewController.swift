@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Intents
+import IntentsUI
 
 class ShortcutComposeViewController: UIViewController {
     // outlets
@@ -170,7 +172,7 @@ class ShortcutComposeViewController: UIViewController {
 // MARK: TableView Data source
 extension ShortcutComposeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 || section == 3 {
+        if section == 0 || section == 3 || section == 4 {
             return 1
         } else if section == 1 {
             return shortcutServices.count
@@ -180,7 +182,7 @@ extension ShortcutComposeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0{
+        if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "shortcutEdit") as! ShortcutComposeTableViewCell
             cell.textField.delegate = self
             textField = cell.textField
@@ -188,6 +190,10 @@ extension ShortcutComposeViewController: UITableViewDataSource {
             cell.textField.becomeFirstResponder()
             return cell
         } else if indexPath.section == 3 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "siri")!
+            cell.contentView.layer.opacity = servicesSet && textSet ? 1.0 : 0.4
+            return cell
+        } else if indexPath.section == 4 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "delete")!
             cell.contentView.layer.opacity = servicesSet && textSet ? 1.0 : 0.4
             return cell
@@ -206,7 +212,7 @@ extension ShortcutComposeViewController: UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
@@ -230,8 +236,10 @@ extension ShortcutComposeViewController: UITableViewDataSource {
             return "Shortcut text"
         } else if section == 1 {
             return "Shortcut Services"
-        } else if section == 2{
+        } else if section == 2 {
             return "Services"
+        } else if section == 3 {
+            return "Siri"
         } else {
             return nil
         }
@@ -281,7 +289,7 @@ extension ShortcutComposeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if indexPath.section == 3 && textSet && servicesSet {
+        if indexPath.section == 4 && textSet && servicesSet {
             let alert = UIAlertController(title: "Delete", message: "Are you sure would like to delete this shortcut?", preferredStyle: .actionSheet)
             let deleteAction = UIAlertAction(title: "Delete Shortcut", style: .destructive, handler: {(action) in
                 guard let activationText = self.shortcutText else {
@@ -294,8 +302,27 @@ extension ShortcutComposeViewController: UITableViewDelegate {
             alert.addAction(cancelAction)
             alert.addAction(deleteAction)
             present(alert, animated: true)
+        } else if indexPath.section == 3 && shortcut != nil {
+            let activity = SherlockShortcutManager.main.createUserActivity(withShortcut: shortcut!)
+            let activityShortcut = INShortcut(userActivity: activity)
+            let vc = INUIAddVoiceShortcutViewController(shortcut: activityShortcut)
+            vc.delegate = self
+            present(vc, animated: true)
         }
     }
+    
+}
+
+// MARK: Voice Delegate
+extension ShortcutComposeViewController: INUIAddVoiceShortcutViewControllerDelegate {
+    func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     
 }
 
@@ -313,6 +340,7 @@ extension ShortcutComposeViewController: UITextFieldDelegate {
         guard let oldInput = textField.text else { return true}
         let newInput = NSString(string: oldInput).replacingCharacters(in: range, with: string)
         if oldInput.count == 15 && newInput.count > oldInput.count { return false }
+        shortcutText = newInput
         
         if !newInput.isEmpty {
             textSet = true

@@ -616,6 +616,27 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="siri" rowHeight="51" id="ma0-2p-7Ti">
+                                        <rect key="frame" x="0.0" y="201.33333333333334" width="375" height="51"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ma0-2p-7Ti" id="u2K-0C-p6Q">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="50.666666666666664"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add to Siri" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q9N-1x-Id3">
+                                                    <rect key="frame" x="15" y="15" width="79" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.46954255705544812" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Q9N-1x-Id3" firstAttribute="centerX" secondItem="u2K-0C-p6Q" secondAttribute="centerX" constant="-133" id="S61-r4-Ejm"/>
+                                                <constraint firstItem="Q9N-1x-Id3" firstAttribute="centerY" secondItem="u2K-0C-p6Q" secondAttribute="centerY" id="fwd-7i-lgV"/>
+                                                <constraint firstItem="Q9N-1x-Id3" firstAttribute="centerX" secondItem="u2K-0C-p6Q" secondAttribute="centerX" constant="-133" id="gFx-8T-VRb"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>

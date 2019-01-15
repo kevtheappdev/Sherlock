@@ -237,6 +237,15 @@ extension SearchViewController: OmniBarDelegate {
     
 }
 
+// MARK: Shortcut handling
+extension SearchViewController {
+    func start(Shortcut shortcutText: String){
+        query = shortcutText
+        omniBar.searchField.text = query! + " "
+        SherlockServiceManager.main.begin(Query: shortcutText)
+    }
+}
+
 
 // MARK: HistoryVCDDelegate
 extension SearchViewController: HistoryVCDDelegate {
