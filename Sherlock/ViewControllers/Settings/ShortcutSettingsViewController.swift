@@ -27,6 +27,10 @@ class ShortcutSettingsViewController: SherlockSwipeViewController {
         navBar.set(colors: ApplicationConstants._sherlockGradientColors)
         tableView.dataSource = self
         tableView.delegate = self
+        
+        // interactive gesture
+        let backGesture = UIPanGestureRecognizer(target: self, action: #selector(SherlockSwipeViewController.didPan(_:)))
+        view.addGestureRecognizer(backGesture)
 
         loadShortcuts()
     }

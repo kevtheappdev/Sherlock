@@ -17,7 +17,6 @@ class SherlockServiceManager: NSObject {
     private var cleared = false
     private var loaded = false
     private var inShortcutMode = false
-    private var currentShortcut: SherlockShortcut?
     
     private lazy var _servicesMapping: [serviceType: SherlockService] = {
         if !loaded {
@@ -38,6 +37,8 @@ class SherlockServiceManager: NSObject {
     private var _shortcutServices = [SherlockService]()
     weak var delegate: SherlockServiceManagerDelegate?
     var currentQuery: String?
+    var fullQuery: String? // includes shortcut macro
+    var currentShortcut: SherlockShortcut?
     
     // data structure access
     var userServices: [SherlockService] {
@@ -193,7 +194,7 @@ class SherlockServiceManager: NSObject {
 // MARK: API Methods
 extension SherlockServiceManager {
     
-    func begin(Query query: String){
+    func begin(Query query: String) -> String{
         let parsedShortcut = SherlockShortcutManager.main.screen(Query: query)
         inShortcutMode = parse(Shortcut: parsedShortcut.0)
         if inShortcutMode {
@@ -202,11 +203,14 @@ extension SherlockServiceManager {
             currentQuery = query
         }
         
+        fullQuery = query
         fetchAutocomplete(forQuery: currentQuery!)
         analyze(Query: currentQuery!)
+        return currentQuery!
     }
     
     func commitQuery() -> [SherlockService]{
+        SherlockHistoryManager.main.log(search: fullQuery!)
         needsUpdate = false
         cancelAutocomplete()
         return copyServices()
@@ -449,11 +453,17 @@ extension SherlockServiceManager {
 
     
     private func reorder(){
-        self._userServices.sort {a, b in
+        let sortClosure = {(a: SherlockService, b: SherlockService) -> Bool in
             if a.weight == b.weight {
                 return a.ogIndex < b.ogIndex
             }
             return a.weight > b.weight
+        }
+        
+        if inShortcutMode {
+            self._shortcutServices.sort(by: sortClosure)
+        } else {
+            self._userServices.sort(by: sortClosure)
         }
     }
     

@@ -289,7 +289,6 @@ extension HistoryViewController: UITableViewDelegate {
         } else {
             let searchEntry = selectedEntry as! SearchHistoryEntry
             SherlockHistoryManager.main.update(entry: searchEntry)
-            SherlockServiceManager.main.begin(Query: searchEntry.query!)
             dismiss(animated: true, completion: nil)
             delegate?.execute(search: searchEntry.query!)
         }

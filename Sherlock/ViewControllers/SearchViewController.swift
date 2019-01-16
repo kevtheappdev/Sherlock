@@ -37,10 +37,12 @@ class SearchViewController: UIViewController {
         super.viewWillAppear(animated)
         if queryToExecute { // TODO: make this a check  on the query string itself
             let services = SherlockServiceManager.main.copyServices()
-            resultsVC.execute(query: query!, services: services, recordHistory: false)
+            let parsedQuery = SherlockServiceManager.main.begin(Query: query!)
+            resultsVC.execute(query: parsedQuery, services: services)
             switchTo(viewController: resultsVC)
             omniBar.searchField.text = query
             omniBar.resignActive()
+            query = parsedQuery
             queryToExecute = false
         }
     }
@@ -166,8 +168,14 @@ extension SearchViewController: ServiceResultDelegate {
     }
     
     func updated(query: String) {
-        self.query = query
-        omniBar.searchField.text = query
+        var cQuery = query
+        let currentShortcut = SherlockServiceManager.main.currentShortcut
+        if SherlockServiceManager.main.currentShortcut != nil {
+            cQuery = currentShortcut!.activationText + " " + query + " "
+        }
+        
+        self.query = cQuery
+        omniBar.searchField.text = cQuery
     }
     
     func didSelect(service: SherlockService) {
@@ -194,11 +202,10 @@ extension SearchViewController: ServiceResultDelegate {
 // MARK: OmniBarDelegate
 extension SearchViewController: OmniBarDelegate {
     func inputChanged(input: String) {
-        query = input
         if input.isEmpty {
             inputCleared()
         } else {
-            SherlockServiceManager.main.begin(Query: input)
+            query = SherlockServiceManager.main.begin(Query: input)
         }
     }
     
@@ -240,10 +247,9 @@ extension SearchViewController: OmniBarDelegate {
 // MARK: Shortcut handling
 extension SearchViewController {
     func start(Shortcut shortcutText: String){
-        query = shortcutText
-        omniBar.searchField.text = query! + " "
+        omniBar.searchField.text = shortcutText + " "
         omniBar.searchField.becomeFirstResponder()
-        SherlockServiceManager.main.begin(Query: shortcutText)
+        query = SherlockServiceManager.main.begin(Query: shortcutText)
     }
 }
 

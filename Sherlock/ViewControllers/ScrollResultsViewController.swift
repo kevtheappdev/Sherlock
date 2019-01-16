@@ -65,16 +65,14 @@ class ScrollResultsViewController: UIViewController {
     
     func setupWebViews(){
         services =  SherlockServiceManager.main.userServices
-        // clear previous webviews
-        for (_, webVC) in webControllers {
-            webVC.removeFromParent()
-            webVC.view.removeFromSuperview()
-        }
-        webControllers.removeAll()
         
         // add web views
         var index = 0
         for service in services {
+            if webControllers.keys.contains(service.type) {
+                continue
+            }
+            
             let config = service.config
             let webVC = WebSearchViewController(service: service, javascriptEnabled: config.resultsJavascriptEnabled)
             webControllers[service.type] = webVC
@@ -146,7 +144,7 @@ class ScrollResultsViewController: UIViewController {
         scrollView.contentOffset = CGPoint(x: CGFloat(currentIndex) * width, y: 0)
     }
     
-    func execute(query: String, service: SherlockService? = nil, services: [SherlockService], recordHistory: Bool = true) {
+    func execute(query: String, service: SherlockService? = nil, services: [SherlockService]) {
         set(Services: services)
         
         
@@ -158,11 +156,6 @@ class ScrollResultsViewController: UIViewController {
             }
         }
         lastQuery = query
-        
-        if recordHistory {
-            SherlockHistoryManager.main.log(search: query)
-        }
-        
         
         for (_, webVC) in webControllers { // TODO: limit this when we add more services
             webVC.execute(query: query)
