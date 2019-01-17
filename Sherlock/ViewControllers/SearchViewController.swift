@@ -174,7 +174,7 @@ extension SearchViewController: ServiceResultDelegate {
             cQuery = currentShortcut!.activationText + " " + query + " "
         }
         
-        self.query = cQuery
+        self.query = query
         omniBar.searchField.text = cQuery
     }
     

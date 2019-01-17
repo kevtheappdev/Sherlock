@@ -136,6 +136,14 @@ class WebResultViewController: SherlockSwipeViewController {
         webView.load(request)
     }
     
+    func resetNavBars(){
+        topConstraint.constant = 0
+        bottomConstraint.constant = 0
+        UIView.animate(withDuration: 0.5, animations: {() in
+            self.view.layoutIfNeeded()
+        })
+    }
+    
     // webview progress
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "estimatedProgress" {
@@ -165,6 +173,7 @@ extension WebResultViewController: WebNavBarDelegate {
     func backButtonPressed() {
         if webView.canGoBack {
             navBar.forwardButton.isEnabled = true
+            resetNavBars()
             webView.goBack()
         }  else {
             dismiss(animated: true, completion: nil)
@@ -174,6 +183,7 @@ extension WebResultViewController: WebNavBarDelegate {
     func forwardButtonPressed() {
         if webView.canGoForward {
             webView.goForward()
+            resetNavBars()
             navBar.forwardButton.isEnabled = webView.canGoForward
         }
     }
@@ -213,11 +223,7 @@ extension WebResultViewController: WKNavigationDelegate {
             okToScroll = false
             
             // reset chrome bars
-            topConstraint.constant = 0
-            bottomConstraint.constant = 0
-            UIView.animate(withDuration: 0.5, animations: {() in
-                self.view.layoutIfNeeded()
-            })
+            resetNavBars()
         }
         decisionHandler(.allow)
     }

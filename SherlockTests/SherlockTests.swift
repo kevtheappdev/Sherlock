@@ -27,16 +27,40 @@ class SherlockTests: XCTestCase {
     func testAutoOrdering(){
         // test autoordering
         expectation = self.expectation(description: "Wait for autoorder")
-        SherlockServiceManager.main.begin(Query: "Xcode")
+        let _ = SherlockServiceManager.main.begin(Query: "Xcode")
         SherlockServiceManager.main.delegate = self
         self.waitForExpectations(timeout: 2, handler: nil)
         
         expectation = self.expectation(description: "Wait for autoorder")
-        SherlockServiceManager.main.begin(Query: "Kevin Turner")
+        let _ = SherlockServiceManager.main.begin(Query: "Kevin Turner")
         expected = [.facebook, .twitter, .google, .wikipedia]
         fulfilled = false
         self.waitForExpectations(timeout: 2, handler: nil)
     }
+    
+    func testShortcuts() {
+        let shortcuts = SherlockShortcutManager.main.shortcuts
+        for shortcut in shortcuts {
+            let query = SherlockServiceManager.main.begin(Query: shortcut.activationText)
+            XCTAssert(query.isEmpty)
+            var updatedServices = SherlockServiceManager.main.userServices
+            var expectedServices = shortcut.services
+            
+            updatedServices.sort(by: {(a: SherlockService, b: SherlockService) in
+                return a.type.rawValue < b.type.rawValue
+            })
+            
+            expectedServices.sort(by: {(a: serviceType, b: serviceType) in
+                return a.rawValue < b.rawValue
+            })
+            
+            for (service, expectedService) in zip(updatedServices, expectedServices) {
+                print("service: \(service.type.rawValue) expected: \(expectedService.rawValue)")
+                XCTAssert(service.type == expectedService)
+            }
+        }
+    }
+    
 
 }
 
