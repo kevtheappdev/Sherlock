@@ -22,6 +22,7 @@ class ScrollResultsViewController: UIViewController {
     var lastContentOffset = CGPoint(x: 0, y: 0)
     var currentIndex = 0
     var webControllers: [serviceType:  WebSearchViewController] = [:]
+    var currentControllers: [WebSearchViewController] = [] // controllers currently on screen
     var userScrolling = true
     weak var currentResult: WebSearchViewController!
 
@@ -60,22 +61,35 @@ class ScrollResultsViewController: UIViewController {
     @objc func updateUI(){
         DispatchQueue.main.async {
             self.setupWebViews()
+            self.layoutWebviews()
+            self.serviceSelector.display(Services: self.services)
         }
     }
     
     func setupWebViews(){
         services =  SherlockServiceManager.main.userServices
         
+        // remove previous webviews
+        for controller in currentControllers {
+            controller.removeFromParent()
+            controller.view.removeFromSuperview()
+        }
+        
+        currentControllers.removeAll(keepingCapacity: true)
+        
         // add web views
         var index = 0
         for service in services {
+            var webVC: WebSearchViewController
             if webControllers.keys.contains(service.type) {
-                continue
+                webVC = webControllers[service.type]!
+            } else {
+                let config = service.config
+                webVC = WebSearchViewController(service: service, javascriptEnabled: config.resultsJavascriptEnabled)
+                webControllers[service.type] = webVC
             }
             
-            let config = service.config
-            let webVC = WebSearchViewController(service: service, javascriptEnabled: config.resultsJavascriptEnabled)
-            webControllers[service.type] = webVC
+            currentControllers.append(webVC)
             addChild(webVC)
             webVC.didMove(toParent:self)
             scrollView.addSubview(webVC.view)

@@ -71,6 +71,7 @@ class ServiceSelectorBar: UIView {
             button.removeFromSuperview()
         }
         buttons.removeAll()
+        buttonOffsets.removeAll(keepingCapacity: true)
         
         var index = 1
         for service in services {
