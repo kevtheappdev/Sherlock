@@ -23,5 +23,4 @@ class WebTitleBar: UIView {
     @IBAction func backButtonPressed(_ sender: Any) {
         delegate?.titleBackButtonPressed()
     }
-    // TODO: functinality for copying URL, view full URL, overall back button, progress bar
 }

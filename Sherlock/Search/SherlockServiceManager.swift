@@ -133,7 +133,6 @@ class SherlockServiceManager: NSObject {
         
     }
     
-    // TODO: cut down on the number of parrse overloads
     private func parse(serviceDetails: [String: JSON], serviceName: String) -> SherlockService {
         let name = serviceName
         let searchName = serviceDetails["searchText"]!.string!
@@ -224,7 +223,6 @@ extension SherlockServiceManager {
         cleared = true
     }
     
-    // TODO: revisit the design of these methods
     func updateOrder(OfServices services: [SherlockService]){
         self._userServices = services
     }
@@ -236,7 +234,7 @@ extension SherlockServiceManager {
 }
 
 // MARK: Parsing functions for services
-extension SherlockServiceManager { // TODO: break out these keys into constants
+extension SherlockServiceManager {
     // configure SherlockServiceConfig objectr from the JSON
     private func parse(config configDict: [String: JSON]) -> SherlockServiceConfig {
         var serviceConfig = SherlockServiceConfig()
@@ -342,7 +340,7 @@ extension SherlockServiceManager {
             if let tag = tag, tags.contains(tag) {
                 let serviceWeights = servicesFor(tag: tag)
                 let percentOfQuery = Float(tokenRange.length) / Float(query.count)
-                if percentOfQuery >= 0.75 { // TODO: make this constant
+                if percentOfQuery >= 0.75 {
                     let name = (query as NSString).substring(with: tokenRange)
                     print("tag: \(tag) for str: \(name)")
                     for (service, serviceWeight) in serviceWeights {

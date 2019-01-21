@@ -11,7 +11,7 @@ import WebKit
 import SafariServices
 
 class WebSearchViewController: UIViewController {
-    var webView: WKWebView = WKWebView()
+    var webView: WKWebView!
     var coverView: LoadingCoverView!
     var openInView: URLSchemeCoverView?
     var sherlockService: SherlockService
@@ -24,15 +24,9 @@ class WebSearchViewController: UIViewController {
 
 
     init(service: SherlockService, javascriptEnabled: Bool = false){
-        // init WKWebView
-        let webPrefs = WKPreferences()
-        webPrefs.javaScriptEnabled = javascriptEnabled
-        let webConfig =  WKWebViewConfiguration()
-        webConfig.preferences = webPrefs
-        webView = WKWebView(frame: CGRect.zero, configuration: webConfig)
         sherlockService = service
         super.init(nibName: nil, bundle: nil)
-        
+        // url scheme
         if service.config.openURLScheme {
             guard let openInView = Bundle.main.loadNibNamed("URLSchemeCoverView", owner: self, options: nil)?.first as? URLSchemeCoverView else {
                 return
@@ -43,6 +37,13 @@ class WebSearchViewController: UIViewController {
             openInView.set(Service: service)
             view.addSubview(openInView)
         } else {
+            // init WKWebView
+            let webPrefs = WKPreferences()
+            webPrefs.javaScriptEnabled = javascriptEnabled
+            let webConfig = WKWebViewConfiguration()
+            webConfig.preferences = webPrefs
+            webView = WKWebView(frame: CGRect.zero, configuration: webConfig)
+            
             // setup oberservers
             webView.addObserver(self, forKeyPath: #keyPath(WKWebView.isLoading), options: .new, context: nil)
             webView.addObserver(self, forKeyPath: #keyPath(WKWebView.url), options: .new, context: nil)

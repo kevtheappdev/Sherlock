@@ -29,6 +29,7 @@ class ShortcutComposeViewController: UIViewController {
         }
     }
     
+    var editMade = false
     var servicesSet = false {
         didSet {
             toggleSaveButton()
@@ -148,8 +149,18 @@ class ShortcutComposeViewController: UIViewController {
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        // TODO: have a pop up if user has inputted information
-        dismiss(animated: true, completion: nil)
+        if editMade {
+            let alert = UIAlertController(title: "Cancel", message: "Are you sure you would like to cancel without saving?", preferredStyle: .actionSheet)
+            let yesAction = UIAlertAction(title: "Yes", style: .destructive, handler:{(action) in
+                self.dismiss(animated: true, completion: nil)
+            })
+            let continueAction = UIAlertAction(title: "No", style: .cancel, handler: nil)
+            alert.addAction(yesAction)
+            alert.addAction(continueAction)
+            present(alert, animated: true, completion: nil)
+        } else {
+            dismiss(animated: true, completion: nil)
+        }
     }
     
     func toggleSaveButton(){
@@ -219,6 +230,11 @@ extension ShortcutComposeViewController: UITableViewDataSource {
         return indexPath.section == 1
     }
     
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        shortcutServices.swapAt(sourceIndexPath.row, destinationIndexPath.row)
+        editMade = true
+    }
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .insert {
             let addedService = otherServices.remove(at: indexPath.row)
@@ -228,6 +244,7 @@ extension ShortcutComposeViewController: UITableViewDataSource {
             tableView.insertRows(at: [IndexPath(row: shortcutServices.count - 1, section: 1)], with: .left)
             tableView.endUpdates()
             servicesSet = true
+            editMade = true
         }
     }
     
@@ -274,6 +291,7 @@ extension ShortcutComposeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete", handler: {(action, indexPath) in
+            self.editMade = true
             let removedService = self.shortcutServices.remove(at: indexPath.row)
             self.otherServices.insert(removedService, at: removedService.ogIndex)
             tableView.beginUpdates()
@@ -330,6 +348,8 @@ extension ShortcutComposeViewController: INUIAddVoiceShortcutViewControllerDeleg
 extension ShortcutComposeViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        editMade = true
+        
         let prohibited = [" ", "\n"]
         for c in prohibited {
             if string.contains(c) {

@@ -17,6 +17,7 @@ class ServiceSelectorBar: UIView {
     private var selectionView: UIView!
     private var buttonOffsets: [CGFloat] = []
     private var selectedOffset = CGPoint(x: 0, y: 0)
+    private var selectedXOffset: CGFloat = 0
     weak var delegate: ServiceSelectorBarDelegate?
     
     init() {
@@ -46,7 +47,7 @@ class ServiceSelectorBar: UIView {
         scrollView.contentSize = CGSize(width: width , height: height)
         
         // layout scrollview elements
-        selectionView.frame = CGRect(x: selectedOffset.x, y: 0, width: ServiceSelectorBar.iconSize, height: 10)
+        selectionView.frame = CGRect(x: selectedXOffset, y: 0, width: ServiceSelectorBar.iconSize, height: 10)
         
         var yMult: CGFloat = 0.4
         if UIApplication.shared.keyWindow!.safeAreaInsets.bottom > CGFloat(0) {
@@ -117,7 +118,7 @@ class ServiceSelectorBar: UIView {
         
         UIView.animate(withDuration: 0.1, animations: {() in
             let selectedPoint = CGPoint(x: selectedOffset, y: 0)
-            self.selectedOffset = selectedPoint // TODO: just store x value
+            self.selectedXOffset = selectedOffset
             self.selectionView.frame = CGRect(origin: selectedPoint, size: self.selectionView.bounds.size)
         })
         
@@ -126,10 +127,10 @@ class ServiceSelectorBar: UIView {
     
     func scrollTo(Percent percent: CGFloat, direction: ScrollDirection){
         if  direction == .right {
-            let nextOffset = CGPoint(x: selectedOffset.x + ServiceSelectorBar.iconSize, y: 0)
+            let nextOffset = CGPoint(x: selectedXOffset + ServiceSelectorBar.iconSize, y: 0)
             selectionView.frame = CGRect(origin: CGPoint(x: percent * nextOffset.x, y: 0), size: selectionView.frame.size)
         } else {
-            selectionView.frame = CGRect(origin: CGPoint(x: selectedOffset.x - (percent * ServiceSelectorBar.iconSize), y: 0), size: selectionView.frame.size)
+            selectionView.frame = CGRect(origin: CGPoint(x: selectedXOffset - (percent * ServiceSelectorBar.iconSize), y: 0), size: selectionView.frame.size)
         }
     }
     

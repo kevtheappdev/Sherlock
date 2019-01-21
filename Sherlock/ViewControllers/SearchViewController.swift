@@ -35,7 +35,7 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if queryToExecute { // TODO: make this a check  on the query string itself
+        if queryToExecute {
             let services = SherlockServiceManager.main.copyServices()
             let parsedQuery = SherlockServiceManager.main.begin(Query: query!)
             resultsVC.execute(query: parsedQuery, services: services)

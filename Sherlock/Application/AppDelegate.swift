@@ -72,7 +72,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
         
-        // TODO: account for the case where the user is in the history or settings screen
+        // dismiss any viewcontrollers
+        window?.rootViewController?.dismiss(animated: true, completion: nil)
         
         if shortcutItem.type == "HistoryAction" {
             searchVC?.displayHistory()
