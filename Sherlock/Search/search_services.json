@@ -32,7 +32,8 @@
 		"categories": {"PersonalName": 5},
 		"config": {
 			"resultsPage": {
-				"javascriptEnabled": true
+				"javascriptEnabled": true,
+				"autoLoad": false
 			}
 		}
 	},

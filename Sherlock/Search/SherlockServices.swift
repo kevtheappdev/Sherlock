@@ -53,6 +53,7 @@ struct SherlockServiceConfig {
     var openURLScheme = false
     var allowedUrls: [String] = []
     var jsString: String?
+    var autoLoad = true
 }
 
 

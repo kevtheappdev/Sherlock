@@ -263,6 +263,10 @@ extension SherlockServiceManager {
                 }
                 serviceConfig.allowedUrls = allowedUrlStrings
             }
+            
+            if let autoLoad = resultsConfig["autoLoad"]?.bool {
+                serviceConfig.autoLoad = autoLoad
+            }
         }
         
         return serviceConfig

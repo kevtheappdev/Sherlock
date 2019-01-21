@@ -11,11 +11,13 @@ import WebKit
 import SafariServices
 
 class WebSearchViewController: UIViewController {
-    var webView: WKWebView!
+    var webView: WKWebView = WKWebView()
     var coverView: LoadingCoverView!
     var openInView: URLSchemeCoverView?
     var sherlockService: SherlockService
     var isUrlScheme = false
+    var autoLoad = true
+    var loaded = false
     
     // transitions
     let present = PushTransition()
@@ -43,6 +45,7 @@ class WebSearchViewController: UIViewController {
             let webConfig = WKWebViewConfiguration()
             webConfig.preferences = webPrefs
             webView = WKWebView(frame: CGRect.zero, configuration: webConfig)
+            autoLoad = service.config.autoLoad
             
             // setup oberservers
             webView.addObserver(self, forKeyPath: #keyPath(WKWebView.isLoading), options: .new, context: nil)
@@ -59,11 +62,12 @@ class WebSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        webView.scrollView.contentInsetAdjustmentBehavior = .never
-        
         // setup cover view
         coverView = LoadingCoverView()
         coverView.backgroundColor = UIColor.white
+        
+        if isUrlScheme {return}
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
     }
     
     override func loadView() {
@@ -72,14 +76,15 @@ class WebSearchViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         let screenFrame = CGRect(origin: CGPoint.zero, size: view.frame.size)
-        coverView.frame = screenFrame
         if let openInView = self.openInView {
             openInView.frame = screenFrame
+        } else {
+            coverView.frame = screenFrame
         }
     }
     
-    func execute(query: String) {
-        if isUrlScheme {return}
+    func execute(query: String, force: Bool = false) {
+        if isUrlScheme || (!autoLoad && !force) || loaded {return}
         coverView.loadingIndicator.startLoadAnimation()
         let urlStr = sherlockService.searchURL
         let urliFiedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!
@@ -88,6 +93,7 @@ class WebSearchViewController: UIViewController {
         let request = URLRequest(url: url)
         view.addSubview(coverView)
         webView.load(request)
+        loaded = true
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {

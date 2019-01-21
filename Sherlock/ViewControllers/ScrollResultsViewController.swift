@@ -206,6 +206,9 @@ class ScrollResultsViewController: UIViewController {
         let selection = UISelectionFeedbackGenerator()
         selection.selectionChanged()
         
+        // make sure webview load is triggered
+        currentResult.execute(query: lastQuery!, force: true)
+        
         // make sure loading view is removed
         if !currentResult.webView.isLoading {
             currentResult.coverView.removeFromSuperview()
