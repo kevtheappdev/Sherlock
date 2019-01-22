@@ -17,7 +17,7 @@ class WebSearchViewController: UIViewController {
     var sherlockService: SherlockService
     var isUrlScheme = false
     var autoLoad = true
-    var loaded = false
+    var queryExecuted: String?
     
     // transitions
     let present = PushTransition()
@@ -84,7 +84,14 @@ class WebSearchViewController: UIViewController {
     }
     
     func execute(query: String, force: Bool = false) {
-        if isUrlScheme || (!autoLoad && !force) || loaded {return}
+        if isUrlScheme || (!autoLoad && !force) {return}
+        
+        if let prevQuery = queryExecuted {
+            if prevQuery == query {
+                return
+            }
+        }
+        
         coverView.loadingIndicator.startLoadAnimation()
         let urlStr = sherlockService.searchURL
         let urliFiedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!
@@ -93,7 +100,7 @@ class WebSearchViewController: UIViewController {
         let request = URLRequest(url: url)
         view.addSubview(coverView)
         webView.load(request)
-        loaded = true
+        queryExecuted = query
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
